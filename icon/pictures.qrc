@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/new/background">
+        <file>tgood.png</file>
+        <file>tgood1.png</file>
+        <file>teld.png</file>
+        <file>loading.gif</file>
+    </qresource>
+</RCC>
