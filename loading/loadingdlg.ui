@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>462</width>
+    <width>349</width>
     <height>102</height>
    </rect>
   </property>
@@ -16,7 +16,7 @@
   <property name="styleSheet">
    <string notr="true">background-color: forestgreen;</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="2,0,0,0">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="2,0,0">
    <property name="sizeConstraint">
     <enum>QLayout::SetMinimumSize</enum>
    </property>
@@ -85,7 +85,7 @@ font:20pt;
 </string>
      </property>
      <property name="text">
-      <string>正在连接服务器，倒计时：</string>
+      <string>正在连接服务器...</string>
      </property>
      <property name="scaledContents">
       <bool>true</bool>

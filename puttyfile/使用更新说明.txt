@@ -1,0 +1,21 @@
+PC6下载站 http://www.pc6.com 
+
+下载，就来PC6，安全、高速、放心
+
+PC6下载QQ群：56522274
+
+------------------------------------------------
+------------------------------------------------
+包含以下工具
+
+Putty (Telnet和SSH客户端工具)
+PSCP (Scp客户端,命令行下通过SSH拷贝文件)
+PSFTP (Sftp命令行客户端,类似于FTP文件传输)
+Puttytel (Telnet客户端)
+Plink (命令行工具,远程执行服务器上的命令)
+PuttyGen (生成DSA和RSA密钥)
+Pageant (Putty、PSCP、Plink的认证代理)
+
+使用说明
+
+Putty在Windows环境下直接可用。如putty.exe可直接用.  pscp、psftp需要在cmd环境下用。试试就知道了。

@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>485</width>
-    <height>369</height>
+    <width>420</width>
+    <height>380</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>420</width>
+    <height>380</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>420</width>
+    <height>380</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -27,25 +39,22 @@ font-family:Microsoft Yahei;</string>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Maximum</enum>
-     </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>24</height>
+       <width>15</width>
+       <height>2</height>
       </size>
      </property>
     </spacer>
    </item>
    <item row="1" column="0">
-    <spacer name="horizontalSpacer_3">
+    <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>113</width>
+       <width>42</width>
        <height>20</height>
       </size>
      </property>
@@ -53,235 +62,7 @@ font-family:Microsoft Yahei;</string>
    </item>
    <item row="1" column="1">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="2" column="0">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="1" column="0" colspan="4">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="styleSheet">
-          <string notr="true">color: rgb(0, 0, 0);
-font:bold;
-font:15pt;
-font-family:微软雅黑;</string>
-         </property>
-         <property name="text">
-          <string>用户名：</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit_5">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(182,194,154);
-color: rgb(0, 0, 0);
-border-radius:5px;
-font:15pt;
-font-family:Microsoft Yahei;</string>
-         </property>
-         <property name="placeholderText">
-          <string>请输入用户名</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="styleSheet">
-          <string notr="true">color: rgb(0, 0, 0);
-font:bold;
-font:15pt;
-font-family:微软雅黑;</string>
-         </property>
-         <property name="text">
-          <string>电话：</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(182,194,154);
-color: rgb(0, 0, 0);
-border-radius:5px;
-font:15pt;
-font-family:Microsoft Yahei;</string>
-         </property>
-         <property name="placeholderText">
-          <string>输入电话号码</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="styleSheet">
-          <string notr="true">color: rgb(0, 0, 0);
-font:bold;
-font:15pt;
-font-family:微软雅黑;</string>
-         </property>
-         <property name="text">
-          <string>邮箱：</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEdit_8">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(182,194,154);
-color: rgb(0, 0, 0);
-border-radius:5px;
-font:15pt;
-font-family:Microsoft Yahei;</string>
-         </property>
-         <property name="placeholderText">
-          <string>请输入邮箱地址</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="styleSheet">
-          <string notr="true">color: rgb(0, 0, 0);
-font:bold;
-font:15pt;
-font-family:微软雅黑;</string>
-         </property>
-         <property name="text">
-          <string>密码：</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="lineEdit_6">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(182,194,154);
-color: rgb(0, 0, 0);
-border-radius:5px;
-font:15pt;
-font-family:Microsoft Yahei;</string>
-         </property>
-         <property name="placeholderText">
-          <string>输入密码</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label">
-         <property name="styleSheet">
-          <string notr="true">color: rgb(0, 0, 0);
-font:bold;
-font:15pt;
-font-family:微软雅黑;</string>
-         </property>
-         <property name="text">
-          <string>确认密码：</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="lineEdit_7">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(182,194,154);
-color: rgb(0, 0, 0);
-border-radius:5px;
-font:15pt;
-font-family:Microsoft Yahei;</string>
-         </property>
-         <property name="placeholderText">
-          <string>再次确认密码</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="2" column="2">
-      <widget class="QPushButton" name="registerPushButton">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:rgb(14 , 150 , 254);
-    border-radius:10px;
-	font: 15pt;
-}
-
-QPushButton:hover
-{
-    background-color:tomato;
-}
-
-QPushButton:pressed
-{
-    background-color:rgb(14 , 100 , 228);
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}
-</string>
-       </property>
-       <property name="text">
-        <string>立即注册</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="3">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="0" colspan="4">
+     <item row="0" column="0">
       <widget class="QLabel" name="label_19">
        <property name="minimumSize">
         <size>
@@ -311,22 +92,318 @@ font-family:Microsoft Yahei;</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="registerPushButton_2">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton
+     <item row="1" column="0">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 0);
+font:bold;
+font:15pt;
+font-family:微软雅黑;</string>
+         </property>
+         <property name="text">
+          <string>用户名：</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QLineEdit" name="passwordLineEdit">
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+background-color: rgb(255,255,255);
+color: rgb(0, 0, 0);
+border-radius:6px;
+font:13pt;
+font-family:Microsoft Yahei;
+border:1px solid gray;
+}
+QLineEdit:hover{
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}
+QLineEdit:focus {
+border-width:2px;
+border-color:gold;
+}
+</string>
+         </property>
+         <property name="echoMode">
+          <enum>QLineEdit::PasswordEchoOnEdit</enum>
+         </property>
+         <property name="placeholderText">
+          <string>输入密码</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 0);
+font:bold;
+font:15pt;
+font-family:微软雅黑;</string>
+         </property>
+         <property name="text">
+          <string>密码：</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="2">
+        <widget class="QLineEdit" name="userLineEdit">
+         <property name="styleSheet">
+          <string notr="true">
+QLineEdit{
+background-color: rgb(255,255,255);
+color: rgb(0, 0, 0);
+border-radius:6px;
+font:13pt;
+font-family:Microsoft Yahei;
+border:1px solid gray;
+}
+QLineEdit:hover{
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}
+QLineEdit:focus {
+border-width:2px;
+border-color:gold;
+}</string>
+         </property>
+         <property name="placeholderText">
+          <string>请输入用户名</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 0);
+font:bold;
+font:15pt;
+font-family:微软雅黑;</string>
+         </property>
+         <property name="text">
+          <string>邮箱：</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="2">
+        <widget class="QLineEdit" name="mailLineEdit">
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+background-color: rgb(255,255,255);
+color: rgb(0, 0, 0);
+border-radius:6px;
+font:13pt;
+font-family:Microsoft Yahei;
+border:1px solid gray;
+}
+QLineEdit:hover{
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}
+QLineEdit:focus {
+border-width:2px;
+border-color:gold;
+}</string>
+         </property>
+         <property name="placeholderText">
+          <string>请输入邮箱地址</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="2">
+        <widget class="QLineEdit" name="phoneLineEdit">
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+background-color: rgb(255,255,255);
+color: rgb(0, 0, 0);
+border-radius:6px;
+font:13pt;
+font-family:Microsoft Yahei;
+border:1px solid gray;
+}
+QLineEdit:hover{
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}
+QLineEdit:focus {
+border-width:2px;
+border-color:gold;
+}</string>
+         </property>
+         <property name="placeholderText">
+          <string>输入11位电话号码</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 0);
+font:bold;
+font:15pt;
+font-family:微软雅黑;</string>
+         </property>
+         <property name="text">
+          <string>电话：</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 0);
+font:bold;
+font:15pt;
+font-family:微软雅黑;</string>
+         </property>
+         <property name="text">
+          <string>开始时间：</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1" colspan="2">
+        <widget class="QLineEdit" name="endDateLineEdit">
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+background-color: rgb(255,255,255);
+color: rgb(0, 0, 0);
+border-radius:6px;
+font:13pt;
+font-family:Microsoft Yahei;
+border:1px solid gray;
+}
+QLineEdit:hover{
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}
+QLineEdit:focus {
+border-width:2px;
+border-color:gold;
+}</string>
+         </property>
+         <property name="placeholderText">
+          <string>格式：2018-08-08</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 0);
+font:bold;
+font:15pt;
+font-family:微软雅黑;</string>
+         </property>
+         <property name="text">
+          <string>结束时间：</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 0, 0);
+font:bold;
+font:15pt;
+font-family:微软雅黑;</string>
+         </property>
+         <property name="text">
+          <string>是否生效：</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" colspan="2">
+        <widget class="QLineEdit" name="startDateLineEdit">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit{
+background-color: rgb(255,255,255);
+color: rgb(0, 0, 0);
+border-radius:6px;
+font:13pt;
+font-family:Microsoft Yahei;
+border:1px solid gray;
+}
+QLineEdit:hover{
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}
+QLineEdit:focus {
+border-width:2px;
+border-color:gold;
+}</string>
+         </property>
+         <property name="placeholderText">
+          <string>格式：2018-01-01</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QRadioButton" name="enableRadioButton">
+         <property name="text">
+          <string>有效</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QRadioButton" name="disenableRadioButton">
+         <property name="text">
+          <string>无效</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="cancelPushButton">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
 {
     font-family:Microsoft Yahei;
     color:white;
@@ -353,22 +430,85 @@ QPushButton:unpressed
     padding-top:4px;
 }
 </string>
-       </property>
-       <property name="text">
-        <string>取消</string>
-       </property>
-      </widget>
+         </property>
+         <property name="text">
+          <string>取消注册</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="registerPushButton">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:rgb(14 , 150 , 254);
+    border-radius:10px;
+	font: 15pt;
+}
+
+QPushButton:hover
+{
+    background-color:tomato;
+}
+
+QPushButton:pressed
+{
+    background-color:rgb(14 , 100 , 228);
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}
+</string>
+         </property>
+         <property name="text">
+          <string>立即注册</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
    <item row="1" column="2">
-    <spacer name="horizontalSpacer_4">
+    <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>113</width>
+       <width>43</width>
        <height>20</height>
       </size>
      </property>
@@ -382,24 +522,36 @@ QPushButton:unpressed
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>25</height>
+       <height>0</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>userLineEdit</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+  <tabstop>mailLineEdit</tabstop>
+  <tabstop>phoneLineEdit</tabstop>
+  <tabstop>startDateLineEdit</tabstop>
+  <tabstop>endDateLineEdit</tabstop>
+  <tabstop>enableRadioButton</tabstop>
+  <tabstop>disenableRadioButton</tabstop>
+  <tabstop>registerPushButton</tabstop>
+  <tabstop>cancelPushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>registerPushButton_2</sender>
+   <sender>cancelPushButton</sender>
    <signal>clicked()</signal>
    <receiver>registerDlg</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>188</x>
-     <y>308</y>
+     <x>162</x>
+     <y>337</y>
     </hint>
     <hint type="destinationlabel">
      <x>189</x>

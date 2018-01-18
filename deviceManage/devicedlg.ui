@@ -34,7 +34,61 @@ font-family:Microsoft Yahei;</string>
      </property>
     </spacer>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="6">
+    <widget class="QLabel" name="deviceLabel">
+     <property name="styleSheet">
+      <string notr="true">color: rgb(0, 0, 0);
+border-radius:10px;
+font:12pt;
+font:bold;
+font-family:Microsoft Yahei;</string>
+     </property>
+     <property name="text">
+      <string>集控终端在线数量：</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="7">
+    <widget class="QLabel" name="numberLabel">
+     <property name="minimumSize">
+      <size>
+       <width>60</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>60</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft Yahei</family>
+       <pointsize>13</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(254,67,101);
+border-radius:6px;
+font:13pt;
+font-family:Microsoft Yahei;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
     <widget class="QLineEdit" name="searchLineEdit">
      <property name="minimumSize">
       <size>
@@ -43,11 +97,22 @@ font-family:Microsoft Yahei;</string>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(182,194,154);
+      <string notr="true">QLineEdit{
+background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:10px;
-font:15pt;
-font-family:Microsoft Yahei;</string>
+font:11pt;
+font-family:Microsoft Yahei;
+border:1px solid gray;
+}
+QLineEdit:hover{
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}
+QLineEdit:focus {
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}</string>
      </property>
      <property name="inputMask">
       <string/>
@@ -76,61 +141,33 @@ font-family:Microsoft Yahei;</string>
     </widget>
    </item>
    <item row="0" column="5">
-    <widget class="QLabel" name="numberLabel">
-     <property name="minimumSize">
+    <spacer name="dotHorizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
       <size>
-       <width>70</width>
-       <height>0</height>
+       <width>40</width>
+       <height>20</height>
       </size>
      </property>
-     <property name="maximumSize">
-      <size>
-       <width>70</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <family>Microsoft Yahei</family>
-       <pointsize>12</pointsize>
-       <weight>50</weight>
-       <italic>false</italic>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(182,194,154);
-color: rgb(0, 0, 0);
-border-radius:6px;
-font:12pt;
-font-family:Microsoft Yahei;</string>
-     </property>
-     <property name="text">
-      <string>1800000</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
+    </spacer>
    </item>
-   <item row="0" column="4">
-    <widget class="QLabel" name="deviceLabel">
+   <item row="0" column="8">
+    <widget class="QLabel" name="unitLabel">
      <property name="styleSheet">
       <string notr="true">color: rgb(0, 0, 0);
 border-radius:10px;
-font:15pt;
+font:12pt;
 font:bold;
 font-family:Microsoft Yahei;</string>
      </property>
      <property name="text">
-      <string>集控终端在线数量：</string>
+      <string> 台</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
+   <item row="0" column="3">
     <widget class="QPushButton" name="searchPushButton">
      <property name="minimumSize">
       <size>
@@ -151,7 +188,8 @@ font-family:Microsoft Yahei;</string>
     color:white;
     background-color:rgb(14 , 150 , 254);
     border-radius:10px;
-	font: 15pt;
+	font: 12pt;
+font:bold;
 }
 
 QPushButton:hover
@@ -177,21 +215,7 @@ QPushButton:unpressed
      </property>
     </widget>
    </item>
-   <item row="0" column="6">
-    <widget class="QLabel" name="unitLabel">
-     <property name="styleSheet">
-      <string notr="true">color: rgb(0, 0, 0);
-border-radius:10px;
-font:15pt;
-font:bold;
-font-family:Microsoft Yahei;</string>
-     </property>
-     <property name="text">
-      <string> 台</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="7">
+   <item row="0" column="9">
     <spacer name="horizontalSpacer_7">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -204,12 +228,13 @@ font-family:Microsoft Yahei;</string>
      </property>
     </spacer>
    </item>
-   <item row="1" column="0" colspan="8">
+   <item row="1" column="0" colspan="10">
     <widget class="QTableWidget" name="listTableWidget">
      <property name="styleSheet">
       <string notr="true">QTableWidget
 {
 	selection-background-color:tomato;
+font:11pt;
 
 }
 QTableWidget::item:hover
@@ -229,20 +254,7 @@ QHeaderView
      </attribute>
     </widget>
    </item>
-   <item row="0" column="3">
-    <spacer name="horizontalSpacer_10">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="0" colspan="8">
+   <item row="2" column="0" colspan="10">
     <widget class="QFrame" name="pageFrame">
      <property name="minimumSize">
       <size>
@@ -302,7 +314,7 @@ QHeaderView
           <property name="styleSheet">
            <string notr="true">color: rgb(0, 0, 0);
 border-radius:10px;
-font:12pt;
+font:10pt;
 font:bold;
 font-family:微软雅黑;</string>
           </property>
@@ -312,22 +324,33 @@ font-family:微软雅黑;</string>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit_2">
+         <widget class="QLineEdit" name="currentPageLineEdit">
           <property name="maximumSize">
            <size>
-            <width>60</width>
-            <height>16777215</height>
+            <width>35</width>
+            <height>22</height>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(182,194,154);
-color: rgb(0, 0, 0);
-border-radius:5px;
-font:12pt;
-font-family:Microsoft Yahei;</string>
+           <string notr="true">QLineEdit{
+background-color: rgb(255,255,255);
+color: blue;
+border-radius:6px;
+font:11pt;
+font-family:Microsoft Yahei;
+border:1px solid gray;
+}
+QLineEdit:hover{
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}
+QLineEdit:focus {
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}</string>
           </property>
           <property name="text">
-           <string>1</string>
+           <string>5</string>
           </property>
           <property name="maxLength">
            <number>10</number>
@@ -348,7 +371,7 @@ font-family:Microsoft Yahei;</string>
           <property name="styleSheet">
            <string notr="true">color: rgb(0, 0, 0);
 border-radius:10px;
-font:12pt;
+font:10pt;
 font:bold;
 font-family:微软雅黑;</string>
           </property>
@@ -394,7 +417,7 @@ font-family:微软雅黑;</string>
           <property name="styleSheet">
            <string notr="true">color: rgb(0, 0, 0);
 border-radius:10px;
-font:12pt;
+font:10pt;
 font:bold;
 font-family:微软雅黑;</string>
           </property>
@@ -404,25 +427,16 @@ font-family:微软雅黑;</string>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit_3">
-          <property name="maximumSize">
-           <size>
-            <width>60</width>
-            <height>16777215</height>
-           </size>
-          </property>
+         <widget class="QLabel" name="allPageLabel">
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(182,194,154);
-color: rgb(0, 0, 0);
-border-radius:5px;
+           <string notr="true">color: blue;
+border-radius:10px;
 font:12pt;
-font-family:Microsoft Yahei;</string>
+font:bold;
+font-family:微软雅黑;</string>
           </property>
           <property name="text">
-           <string>3000</string>
-          </property>
-          <property name="maxLength">
-           <number>20</number>
+           <string/>
           </property>
          </widget>
         </item>
@@ -437,12 +451,122 @@ font-family:Microsoft Yahei;</string>
           <property name="styleSheet">
            <string notr="true">color: rgb(0, 0, 0);
 border-radius:10px;
-font:12pt;
+font:10pt;
 font:bold;
 font-family:微软雅黑;</string>
           </property>
           <property name="text">
            <string>页</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="previousPushButton">
+          <property name="minimumSize">
+           <size>
+            <width>45</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>45</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:rgb(14 , 150 , 254);
+    border-radius:6px;
+	font: 11pt;
+}
+
+QPushButton:hover
+{
+    background-color:rgb(44 , 137 , 255);
+}
+
+QPushButton:pressed
+{
+    background-color:rgb(14 , 100 , 228);
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+          </property>
+          <property name="text">
+           <string>上页</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_11">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Maximum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>5</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="nextPushButton">
+          <property name="minimumSize">
+           <size>
+            <width>45</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>45</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:rgb(14 , 150 , 254);
+    border-radius:6px;
+	font: 11pt;
+}
+
+QPushButton:hover
+{
+    background-color:rgb(44 , 137 , 255);
+}
+
+QPushButton:pressed
+{
+    background-color:rgb(14 , 100 , 228);
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+          </property>
+          <property name="text">
+           <string>下页</string>
           </property>
          </widget>
         </item>
@@ -484,7 +608,7 @@ font-family:微软雅黑;</string>
           <property name="styleSheet">
            <string notr="true">color: rgb(0, 0, 0);
 border-radius:10px;
-font:12pt;
+font:10pt;
 font:bold;
 font-family:微软雅黑;</string>
           </property>
@@ -494,22 +618,16 @@ font-family:微软雅黑;</string>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit_4">
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>16777215</height>
-           </size>
-          </property>
+         <widget class="QLabel" name="numLabel">
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(182,194,154);
-color: rgb(0, 0, 0);
-border-radius:5px;
+           <string notr="true">color: blue;
+border-radius:10px;
 font:12pt;
-font-family:Microsoft Yahei;</string>
+font:bold;
+font-family:微软雅黑;</string>
           </property>
           <property name="text">
-           <string>60</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -518,7 +636,7 @@ font-family:Microsoft Yahei;</string>
           <property name="styleSheet">
            <string notr="true">color: rgb(0, 0, 0);
 border-radius:10px;
-font:12pt;
+font:10pt;
 font:bold;
 font-family:微软雅黑;</string>
           </property>
@@ -557,6 +675,67 @@ font-family:微软雅黑;</string>
       </item>
      </layout>
     </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QPushButton" name="searchAllPushButton">
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:rgb(14 , 150 , 254);
+    border-radius:10px;
+	font: 12pt;
+font:bold;
+}
+
+QPushButton:hover
+{
+    background-color:rgb(44 , 137 , 255);
+}
+
+QPushButton:pressed
+{
+    background-color:rgb(14 , 100 , 228);
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+     </property>
+     <property name="text">
+      <string>查询全部</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer_10">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

@@ -1,10 +1,17 @@
+/***********************************************************************
+* Copyright (c) 2018, 青岛特来电新能源有限公司  All rights reserved.
+*
+* 文件名称： loadingdlg.h
+* 描    述： 登录缓冲进度条
+* 修改记录：
+* 			V0.9，2017-12-19，new，刘卫明
+*
+***********************************************************************/
 #ifndef LOADINGDLG_H
 #define LOADINGDLG_H
 
-#include "management/managementtool.h"
 #include <QDialog>
 #include <QMovie>
-#include <QTimer>
 
 namespace Ui {
 class loadingDlg;
@@ -20,12 +27,8 @@ public:
 
     int sec; //计时
 
-public slots:
-    void delayDisplay();
-
 private:
     Ui::loadingDlg *ui;
-    ManagementTool *pManageDlg;
     QMovie *movie;
     QTimer *pTimer;
 };

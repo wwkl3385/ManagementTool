@@ -23,37 +23,49 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
+QT += network
+#LIBS += -lIphlpapi
+
 SOURCES += \
-     main.cpp \
-    ./management/managementtool.cpp \
-    ./logon/logon.cpp \
-    ./deviceManage/devicedlg.cpp \
-    ./accountManage/accountdlg.cpp \
-    ./register/registerdlg.cpp \
-    ./recordExport/recorddlg.cpp \
-    ./password/passworddlg.cpp \
-    loading/loadingdlg.cpp
+    main.cpp \
+    management/managementtool.cpp \
+    deviceManage/devicedlg.cpp \
+    accountManage/accountdlg.cpp \
+    register/registerdlg.cpp \
+    recordExport/recorddlg.cpp \
+    loading/loadingdlg.cpp \
+    jsonManage/jsonmanage.cpp \
+    httpManage/httpmanage.cpp \
+    logon/logon.cpp \
+    downloadManage/downloadmanager.cpp
 
 HEADERS += \
-    ./management/managementtool.h \
-    ./logon/logon.h \
-    ./deviceManage/devicedlg.h \
-    ./accountManage/accountdlg.h \
-    ./register/registerdlg.h \
-    ./recordExport/recorddlg.h \
-    ./password/passworddlg.h \
-    loading/loadingdlg.h
+    management/managementtool.h \
+    deviceManage/devicedlg.h \
+    accountManage/accountdlg.h \
+    register/registerdlg.h \
+    recordExport/recorddlg.h \
+    loading/loadingdlg.h \
+    jsonManage/jsonmanage.h \
+    httpManage/httpmanage.h \
+    main.rc \
+    logon/logon.h \
+    downloadManage/downloadmanager.h
 
 FORMS += \
-    ./management/managementtool.ui \
-    ./logon/logon.ui \
-    ./deviceManage/devicedlg.ui \
-    ./accountManage/accountdlg.ui \
-    ./register/registerdlg.ui \
-    ./recordExport/recorddlg.ui \
-    ./password/passworddlg.ui \
-    loading/loadingdlg.ui
+    management/managementtool.ui \
+    deviceManage/devicedlg.ui \
+    accountManage/accountdlg.ui \
+    register/registerdlg.ui \
+    recordExport/recorddlg.ui \
+    loading/loadingdlg.ui \
+    logon/logon.ui
+
 RC_FILE  = ./icon/icon.rc
 
+RC_FILE += main.rc
 RESOURCES += \
     ./icon/pictures.qrc
+
+DISTFILES += \
+    uac.manifest

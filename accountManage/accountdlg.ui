@@ -28,100 +28,72 @@ font-family:Microsoft Yahei;</string>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Maximum</enum>
+       </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>20</width>
          <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QLineEdit" name="searchLineEdit">
        <property name="minimumSize">
         <size>
-         <width>130</width>
-         <height>35</height>
+         <width>160</width>
+         <height>30</height>
         </size>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>130</width>
-         <height>35</height>
-        </size>
+       <property name="font">
+        <font>
+         <family>Microsoft Yahei</family>
+         <pointsize>12</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>IBeamCursor</cursorShape>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:rgb(14 , 150 , 254);
-    border-radius:10px;
-	font: 15pt;
-}
-
-QPushButton:hover
-{
-    background-color:rgb(44 , 137 , 255);
-}
-
-QPushButton:pressed
-{
-    background-color:rgb(14 , 100 , 228);
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-       </property>
-       <property name="text">
-        <string>所有账户信息</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit_9">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(182,194,154);
+        <string notr="true">QLineEdit{
+background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:10px;
-font:15pt;
-font-family:Microsoft Yahei;</string>
+font:12pt;
+font-family:Microsoft Yahei;
+border:1px solid gray;
+}
+QLineEdit:hover{
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}
+QLineEdit:focus {
+border-width:2px;
+border-color:rgb(170, 170, 255);
+}</string>
        </property>
        <property name="placeholderText">
-        <string>请输入工号查询</string>
+        <string>输入用户名或邮箱查询</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="searchPushButton">
        <property name="minimumSize">
         <size>
          <width>130</width>
-         <height>35</height>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>130</width>
-         <height>35</height>
+         <height>30</height>
         </size>
        </property>
        <property name="styleSheet">
@@ -131,7 +103,8 @@ font-family:Microsoft Yahei;</string>
     color:white;
     background-color:rgb(14 , 150 , 254);
     border-radius:10px;
-	font: 15pt;
+	font: 12pt;
+font:bold;
 }
 
 QPushButton:hover
@@ -170,6 +143,67 @@ QPushButton:unpressed
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="allUserPushButton">
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>130</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:rgb(14 , 150 , 254);
+    border-radius:10px;
+	font: 12pt;
+font:bold;
+}
+
+QPushButton:hover
+{
+    background-color:rgb(44 , 137 , 255);
+}
+
+QPushButton:pressed
+{
+    background-color:rgb(14 , 100 , 228);
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+       </property>
+       <property name="text">
+        <string>所有账户信息</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
     </layout>
    </item>
    <item row="1" column="0">
@@ -178,6 +212,7 @@ QPushButton:unpressed
       <string notr="true">QTableWidget
 {
     selection-background-color:tomato;
+font:12pt;
 
 }
 QTableWidget::item:hover
@@ -228,7 +263,7 @@ font:bold;
        <property name="minimumSize">
         <size>
          <width>100</width>
-         <height>35</height>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -244,7 +279,7 @@ font:bold;
     color:white;
     background-color:rgb(14 , 150 , 254);
     border-radius:10px;
-	font: 15pt;
+	font: 12pt;
 }
 
 QPushButton:hover
@@ -284,11 +319,65 @@ QPushButton:unpressed
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_11">
+      <widget class="QPushButton" name="modifyPushButton">
        <property name="minimumSize">
         <size>
          <width>100</width>
-         <height>35</height>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLineEdit{
+background-color: oldlace; 
+color: steelblue;
+ border-radius:10px; 
+font:15px;   
+border: 2px groove gray;
+ border-style: outset;
+}
+                                               
+QLineEdit:hover
+{
+background-color:khaki; 
+color: black;
+}
+                                              
+QLineEdit:focus
+{
+background-color: pink; 
+border-style: inset; 
+}</string>
+       </property>
+       <property name="text">
+        <string>修改账户</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="deletePushButton">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -304,7 +393,7 @@ QPushButton:unpressed
     color:white;
     background-color:rgb(14 , 150 , 254);
     border-radius:10px;
-	font: 15pt;
+	font: 12pt;
 }
 
 QPushButton:hover
