@@ -7,10 +7,10 @@
 * 			V0.9，2018-01-12，new，刘卫明
 *
 ***********************************************************************/
-#include "managementtool.h"
-#include "ui_managementtool.h"
-#include "logon/logon.h"
 #include "accountManage/accountdlg.h"
+#include "ui_managementtool.h"
+#include "managementtool.h"
+#include "logon/logon.h"
 #include "deviceManage/devicedlg.h"
 #include "recordExport/recorddlg.h"
 #include <QScrollBar>
@@ -28,11 +28,16 @@
 #include <WinSock2.h>
 #include <iphlpapi.h>
 
+ #define  QUERY_ONE_USER_URL "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_one_user"   //查询单个用户信息url
+
 static int n = 0;       //记录创建的次数
 static int secTmp = 0;  //连接vpn 超时时间
 static int sec = 0;     //vpn 连接时间 s
 static int min = 0;     //vpn 连接时间 min
 bool connectVpnSuccessFlag = false;  //vpn连接成功标志  false:未连接
+bool openPutty  = true;
+bool openWinscp = true;
+stJsonUserData  ManagementTool::stUserInfo;
 
 ManagementTool::ManagementTool(QWidget *parent) :
     QMainWindow(parent),
@@ -44,7 +49,12 @@ ManagementTool::ManagementTool(QWidget *parent) :
     setWindowTitle("智能集中控制器远程管理系统");
     setWindowIcon(QIcon("teld.ico")); //设置软件图标
     this->resize(1500, 800);          //设置初始尺寸
+    ui->flashLabel->setStyleSheet("QLabel{background-color:white ;border-radius:6px;}");
+
+    dataJson = new jsonManage;
+    dataHttp = new httpManage;
     funcWidget = NULL;
+    regDlg = NULL;
     vpnClickedConnect = false;
     vpnClicked = false;
 
@@ -72,12 +82,24 @@ ManagementTool::ManagementTool(QWidget *parent) :
     ui->nameLineEdit->setText(logon::userNameInfo);
 
     ui->puttyPushButton->hide();
-    ui->puttyPushButtonClose->hide();
+//    ui->puttyPushButtonClose->hide();
     ui->winscpPushButton->hide();
-    ui->winscpPushButtonClose->hide();
+//    ui->winscpPushButtonClose->hide();
     ui->connectVPNPushButton->setText("连接");
 
     ui->recordPushButton->hide();
+
+    /*默认显示设备管理界面*/
+    if (funcWidget)
+    {
+        layout->removeWidget(funcWidget);
+        delete funcWidget;
+        funcWidget = NULL;
+    }
+
+    funcWidget = new deviceDlg(ui->spaceFrame);
+    layout->addWidget(funcWidget);
+    funcWidget->show();
 
     /*管理员和普通用户*/
     if(logon::userType == 1)
@@ -88,9 +110,19 @@ ManagementTool::ManagementTool(QWidget *parent) :
     else
     {
         ui->nameLabel->setText("普通用户");
-        ui->AdminPage->setVisible(false);
-        ui->manageToolBox->removeItem(1);
+//        ui->AdminPage->setVisible(false);
+//        ui->manageToolBox->removeItem(1);
     }
+
+    /*连接服务器,请求单个用户*/
+    dataJson->queryOneUserObj= dataJson->jsonPackQueryOneUser(logon::userNameInfo);
+    dataHttp->httpPost(QUERY_ONE_USER_URL, dataJson->queryOneUserObj); //http请求当前用户
+    qDebug() << "当前用户信息请求:" << dataJson->queryOneUserObj;
+
+    /*http请求*/
+    connect(this->dataHttp->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onReplyFinished(QNetworkReply*)));
+    connect(this, SIGNAL(transmitSignal(QByteArray)), this, SLOT(onOneUserDataParse(QByteArray)));
+
 }
 
 ManagementTool::~ManagementTool()
@@ -100,6 +132,12 @@ ManagementTool::~ManagementTool()
         layout->removeWidget(funcWidget);
         delete funcWidget;
         funcWidget = NULL;
+    }
+
+    if (regDlg)
+    {
+        delete regDlg;
+        regDlg = NULL;
     }
 
     qDebug() <<"managementDlg创建的次数："<< --n;
@@ -137,17 +175,39 @@ void ManagementTool::on_devicePushButton_clicked()
 /*账户设置*/
 void ManagementTool::on_accountPushButton_clicked()
 {
-    if (funcWidget)
+    /*管理员和普通用户*/
+    if(logon::userType == 1) //管理员
     {
-        layout->removeWidget(funcWidget);
-        delete funcWidget;
-        funcWidget = NULL;
+        if (funcWidget)
+        {
+            layout->removeWidget(funcWidget);
+            delete funcWidget;
+            funcWidget = NULL;
+        }
+
+        funcWidget = new accountDlg(ui->spaceFrame);
+
+        layout->addWidget(funcWidget);
+        funcWidget->show();
     }
+    else
+    {
+        /*http请求*/
+        connect(this, SIGNAL(transmitSignal(QByteArray)), this, SLOT(onOneUserDataParse(QByteArray)));
+        /*连接服务器,请求单个用户*/
+        dataHttp->httpPost(QUERY_ONE_USER_URL, dataJson->queryOneUserObj); //http请求当前用户
 
-    funcWidget = new accountDlg(ui->spaceFrame);
+        accountDlg::modifyFlag = true;  //修改用户
+        if (regDlg)
+        {
+            delete regDlg;
+            regDlg = NULL;
+        }
 
-    layout->addWidget(funcWidget);
-    funcWidget->show();
+         regDlg = new registerDlg;
+         regDlg->exec();
+         return;
+    }
 }
 
 
@@ -257,12 +317,12 @@ void ManagementTool::onTimeDelay()
         ui->connectVPNPushButton->setText("断开");
         ui->connectVPNPushButton->setEnabled(true);
         ui->connectStatusLabel->setText("连接成功");
-        ui->connectStatusLabel->setStyleSheet("QLabel{color:yellow;font:15px;font:bold;}");
+        ui->connectStatusLabel->setStyleSheet("QLabel{color:red;font:15px;font:bold;}");
 
         if (halfSec % 2 == 1)
-            ui->flashLabel->setStyleSheet("QLabel{background-color:yellow;border-radius:6px;}");
+            ui->flashLabel->setStyleSheet("QLabel{background-color:red;border-radius:6px;}");
         else
-            ui->flashLabel->setStyleSheet("QLabel{background-color:green; border-radius:6px;}");
+            ui->flashLabel->setStyleSheet("QLabel{background-color:white; border-radius:6px;}");
 
         strTime.sprintf("%d分：%d秒", min, sec);
         ui->timeLable->setText(strTime);
@@ -279,16 +339,16 @@ void ManagementTool::onTimeDelay()
     if (!deviceDlg::deviceIp.isEmpty())
     {
         ui->puttyPushButton->show();
-        ui->puttyPushButtonClose->show();
+//        ui->puttyPushButtonClose->show();
         ui->winscpPushButton->show();
-        ui->winscpPushButtonClose->show();
+//        ui->winscpPushButtonClose->show();
     }
     else
     {
         ui->puttyPushButton->hide();
-        ui->puttyPushButtonClose->hide();
+//        ui->puttyPushButtonClose->hide();
         ui->winscpPushButton->hide();
-        ui->winscpPushButtonClose->hide();
+//        ui->winscpPushButtonClose->hide();
     }
 
     /*管理员密码被修改后,退出主界面*/
@@ -391,33 +451,59 @@ void ManagementTool::on_connectVPNPushButton_clicked()
 
 void ManagementTool::on_puttyPushButton_clicked()
 {
-    QString program = QCoreApplication::applicationDirPath() + "./thirdApp/bin/putty.exe";
+    if (openPutty == true)
+    {
+        openPutty = false;
+        ui->puttyPushButton->setText("关闭putty");
+        ui->puttyPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:rgb(87,96,105); border-radius:10px; font: 12pt; } QPushButton:hover { background-color:rgb(84,115,135); } QPushButton:pressed { background-color:rgb(14 , 100 , 228); padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
-    QStringList arguments;
-    QString ip = deviceDlg::deviceIp;
+        QString program = QCoreApplication::applicationDirPath() + "./thirdApp/bin/putty.exe";
 
-    arguments<< "-telnet" << ip << "23";
+        QStringList arguments;
+        QString ip = deviceDlg::deviceIp;
 
-    qDebug() << arguments;
+        arguments<< "-telnet" << ip << "23";
 
-    puttyProcess->setProcessChannelMode(QProcess::SeparateChannels);
-    puttyProcess->setReadChannel(QProcess::StandardOutput);
-    puttyProcess->start(program, arguments, QIODevice::ReadWrite);
+        qDebug() << arguments;
 
-    //    connect(puttyProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onProcessError(QProcess::ProcessError)));
+        puttyProcess->setProcessChannelMode(QProcess::SeparateChannels);
+        puttyProcess->setReadChannel(QProcess::StandardOutput);
+        puttyProcess->start(program, arguments, QIODevice::ReadWrite);
+    }
+    else
+    {
+        terminateApp("taskkill /im putty.exe /f");
+        openPutty = true;
+        ui->puttyPushButton->setText("打开putty");
+        ui->puttyPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:rgb(38,188,213); border-radius:10px; font: 12pt; } QPushButton:hover { background-color:deepskyblue; }  QPushButton:pressed { background-color:deepskyblue; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px;}");
+    }
 }
 
 void ManagementTool::on_winscpPushButton_clicked()
 {
-    QString program = QCoreApplication::applicationDirPath() + "./thirdApp/bin/WinScp.exe";
-    QStringList arguments;
-    QString ip = deviceDlg::deviceIp;
+    if (openWinscp== true)
+    {
+        openWinscp= false;
+        ui->winscpPushButton->setText("关闭winscp");
+        ui->winscpPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:rgb(87,96,105); border-radius:10px; font: 12pt; } QPushButton:hover { background-color:rgb(84,115,135); } QPushButton:pressed { background-color:rgb(14 , 100 , 228); padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
-    arguments << QString("%1://%2:%3@%4:%5").arg("ftp").arg("EM9280").arg("root").arg(ip).arg(21);
+        QString program = QCoreApplication::applicationDirPath() + "./thirdApp/bin/WinScp.exe";
+        QStringList arguments;
+        QString ip = deviceDlg::deviceIp;
 
-    winscpProcess->setProcessChannelMode(QProcess::SeparateChannels);
-    winscpProcess->setReadChannel(QProcess::StandardOutput);
-    winscpProcess->start(program, arguments, QIODevice::ReadWrite);
+        arguments << QString("%1://%2:%3@%4:%5").arg("ftp").arg("EM9280").arg("root").arg(ip).arg(21);
+
+        winscpProcess->setProcessChannelMode(QProcess::SeparateChannels);
+        winscpProcess->setReadChannel(QProcess::StandardOutput);
+        winscpProcess->start(program, arguments, QIODevice::ReadWrite);
+    }
+    else
+    {
+        terminateApp("taskkill /im winscp.exe /f");
+        openWinscp = true;
+        ui->winscpPushButton->setText("打开winscp");
+        ui->winscpPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:rgb(38,188,213); border-radius:10px; font: 12pt; } QPushButton:hover { background-color:deepskyblue; }  QPushButton:pressed { background-color:deepskyblue; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px;}");
+    }
 }
 
 #if 0
@@ -498,6 +584,74 @@ void ManagementTool::terminateApp(QString app)
 ***********************************************************************/
 void ManagementTool::on_aboutPushButton_clicked()
 {
-    QMessageBox::about(NULL, "版权所有", "Copyright (c) 2017, 青岛特来电新能源有限公司, All rights reserved." \
-                                     "\n\n集中控制器远程管理系统 V1.0.0\n\n智能充电中心");
+    QMessageBox::about(NULL, "版权所有", "Copyright (c) 2018, 青岛特来电新能源有限公司, All rights reserved." \
+                                     "\n\n集中控制器远程管理系统 V1.0.0\n\n智能充电研发中心-集控开发部");
 }
+
+
+void ManagementTool::on_aboutAction_triggered()
+{
+    QMessageBox::about(NULL, "版权所有", "Copyright (c) 2018, 青岛特来电新能源有限公司, All rights reserved." \
+                                     "\n\n集中控制器远程管理系统 V1.0.0\n\n智能充电研发中心-集控开发部");
+}
+
+/*使用说明书*/
+void ManagementTool::on_helpAction_triggered()
+{
+
+}
+
+void ManagementTool::on_exitAction_triggered()
+{
+    this->close();
+}
+
+
+void ManagementTool::onOneUserDataParse(QByteArray tmpData)
+{
+    disconnect(this, SIGNAL(transmitSignal(QByteArray)), this, SLOT(onOneUserDataParse(QByteArray)));
+    qDebug() << "获取当个数据用户：" <<tmpData;
+
+    if (!dataJson->jsonParseData(tmpData, "password").isEmpty())
+    {
+        ManagementTool::stUserInfo.user =  dataJson->jsonParseData(tmpData,"password").first();
+        ManagementTool::stUserInfo.password =  dataJson->jsonParseData(tmpData,"password").first();
+        ManagementTool::stUserInfo.userMail =  dataJson->jsonParseData(tmpData,"user_mail").first();
+        ManagementTool::stUserInfo.userPhone =  dataJson->jsonParseData(tmpData,"user_phone").first();
+        ManagementTool::stUserInfo.userEnable =  dataJson->jsonParseData(tmpData,"password").first();
+        ManagementTool::stUserInfo.userStartDate =  dataJson->jsonParseData(tmpData,"user_start_date").first();
+        ManagementTool::stUserInfo.userEndDate =  dataJson->jsonParseData(tmpData,"user_end_date").first();
+    }
+
+    if (ManagementTool::stUserInfo.password == "123456")
+    {
+        accountDlg::modifyFlag = true;
+        if (regDlg)
+        {
+           QMessageBox::warning(this->regDlg, "提示", "当前密码为初始密码，请修改密码！");
+//            delete regDlg;
+//            regDlg = NULL;
+        }
+        else
+        {
+            regDlg = new registerDlg;
+            QMessageBox::warning(this, "提示", "当前密码为初始密码，请修改密码！");
+            regDlg->exec();
+
+            return;
+        }
+    }
+}
+
+void ManagementTool::onReplyFinished(QNetworkReply *reply)
+{
+    if(reply->error() != QNetworkReply::NoError)
+    {
+        qDebug() << "Error:" << reply->errorString();
+        QMessageBox::warning(this, "提示", "连接服务器超时，请重试！");
+        return;
+    }
+    QByteArray tempBuf = reply->readAll();
+    emit transmitSignal(tempBuf);
+}
+

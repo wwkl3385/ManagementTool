@@ -14,7 +14,7 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(225,233,220);
+   <string notr="true">
 color: rgb(20,68,106);
 border-radius:10px;
 font:15pt;
@@ -28,12 +28,9 @@ font-family:Microsoft Yahei;</string>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Maximum</enum>
-       </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>20</width>
+         <width>40</width>
          <height>20</height>
         </size>
        </property>
@@ -101,20 +98,19 @@ border-color:rgb(170, 170, 255);
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:rgb(14 , 150 , 254);
+    background-color:skyblue;
     border-radius:10px;
 	font: 12pt;
-font:bold;
 }
 
 QPushButton:hover
 {
-    background-color:rgb(44 , 137 , 255);
+    background-color:deepskyblue;
 }
 
 QPushButton:pressed
 {
-    background-color:rgb(14 , 100 , 228);
+    background-color:deepskyblue;
     padding-left:4px;
     padding-top:4px;
 }
@@ -131,7 +127,7 @@ QPushButton:unpressed
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_6">
+      <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -162,20 +158,19 @@ QPushButton:unpressed
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:rgb(14 , 150 , 254);
+    background-color:skyblue;
     border-radius:10px;
 	font: 12pt;
-font:bold;
 }
 
 QPushButton:hover
 {
-    background-color:rgb(44 , 137 , 255);
+    background-color:deepskyblue;
 }
 
 QPushButton:pressed
 {
-    background-color:rgb(14 , 100 , 228);
+    background-color:deepskyblue;
     padding-left:4px;
     padding-top:4px;
 }
@@ -191,19 +186,6 @@ QPushButton:unpressed
        </property>
       </widget>
      </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
     </layout>
    </item>
    <item row="1" column="0">
@@ -211,13 +193,13 @@ QPushButton:unpressed
      <property name="styleSheet">
       <string notr="true">QTableWidget
 {
-    selection-background-color:tomato;
+    selection-background-color:skyblue;
 font:12pt;
 
 }
 QTableWidget::item:hover
 {
-background-color:rgb(252,157,154)
+background-color:rgb(203,203,203);
 } 
 
 QHeaderView
@@ -277,19 +259,19 @@ font:bold;
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:rgb(14 , 150 , 254);
+    background-color:skyblue;
     border-radius:10px;
 	font: 12pt;
 }
 
 QPushButton:hover
 {
-    background-color:rgb(44 , 137 , 255);
+    background-color:deepskyblue;
 }
 
 QPushButton:pressed
 {
-    background-color:rgb(14 , 100 , 228);
+    background-color:deepskyblue;
     padding-left:4px;
     padding-top:4px;
 }
@@ -333,25 +315,31 @@ QPushButton:unpressed
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">QLineEdit{
-background-color: oldlace; 
-color: steelblue;
- border-radius:10px; 
-font:15px;   
-border: 2px groove gray;
- border-style: outset;
-}
-                                               
-QLineEdit:hover
+        <string notr="true">QPushButton
 {
-background-color:khaki; 
-color: black;
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:skyblue;
+    border-radius:10px;
+	font: 12pt;
 }
-                                              
-QLineEdit:focus
+
+QPushButton:hover
 {
-background-color: pink; 
-border-style: inset; 
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
 }</string>
        </property>
        <property name="text">
@@ -391,19 +379,19 @@ border-style: inset;
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:rgb(14 , 150 , 254);
+    background-color:skyblue;
     border-radius:10px;
 	font: 12pt;
 }
 
 QPushButton:hover
 {
-    background-color:rgb(44 , 137 , 255);
+    background-color:deepskyblue;
 }
 
 QPushButton:pressed
 {
-    background-color:rgb(14 , 100 , 228);
+    background-color:deepskyblue;
     padding-left:4px;
     padding-top:4px;
 }

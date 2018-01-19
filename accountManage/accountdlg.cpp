@@ -34,6 +34,7 @@ accountDlg::accountDlg(QWidget *parent) :
     qDebug() << "创建accountDlg";
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
+    ui->allUserPushButton->hide();
 
     signalFlag = false;  //请求 删除 信号
 
@@ -55,7 +56,7 @@ accountDlg::accountDlg(QWidget *parent) :
                                               "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
 
     ui->searchLineEdit->setStyleSheet("QLineEdit{background-color: oldlace; color: steelblue; border-radius:10px; font:12pt;font:bold;  border: 2px groove gray; border-style: outset;}"\
-                                               "QLineEdit:hover{background-color:khaki; color: black;}"\
+                                               "QLineEdit:hover{background-color:skyblue; color: black;}"\
                                               "QLineEdit:focus{background-color: lightblue; border-style: inset; }");
 
     /*设置表头内容*/
@@ -80,7 +81,7 @@ accountDlg::accountDlg(QWidget *parent) :
     ui->accountTableWidget->horizontalHeader()->setFont(font);
 
     /*设置表的属性*/
-    ui->accountTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:forestgreen;font:12pt;font:bold;}"); //设置表头背景色
+    ui->accountTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:deepskyblue;font:12pt;font:bold;}"); //设置表头背景色
     ui->accountTableWidget->horizontalHeader()->setHighlightSections(false);        //点击表时，不对表头行高亮
     ui->accountTableWidget->horizontalHeader()->setFixedHeight(30);                 //设置表头的高度
     ui->accountTableWidget->verticalHeader()->setDefaultSectionSize(35);            //设置行高

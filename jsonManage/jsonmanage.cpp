@@ -17,6 +17,7 @@ jsonManage::jsonManage()
 {
 
 }
+
   /*软件更新*/
 QJsonObject jsonManage::jsonPackUpdate(QString version)
 {
@@ -212,6 +213,25 @@ QJsonObject jsonManage::jsonPackQueryUser()
     queryUserObj.insert("data", queryUserDataArray);
 
     return queryUserObj;
+}
+
+  /*查询当前登录用户信息*/
+QJsonObject jsonManage::jsonPackQueryOneUser(QString user)
+{
+    QJsonObject oneUserObj;
+    QJsonObject oneUserObjParam, oneUserObjData;
+    QJsonArray  oneUserParamArray, oneUserDataArray;
+
+    oneUserObjParam.insert("user", user);
+
+    oneUserDataArray.append(oneUserObjData);
+    oneUserParamArray.append(oneUserObjParam);
+
+    oneUserObj.insert("cmd", QString("query_one_user"));
+    oneUserObj.insert("param", oneUserParamArray);
+    oneUserObj.insert("data", oneUserDataArray);
+
+    return oneUserObj;
 }
 
     /*查询集控登录连接的信息*/

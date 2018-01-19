@@ -24,6 +24,7 @@ public:
     QJsonObject deleteUserObj;     //删除用户
     QJsonObject modifyUserObj;     //修改用户
     QJsonObject queryUserObj;      //查询当前所有用户信息
+    QJsonObject queryOneUserObj;   //查询当前用户信息
     QJsonObject connectInfoObj;    //查询集控登录连接的信息
     QJsonObject connectNumberObj;  //查询在线终端数量
     QJsonObject connectAllInfoObj; //查询所有的在线终端数据
@@ -42,6 +43,7 @@ public:
     void jsonPackModifyUserAppend(QJsonObject &obj, QString user, QString password, QString mail, QString phone, QString enable, QString startDate, QString endDate);
 
     QJsonObject jsonPackQueryUser();
+    QJsonObject jsonPackQueryOneUser(QString user);
 
     QJsonObject jsonPackQueryConnectInfo(QString userId);
 

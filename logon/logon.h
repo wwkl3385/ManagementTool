@@ -64,8 +64,7 @@ private slots:
     void on_logonPushButton_clicked();
     void replyFinished(QNetworkReply *reply);    //http接收数据
     void loginDataParse(QByteArray tmpData);     //登录数据解析
-    void updateDataParse(QByteArray tmpData);    //登录数据解析
-
+    void updateDataParse(QByteArray tmpData);    //更新数据解析
     void onReplyFinished(int statusCode);
     void onDownloadProcess(qint64 bytesReceived, qint64 bytesTotal);
 

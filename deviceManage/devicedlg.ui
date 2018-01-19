@@ -14,40 +14,12 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(225,233,220);
-color: rgb(20,68,106);
+   <string notr="true">color: rgb(20,68,106);
 border-radius:10px;
 font:15pt;
 font-family:Microsoft Yahei;</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <spacer name="horizontalSpacer_6">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>6</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="6">
-    <widget class="QLabel" name="deviceLabel">
-     <property name="styleSheet">
-      <string notr="true">color: rgb(0, 0, 0);
-border-radius:10px;
-font:12pt;
-font:bold;
-font-family:Microsoft Yahei;</string>
-     </property>
-     <property name="text">
-      <string>集控终端在线数量：</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="7">
     <widget class="QLabel" name="numberLabel">
      <property name="minimumSize">
@@ -87,6 +59,33 @@ font-family:Microsoft Yahei;</string>
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
+   </item>
+   <item row="0" column="6">
+    <widget class="QLabel" name="deviceLabel">
+     <property name="styleSheet">
+      <string notr="true">color: rgb(0, 0, 0);
+border-radius:10px;
+font:12pt;
+font:bold;
+font-family:Microsoft Yahei;</string>
+     </property>
+     <property name="text">
+      <string>集控终端在线数量：</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <spacer name="horizontalSpacer_6">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>6</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item row="0" column="2">
     <widget class="QLineEdit" name="searchLineEdit">
@@ -186,20 +185,19 @@ font-family:Microsoft Yahei;</string>
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:rgb(14 , 150 , 254);
+    background-color:skyblue;
     border-radius:10px;
 	font: 12pt;
-font:bold;
 }
 
 QPushButton:hover
 {
-    background-color:rgb(44 , 137 , 255);
+    background-color:deepskyblue;
 }
 
 QPushButton:pressed
 {
-    background-color:rgb(14 , 100 , 228);
+    background-color:deepskyblue;
     padding-left:4px;
     padding-top:4px;
 }
@@ -233,26 +231,85 @@ QPushButton:unpressed
      <property name="styleSheet">
       <string notr="true">QTableWidget
 {
-	selection-background-color:tomato;
-font:11pt;
+    selection-background-color:skyblue;
+font:12pt;
 
 }
 QTableWidget::item:hover
 {
-	background-color:rgb(252,157,154)
+background-color:rgb(203,203,203);
 } 
 
 QHeaderView
 {
-	color:snow;
-	font:bold;
-}
-</string>
+
+font:bold;
+}</string>
      </property>
      <attribute name="horizontalHeaderDefaultSectionSize">
       <number>180</number>
      </attribute>
     </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QPushButton" name="searchAllPushButton">
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:skyblue;
+    border-radius:10px;
+	font: 12pt;
+}
+
+QPushButton:hover
+{
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+     </property>
+     <property name="text">
+      <string>查询全部</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer_10">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item row="2" column="0" colspan="10">
     <widget class="QFrame" name="pageFrame">
@@ -479,19 +536,19 @@ font-family:微软雅黑;</string>
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:rgb(14 , 150 , 254);
-    border-radius:6px;
-	font: 11pt;
+    background-color:skyblue;
+    border-radius:10px;
+	font: 12pt;
 }
 
 QPushButton:hover
 {
-    background-color:rgb(44 , 137 , 255);
+    background-color:deepskyblue;
 }
 
 QPushButton:pressed
 {
-    background-color:rgb(14 , 100 , 228);
+    background-color:deepskyblue;
     padding-left:4px;
     padding-top:4px;
 }
@@ -542,19 +599,19 @@ QPushButton:unpressed
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:rgb(14 , 150 , 254);
-    border-radius:6px;
-	font: 11pt;
+    background-color:skyblue;
+    border-radius:10px;
+	font: 12pt;
 }
 
 QPushButton:hover
 {
-    background-color:rgb(44 , 137 , 255);
+    background-color:deepskyblue;
 }
 
 QPushButton:pressed
 {
-    background-color:rgb(14 , 100 , 228);
+    background-color:deepskyblue;
     padding-left:4px;
     padding-top:4px;
 }
@@ -675,67 +732,6 @@ font-family:微软雅黑;</string>
       </item>
      </layout>
     </widget>
-   </item>
-   <item row="0" column="4">
-    <widget class="QPushButton" name="searchAllPushButton">
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>100</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:rgb(14 , 150 , 254);
-    border-radius:10px;
-	font: 12pt;
-font:bold;
-}
-
-QPushButton:hover
-{
-    background-color:rgb(44 , 137 , 255);
-}
-
-QPushButton:pressed
-{
-    background-color:rgb(14 , 100 , 228);
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-     </property>
-     <property name="text">
-      <string>查询全部</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer_10">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

@@ -193,8 +193,9 @@ void logon::loginDataParse(QByteArray tmpData)
         status = dataJson->jsonParseData(tmpData,"status").first().toInt();
 
     qDebug() <<"status返回解析值："<< status ;
-
-    if (status == 1) //登录成功
+    switch (status)
+    {
+    case 1:  //登录成功
     {
         pLoadDlg->close(); //关闭动态登录显示窗口
         delete pLoadDlg;
@@ -210,13 +211,28 @@ void logon::loginDataParse(QByteArray tmpData)
         qDebug() <<"userType返回解析值："<< userType << "管理员";
 
         this->accept();
+        break;
     }
-    else
+    case 2:  //已经登录
     {
         pLoadDlg->close(); //关闭动态登录显示窗口
-        QMessageBox::critical(this, "错误", "请输入正确的用户名和密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-        return;
+        QMessageBox::critical(this, "错误", "该用户已经登录!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        break;
     }
+    case 3:  //该用户为生效
+    {
+        pLoadDlg->close(); //关闭动态登录显示窗口
+        QMessageBox::critical(this, "错误", "该用户未生效，请联系管理员!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        break;
+    }
+    default:
+    {
+        pLoadDlg->close(); //关闭动态登录显示窗口
+        QMessageBox::critical(this, "错误", "用户名或密码错误!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        break;
+    }
+    }
+
 }
 
 void logon::updateDataParse(QByteArray tmpData)

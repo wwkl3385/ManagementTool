@@ -14,8 +14,9 @@
 #include <QProgressDialog>
 #include "jsonManage/jsonmanage.h"
 #include "httpManage/httpmanage.h"
-//#include "dataCache/datacache.h"
 #include <QTimer>
+//#include <QMenu>
+//#include <QAction>
 
 namespace Ui {
 class deviceDlg;
@@ -30,12 +31,29 @@ public:
     ~deviceDlg();
 
     void keyPressEvent(QKeyEvent *event);
+//    void createActions();
+//    void contextMenuEvent(QContextMenuEvent *event);
 
     int            signalFlag;    //信号标志位
     static QString deviceIp;      //被选择的设备ip地址
     QList<QString> remoteIpList;  //存储解析的远程ip
     QList<QString> startTimeList; //存储解析最新上线时间
     QList<QString> userIdList;    //存储解析用户id地址
+
+#if 0
+    QMenu *pop_menu;
+    QMenu *sort_style;
+    QAction *action_name;
+    QAction *action_size;
+    QAction *action_type;
+    QAction *action_date;
+    QAction *action_open;
+    QAction *action_download;
+    QAction *action_flush;
+    QAction *action_delete;
+    QAction *action_rename ;
+    QAction *action_create_folder;
+#endif
 
 signals:
     transmitNumSignal(QByteArray);

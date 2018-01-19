@@ -14,7 +14,7 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(225,233,220);
+   <string notr="true">
 color: rgb(20,68,106);
 border-radius:10px;
 font:15pt;

@@ -18,11 +18,14 @@
 #define  QUERY_ALL_INFO_URL  "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_all_connect_info"     //所有在线终端 信息
 #define  QUERY_ALL_NUM_URL   "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_total_connect"        //所有在线终端 数量
 #define  QUERY_INFO_URL      "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_connect_info"         //集控登录连接信息
-#define  NUMPAGE             18    //每页显示条数
+#define  NUMPAGE             25    //每页显示条数
+
+const QString signalInitensity = "--dB"; //无信号强度，默认为--dB
 
 int pageNum = 0;     // 页数
 int remainsRow = 0;  // 剩余行数
 int indexPage = 1;   // 页的索引
+
 
 QString deviceDlg::deviceIp; //被选择的设备ip地址
 
@@ -36,9 +39,25 @@ deviceDlg::deviceDlg(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
 
+#if 0
+    //创建菜单项
+    pop_menu = new QMenu();
+    sort_style = new QMenu(this);
+    action_name = new QAction(this);
+    action_size = new QAction(this);
+    action_type = new QAction(this);
+    action_date = new QAction(this);
+    action_open = new QAction(this);
+    action_download = new QAction(this);
+    action_flush = new QAction(this);
+    action_delete = new QAction(this);
+    action_rename = new QAction(this);
+    action_create_folder = new QAction(this);
+#endif
 
     signalFlag = 0;  //发送数量信号
 
+    ui->searchAllPushButton->hide();
     ui->pageFrame->hide();
     pTimer = new QTimer(this);
     connect(pTimer, SIGNAL(timeout()), this, SLOT(onTimeRelay()));
@@ -54,7 +73,7 @@ deviceDlg::deviceDlg(QWidget *parent) :
                                                "QLineEdit:hover{background-color:khaki; color: black;}"\
                                               "QLineEdit:focus{background-color:lightblue; border-style: inset; }");
      ui->searchLineEdit->setStyleSheet("QLineEdit{background-color: oldlace; color: steelblue; border-radius:8px; font:12pt;   border: 2px groove gray; border-style: outset;}"\
-                                               "QLineEdit:hover{background-color:khaki; color: black;}"\
+                                               "QLineEdit:hover{background-color:skyblue; color: black;}"\
                                               "QLineEdit:focus{background-color:lightblue; border-style: inset; }");
 
      ui->searchPushButton->setStyleSheet("QPushButton{background-color: rgb(14 , 150 , 254); color: white; border-radius:8px; font:12pt;font:bold; border: 2px groove gray; border-style: outset;}"\
@@ -81,18 +100,18 @@ deviceDlg::deviceDlg(QWidget *parent) :
 
     /*设置表头内容*/
     QStringList header;
-    header << "编号"  << "   mac地址   "<< "  站地址1  "<< "  站地址2  "<< "  站地址3  " <<  "设备vpn地址" << " 设备登录时间 " << " 信号强度 ";
+    header << "编号"  << "   mac地址   "<< "  站地址1  "<< "  站地址2  "<< "  站地址3  " <<  " 设备vpn地址 " << "设备上线时间" << " 信号强度 ";
     ui->listTableWidget->setHorizontalHeaderLabels(header);
 
     /*设置表的行排列显示*/
     ui->listTableWidget->horizontalHeader()->resizeSection(0, 50); //设置表头第一列(编号)的宽度为50；
-    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
-    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
-    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
-    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
+    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
+    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(5, QHeaderView::ResizeToContents);
     ui->listTableWidget->horizontalHeader()->setSectionResizeMode(6, QHeaderView::ResizeToContents);
-    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::Stretch);
+    ui->listTableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::ResizeToContents);
 
     /*设置表头字体加粗*/
     QFont font = this->font();
@@ -100,7 +119,7 @@ deviceDlg::deviceDlg(QWidget *parent) :
     ui->listTableWidget->horizontalHeader()->setFont(font);
 
     /*设置表的属性*/
-    ui->listTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:forestgreen;font:12pt;font:bold;}"); //设置表头背景色
+    ui->listTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:deepskyblue;font:12pt;font:bold;}"); //设置表头背景色
     ui->listTableWidget->horizontalHeader()->setHighlightSections(false);     //点击表时，不对表头行高亮
     ui->listTableWidget->horizontalHeader()->setStretchLastSection(true);     //设置充满表宽度
     ui->listTableWidget->verticalHeader()->setDefaultSectionSize(30);         //设置行高
@@ -108,9 +127,10 @@ deviceDlg::deviceDlg(QWidget *parent) :
     ui->listTableWidget->setShowGrid(false);                                  //设置不显示格子线
     ui->listTableWidget->verticalHeader()->setVisible(false);                 //设置垂直头不可见
     ui->listTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows); //整行选中的方式
-    //ui->listTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置不可编辑
+    ui->listTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置不可编辑
     ui->listTableWidget->setEditTriggers(QAbstractItemView::DoubleClicked);   //设置双击可编辑
     ui->listTableWidget->horizontalHeader()->setFixedHeight(28);              //设置表头的高度
+    ui->listTableWidget->setSelectionMode(QAbstractItemView::SingleSelection); //设置只能选择一行，不能选择多行
 
     /*设置水平、垂直滚动条样式*/
     ui->listTableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{background:transparent; height:20px;}"
@@ -124,11 +144,14 @@ deviceDlg::deviceDlg(QWidget *parent) :
                                                             "QScrollBar::sub-line{background:transparent;}"
                                                             "QScrollBar::add-line{background:transparent;}");
 
+#if 0
     /* 删除所有设备信息*/
     ui->listTableWidget->clearContents();
 
     for (int i=0; i<NUMPAGE;i++)
         ui->listTableWidget->insertRow(i);       //插入NUMPAGE行
+#endif
+
 
     /*管理员和普通用户*/
     if(logon::userType == 1)
@@ -137,6 +160,14 @@ deviceDlg::deviceDlg(QWidget *parent) :
         dataJson->connectNumberObj= dataJson->jsonPackQueryConnectNumber();
         dataHttp->httpPost(QUERY_ALL_NUM_URL, dataJson->connectNumberObj); //http请求终端数量
         connect(this->dataHttp->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onReplyFinished(QNetworkReply*)));
+
+//    signalFlag = 1;     //集控所有信息
+    progressDlg->show();
+
+    /* 管理员---查询所有的在线终端--数据*/
+    dataJson->connectAllInfoObj= dataJson->jsonPackQueryConnectAllInfo();
+    dataHttp->httpPost(QUERY_ALL_INFO_URL, dataJson->connectAllInfoObj); //http请求
+
 
         /*http请求 数量*/
         connect(this, SIGNAL(transmitNumSignal(QByteArray)), this, SLOT(onConnectTotalNumDataParse(QByteArray)));
@@ -221,11 +252,14 @@ void deviceDlg::onConnectTotalNumDataParse(QByteArray tmpData)
     {
         ui->numberLabel->setText(dataJson->jsonParseData(tmpData, "total_num").first());
     }
+
+    signalFlag = 1;     //集控所有信息
 }
 
 /*查询全部集控信息*/
 void deviceDlg::on_searchAllPushButton_clicked()
 {
+
     signalFlag = 1;     //集控所有信息
     progressDlg->show();
 
@@ -268,7 +302,10 @@ void deviceDlg::onConnectAllInfoDataParse(QByteArray tmpData)
     else
         ui->allPageLabel->setText(QString::number(pageNum, 10));
 
-    int j = 0; //插入行数
+    //    int j = 0; //插入行数
+    /* 删除所有账户信息*/
+    ui->listTableWidget->clearContents();
+    ui->listTableWidget->setRowCount(0); //删除行
     for (int i = 0; i < NUMPAGE; i++)
     {
         QApplication::processEvents(); //处理大数据，防gui假死
@@ -281,21 +318,26 @@ void deviceDlg::onConnectAllInfoDataParse(QByteArray tmpData)
                 idList.append("");
         }
 
-        ui->listTableWidget->setItem(j, 0, new QTableWidgetItem(QString::number(i+1, 10)));
-        ui->listTableWidget->item(j, 0)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-        ui->listTableWidget->setItem(j, 1, new QTableWidgetItem(idList.value(0)));
-        ui->listTableWidget->item(j, 1)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-        ui->listTableWidget->setItem(j, 2, new QTableWidgetItem(idList.value(1)));
-        ui->listTableWidget->item(j, 2)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-        ui->listTableWidget->setItem(j, 3, new QTableWidgetItem(idList.value(2)));
-        ui->listTableWidget->item(j, 3)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-        ui->listTableWidget->setItem(j, 4, new QTableWidgetItem(idList.value(3)));
-        ui->listTableWidget->item(j, 4)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-        ui->listTableWidget->setItem(j, 5, new QTableWidgetItem(remoteIpList.value(i)));
-        ui->listTableWidget->item(j, 5)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-        ui->listTableWidget->setItem(j, 6, new QTableWidgetItem(startTimeList.value(i)));
-        ui->listTableWidget->item(j, 6)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-        j++;
+
+        int row_count = ui->listTableWidget->rowCount(); //获取表单行数
+        ui->listTableWidget->insertRow(row_count);       //插入新行
+
+        ui->listTableWidget->setItem(row_count, 0, new QTableWidgetItem(QString::number(i+1, 10)));
+        ui->listTableWidget->item(row_count, 0)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+        ui->listTableWidget->setItem(row_count, 1, new QTableWidgetItem(idList.value(0)));
+        ui->listTableWidget->item(row_count, 1)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+        ui->listTableWidget->setItem(row_count, 2, new QTableWidgetItem(idList.value(1)));
+        ui->listTableWidget->item(row_count, 2)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+        ui->listTableWidget->setItem(row_count, 3, new QTableWidgetItem(idList.value(2)));
+        ui->listTableWidget->item(row_count, 3)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+        ui->listTableWidget->setItem(row_count, 4, new QTableWidgetItem(idList.value(3)));
+        ui->listTableWidget->item(row_count, 4)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+        ui->listTableWidget->setItem(row_count, 5, new QTableWidgetItem(remoteIpList.value(i)));
+        ui->listTableWidget->item(row_count, 5)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+        ui->listTableWidget->setItem(row_count, 6, new QTableWidgetItem(startTimeList.value(i)));
+        ui->listTableWidget->item(row_count, 6)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+        ui->listTableWidget->setItem(row_count, 7, new QTableWidgetItem(signalInitensity));
+        ui->listTableWidget->item(row_count, 7)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
 
         if (progressDlg->wasCanceled())
         {
@@ -359,7 +401,10 @@ void deviceDlg::onConnectInfoDataParse(QByteArray tmpData)
     if (num > 5) //限定显示条数
         num = 5;
 
-    int row_count = 0;
+    //    int row_count = 0;
+    /* 删除所有账户信息*/
+    ui->listTableWidget->clearContents();
+    ui->listTableWidget->setRowCount(0); //删除行
     for (int i = 0; i < num; i++)
     {
         QApplication::processEvents(); //处理大数据，防gui假死
@@ -372,6 +417,11 @@ void deviceDlg::onConnectInfoDataParse(QByteArray tmpData)
             for (int i=0; i < (4 - idList.size()); i++)
                 idList.append("");
         }
+
+
+        int row_count = ui->listTableWidget->rowCount(); //获取表单行数
+        ui->listTableWidget->insertRow(row_count);       //插入新行
+
 
         ui->listTableWidget->setItem(row_count, 0, new QTableWidgetItem(QString::number(i+1, 10)));
         ui->listTableWidget->item(row_count, 0)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
@@ -387,7 +437,9 @@ void deviceDlg::onConnectInfoDataParse(QByteArray tmpData)
         ui->listTableWidget->item(row_count, 5)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
         ui->listTableWidget->setItem(row_count, 6, new QTableWidgetItem(startTimeList.value(i)));
         ui->listTableWidget->item(row_count, 6)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-        row_count++;
+        ui->listTableWidget->setItem(row_count, 7, new QTableWidgetItem(signalInitensity));
+        ui->listTableWidget->item(row_count, 7)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+        //        row_count++;
 
         //qDebug() <<"wasCanceled"<< progressDlg->wasCanceled();
         if (progressDlg->wasCanceled())
@@ -414,22 +466,22 @@ void deviceDlg::on_listTableWidget_cellClicked(int row, int column)
     int selectedDevNum = row +NUMPAGE * (indexPage - 1);
 
     qDebug() << "设备ip行：" << selectedDevNum;
-//    QList<QString> remoteIpList;  //存储解析的远程ip
+    //    QList<QString> remoteIpList;  //存储解析的远程ip
 
-     if (signalFlag == 1)
-     {
-         if (!remoteIpList.isEmpty() && remoteIpList.size() > selectedDevNum)
-             deviceDlg::deviceIp =  remoteIpList.at(selectedDevNum);
-         else
-             deviceDlg::deviceIp = "";
-     }
-     else if (signalFlag == 2)
-     {
-          if (!remoteIpList.isEmpty() && remoteIpList.size() > row && row < 5)
-             deviceDlg::deviceIp =  remoteIpList.at(row);
-         else
-             deviceDlg::deviceIp = "";
-     }
+    if (signalFlag == 1)
+    {
+        if (!remoteIpList.isEmpty() && remoteIpList.size() > selectedDevNum)
+            deviceDlg::deviceIp =  remoteIpList.at(selectedDevNum);
+        else
+            deviceDlg::deviceIp = "";
+    }
+    else if (signalFlag == 2)
+    {
+        if (!remoteIpList.isEmpty() && remoteIpList.size() > row && row < 5)
+            deviceDlg::deviceIp =  remoteIpList.at(row);
+        else
+            deviceDlg::deviceIp = "";
+    }
 
     qDebug() << "设备ip 大小" << remoteIpList.size();
     qDebug() << "设备ip" << deviceIp;
@@ -490,7 +542,10 @@ void deviceDlg::on_nextPushButton_clicked()
 
     if (indexPage <= pageNum)
     {
-        int row_count = 0;
+        //        int row_count = 0;
+        /* 删除所有账户信息*/
+        ui->listTableWidget->clearContents();
+        ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * indexPage; i++)
         {
             QApplication::processEvents(); //处理大数据，防gui假死
@@ -502,6 +557,10 @@ void deviceDlg::on_nextPushButton_clicked()
                 for (int i=0; i < (4 - idList.size()); i++)
                     idList.append("");
             }
+
+
+            int row_count = ui->listTableWidget->rowCount(); //获取表单行数
+            ui->listTableWidget->insertRow(row_count);       //插入新行
 
             ui->listTableWidget->setItem(row_count, 0, new QTableWidgetItem(QString::number(i+1, 10)));
             ui->listTableWidget->item(row_count, 0)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
@@ -517,7 +576,10 @@ void deviceDlg::on_nextPushButton_clicked()
             ui->listTableWidget->item(row_count, 5)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
             ui->listTableWidget->setItem(row_count, 6, new QTableWidgetItem(startTimeList.value(i)));
             ui->listTableWidget->item(row_count, 6)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-            row_count ++;
+            ui->listTableWidget->setItem(row_count, 7, new QTableWidgetItem(signalInitensity));
+            ui->listTableWidget->item(row_count, 7)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+
+            //            row_count ++;
 
             //            qDebug() <<"wasCanceled"<< progressDlg->wasCanceled();
             if (progressDlg->wasCanceled())
@@ -535,7 +597,10 @@ void deviceDlg::on_nextPushButton_clicked()
     }
     else
     {
-        int row_count = 0;
+        //        int row_count = 0;
+        /* 删除所有账户信息*/
+        ui->listTableWidget->clearContents();
+        ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * (indexPage-1) + remainsRow; i++)
         {
             QApplication::processEvents(); //处理大数据，防gui假死
@@ -548,6 +613,11 @@ void deviceDlg::on_nextPushButton_clicked()
                 for (int i=0; i < (4 - idList.size()); i++)
                     idList.append("");
             }
+
+
+            int row_count = ui->listTableWidget->rowCount(); //获取表单行数
+            ui->listTableWidget->insertRow(row_count);       //插入新行
+
 
             ui->listTableWidget->setItem(row_count, 0, new QTableWidgetItem(QString::number(i+1, 10)));
             ui->listTableWidget->item(row_count, 0)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
@@ -563,7 +633,9 @@ void deviceDlg::on_nextPushButton_clicked()
             ui->listTableWidget->item(row_count, 5)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
             ui->listTableWidget->setItem(row_count, 6, new QTableWidgetItem(startTimeList.value(i)));
             ui->listTableWidget->item(row_count, 6)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-            row_count ++;
+            ui->listTableWidget->setItem(row_count, 7, new QTableWidgetItem(signalInitensity));
+            ui->listTableWidget->item(row_count, 7)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+            //            row_count ++;
 
             //            qDebug() <<"wasCanceled"<< progressDlg->wasCanceled();
             if (progressDlg->wasCanceled())
@@ -608,7 +680,10 @@ void deviceDlg::on_currentPageLineEdit_returnPressed()
 
     if (indexPage <= pageNum)
     {
-        int row_count = 0;
+        //        int row_count = 0;
+        /* 删除所有账户信息*/
+        ui->listTableWidget->clearContents();
+        ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * indexPage; i++)
         {
             QApplication::processEvents(); //处理大数据，防gui假死
@@ -620,6 +695,10 @@ void deviceDlg::on_currentPageLineEdit_returnPressed()
                 for (int i=0; i < (4 - idList.size()); i++)
                     idList.append("");
             }
+
+
+            int row_count = ui->listTableWidget->rowCount(); //获取表单行数
+            ui->listTableWidget->insertRow(row_count);       //插入新行
 
             ui->listTableWidget->setItem(row_count, 0, new QTableWidgetItem(QString::number(i+1, 10)));
             ui->listTableWidget->item(row_count, 0)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
@@ -635,8 +714,10 @@ void deviceDlg::on_currentPageLineEdit_returnPressed()
             ui->listTableWidget->item(row_count, 5)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
             ui->listTableWidget->setItem(row_count, 6, new QTableWidgetItem(startTimeList.value(i)));
             ui->listTableWidget->item(row_count, 6)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+            ui->listTableWidget->setItem(row_count, 7, new QTableWidgetItem(signalInitensity));
+            ui->listTableWidget->item(row_count, 7)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
 
-            row_count ++;
+            //            row_count ++;
             //            qDebug() <<"wasCanceled"<< progressDlg->wasCanceled();
             if (progressDlg->wasCanceled())
             {
@@ -652,7 +733,10 @@ void deviceDlg::on_currentPageLineEdit_returnPressed()
     }
     else
     {
-        int row_count = 0;
+        //        int row_count = 0;
+        /* 删除所有账户信息*/
+        ui->listTableWidget->clearContents();
+        ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * (indexPage-1) + remainsRow; i++)
         {
             QApplication::processEvents(); //处理大数据，防gui假死
@@ -665,6 +749,10 @@ void deviceDlg::on_currentPageLineEdit_returnPressed()
                 for (int i=0; i < (4 - idList.size()); i++)
                     idList.append("");
             }
+
+
+            int row_count = ui->listTableWidget->rowCount(); //获取表单行数
+            ui->listTableWidget->insertRow(row_count);       //插入新行
 
             ui->listTableWidget->setItem(row_count, 0, new QTableWidgetItem(QString::number(i+1, 10)));
             ui->listTableWidget->item(row_count, 0)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
@@ -680,8 +768,10 @@ void deviceDlg::on_currentPageLineEdit_returnPressed()
             ui->listTableWidget->item(row_count, 5)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
             ui->listTableWidget->setItem(row_count, 6, new QTableWidgetItem(startTimeList.value(i)));
             ui->listTableWidget->item(row_count, 6)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+            ui->listTableWidget->setItem(row_count, 7, new QTableWidgetItem(signalInitensity));
+            ui->listTableWidget->item(row_count, 7)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
 
-            row_count ++;
+            //            row_count ++;
             //            qDebug() <<"wasCanceled"<< progressDlg->wasCanceled();
             if (progressDlg->wasCanceled())
             {
@@ -737,7 +827,10 @@ void deviceDlg::on_previousPushButton_clicked()
 
     if (indexPage <= pageNum)
     {
-        int row_count = 0;
+        //        int row_count = 0;
+        /* 删除所有账户信息*/
+        ui->listTableWidget->clearContents();
+        ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * indexPage; i++)
         {
             QApplication::processEvents(); //处理大数据，防gui假死
@@ -750,6 +843,10 @@ void deviceDlg::on_previousPushButton_clicked()
                 for (int i=0; i < (4 - idList.size()); i++)
                     idList.append("");
             }
+
+
+            int row_count = ui->listTableWidget->rowCount(); //获取表单行数
+            ui->listTableWidget->insertRow(row_count);       //插入新行
 
             ui->listTableWidget->setItem(row_count, 0, new QTableWidgetItem(QString::number(i+1, 10)));
             ui->listTableWidget->item(row_count, 0)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
@@ -766,7 +863,9 @@ void deviceDlg::on_previousPushButton_clicked()
 
             ui->listTableWidget->setItem(row_count, 6, new QTableWidgetItem(startTimeList.value(i)));
             ui->listTableWidget->item(row_count, 6)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-            row_count ++;
+            ui->listTableWidget->setItem(row_count, 7, new QTableWidgetItem(signalInitensity));
+            ui->listTableWidget->item(row_count, 7)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+            //            row_count ++;
 
             //            qDebug() <<"wasCanceled"<< progressDlg->wasCanceled();
             if (progressDlg->wasCanceled())
@@ -784,7 +883,11 @@ void deviceDlg::on_previousPushButton_clicked()
     }
     else
     {
-        int row_count  = 0;
+        //        int row_count  = 0;
+
+        /* 删除所有账户信息*/
+        ui->listTableWidget->clearContents();
+        ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * (indexPage-1) + remainsRow; i++)
         {
             QApplication::processEvents(); //处理大数据，防gui假死
@@ -797,6 +900,11 @@ void deviceDlg::on_previousPushButton_clicked()
                 for (int i=0; i < (4 - idList.size()); i++)
                     idList.append("");
             }
+
+
+            int row_count = ui->listTableWidget->rowCount(); //获取表单行数
+            ui->listTableWidget->insertRow(row_count);       //插入新行
+
 
             ui->listTableWidget->setItem(row_count, 0, new QTableWidgetItem(QString::number(i+1, 10)));
             ui->listTableWidget->item(row_count, 0)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
@@ -812,7 +920,9 @@ void deviceDlg::on_previousPushButton_clicked()
             ui->listTableWidget->item(row_count, 5)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
             ui->listTableWidget->setItem(row_count, 6, new QTableWidgetItem(startTimeList.value(i)));
             ui->listTableWidget->item(row_count, 6)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
-            row_count ++;
+            ui->listTableWidget->setItem(row_count, 7, new QTableWidgetItem(signalInitensity));
+            ui->listTableWidget->item(row_count, 7)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
+            //            row_count ++;
 
             //qDebug() <<"wasCanceled"<< progressDlg->wasCanceled();
             if (progressDlg->wasCanceled())
@@ -828,3 +938,53 @@ void deviceDlg::on_previousPushButton_clicked()
         progressDlg->reset();
     }
 }
+
+#if 0
+void deviceDlg::createActions()
+{
+    action_open->setText("打开");
+    action_download->setText(QString("下载"));
+    action_flush->setText(QString("刷新"));
+    action_delete->setText(QString("删除"));
+    action_rename->setText(QString("重命名"));
+    action_create_folder->setText(QString("新建文件夹"));
+    action_name->setText(QString("名称"));
+    action_size->setText(QString("大小"));
+    action_type->setText(QString("项目类型"));
+    action_date->setText(QString("修改日期"));
+
+    //设置快捷键
+    action_flush->setShortcut(QKeySequence::Refresh);
+
+    //设置文件夹图标
+    //    action_create_folder->setIcon(icon);
+    QObject::connect(action_create_folder, SIGNAL(triggered()), this, SLOT(createFolder()));
+}
+
+void deviceDlg::contextMenuEvent(QContextMenuEvent *event)
+{
+    pop_menu->clear(); //清除原有菜单
+    QPoint point = event->pos(); //得到窗口坐标
+    QTableWidgetItem *item = ui->listTableWidget->itemAt(point);
+    if(item != NULL)
+    {
+        pop_menu->addAction(action_download);
+        pop_menu->addAction(action_flush);
+        pop_menu->addSeparator();
+        pop_menu->addAction(action_delete);
+        pop_menu->addAction(action_rename);
+        pop_menu->addSeparator();
+        pop_menu->addAction(action_create_folder);
+        sort_style = pop_menu->addMenu("排序");
+        sort_style->addAction(action_name);
+        sort_style->addAction(action_size);
+        sort_style->addAction(action_type);
+        sort_style->addAction(action_date);
+
+        //菜单出现的位置为当前鼠标的位置
+        pop_menu->exec(QCursor::pos());
+        event->accept();
+    }
+}
+
+#endif

@@ -10,6 +10,9 @@
 #ifndef MANAGEMENTTOOL_H
 #define MANAGEMENTTOOL_H
 
+#include "jsonManage/jsonmanage.h"
+#include "httpManage/httpmanage.h"
+#include "register/registerdlg.h"
 #include <QProgressDialog>
 #include <QMainWindow>
 #include <QHBoxLayout>
@@ -17,6 +20,20 @@
 #include <QWidget>
 #include <QTimer>
 #include <QRect>
+
+/*json内容:用户数据--解析数据结构*/
+
+typedef struct ST_JSONUSERDATA
+{
+    QString user;        //查询当前所有的用户信息
+    QString password;
+    QString userMail;
+    QString userPhone;
+    QString userEnable;
+    QString userStartDate;
+    QString userEndDate;
+}stJsonUserData;
+
 
 namespace Ui {
 class ManagementTool;
@@ -35,10 +52,19 @@ public:
     QStringList getAdapterInfoWithWindows();
     void        terminateApp(QString app);
 
+    jsonManage  *dataJson;
+    httpManage  *dataHttp;
+
+    static stJsonUserData  stUserInfo;
+
     QWidget     *funcWidget;
+    registerDlg *regDlg;
     bool        vpnClickedConnect;   //连接vpn---1 ,   断开vpn---0
     bool        vpnClicked;
     QStringList oldIp;
+
+signals:
+    transmitSignal(QByteArray tmpData);          //数据传送
 
 private slots:
     void onTimeDelay();
@@ -51,6 +77,12 @@ private slots:
     void on_connectVPNPushButton_clicked();
     void on_winscpPushButtonClose_clicked();
     void on_aboutPushButton_clicked();
+    void on_aboutAction_triggered();
+    void on_helpAction_triggered();
+    void on_exitAction_triggered();
+
+    void onOneUserDataParse(QByteArray tmpData);    //登录数据解析
+    void onReplyFinished(QNetworkReply *reply);    //http接收数据
 
 private:
     QProcess           *vpnProcess;

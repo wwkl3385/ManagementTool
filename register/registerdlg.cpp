@@ -9,7 +9,9 @@
 ***********************************************************************/
 #include "register/registerdlg.h"
 #include "accountManage/accountdlg.h"
+#include "management/managementtool.h"
 #include "ui_registerdlg.h"
+#include <logon/logon.h>
 #include <QNetworkReply>
 #include <QMessageBox>
 #include <QDebug>
@@ -32,9 +34,15 @@ registerDlg::registerDlg(QWidget *parent) :
     setWindowTitle("注册账户");
 
     qDebug() << "创建registerDlg!";
-    qDebug() << "修改标志static："<<accountDlg::modifyFlag;
-    qDebug() << "用户信息static："<<accountDlg::modifyInfoData.password;
-    qDebug() << "修改标志userList："<< accountDlg::userList.first().user;
+
+    qDebug() << "注册Dlg:" <<logon::userNameInfo;
+    qDebug() << "注册Dlg:" <<logon::userPassInfo; //密码
+    qDebug() << "注册Dlg:" <<logon::userType; // 用户类型
+
+
+//    qDebug() << "修改标志static："<<accountDlg::modifyFlag;
+//    qDebug() << "用户信息static："<<accountDlg::modifyInfoData.password;
+//    qDebug() << "修改标志userList："<< accountDlg::userList.first().user;
 
     QDate currentDate = QDate::currentDate();
     QString currentDateStr = currentDate.toString("yyyy-MM-dd");
@@ -45,17 +53,68 @@ registerDlg::registerDlg(QWidget *parent) :
     rx.setCaseSensitivity(Qt::CaseSensitive); //对大小写字母敏感，即区分大小写
     rx.setPattern(QString("^[A-Za-z0-9]+$")); //匹配格式为所有大小写字母和数字组成的字符串，位数不限
 
+    rxMail.setPatternSyntax(QRegExp::RegExp);
+    rxMail.setCaseSensitivity(Qt::CaseSensitive); //对大小写字母敏感，即区分大小写
+    rxMail.setPattern(QString("^([a-zA-Z0-9]+[_|]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|]?)*[a-zA-Z0-9]+.[a-zA-Z]{2,3}$")); //邮箱校验
+
+    rxPhone.setPatternSyntax(QRegExp::RegExp);
+    rxPhone.setCaseSensitivity(Qt::CaseSensitive); //对大小写字母敏感，即区分大小写
+    rxPhone.setPattern(QString("^1[0-9]{10}$")); //电话校验
+
+    rxDate.setPatternSyntax(QRegExp::RegExp);
+    rxDate.setCaseSensitivity(Qt::CaseSensitive); //对大小写字母敏感，即区分大小写
+    rxDate.setPattern(QString("(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)")); //日期匹配
+
+
     if (accountDlg::modifyFlag== true)  //修改用户
     {
-        setWindowTitle("修改账户");
-        ui->cancelPushButton->setText("取消修改");
-        ui->registerPushButton->setText("确认修改");
-        ui->userLineEdit->setText(accountDlg::modifyInfoData.user);
-        ui->mailLineEdit->setText(accountDlg::modifyInfoData.userMail);
-        ui->phoneLineEdit->setText(accountDlg::modifyInfoData.userPhone);
-        ui->startDateLineEdit->setText(accountDlg::modifyInfoData.userStartDate);
-        ui->endDateLineEdit->setText(accountDlg::modifyInfoData.userEndDate);
-        ui->userLineEdit->setDisabled(true);
+        if (logon::userType == 1 && accountDlg::deleteRow != -1)        //初始值
+        {
+            setWindowTitle("修改账户");
+            ui->cancelPushButton->setText("取消");
+            ui->registerPushButton->setText("修改");
+            ui->userLineEdit->setText(accountDlg::modifyInfoData.user);
+            ui->mailLineEdit->setText(accountDlg::modifyInfoData.userMail);
+            ui->phoneLineEdit->setText(accountDlg::modifyInfoData.userPhone);
+
+            if (accountDlg::modifyInfoData.user == logon::userNameInfo)
+            {
+                ui->disenableRadioButton->hide();
+                ui->enableRadioButton->hide();
+                ui->operationLabel->hide();
+                ui->startLabel->hide();
+                ui->stopLabel->hide();
+                ui->startDateLineEdit->hide();
+                ui->endDateLineEdit->hide();
+            }
+
+            ui->startDateLineEdit->setText(accountDlg::modifyInfoData.userStartDate);
+            ui->endDateLineEdit->setText(accountDlg::modifyInfoData.userEndDate);
+            ui->userLineEdit->setDisabled(true);
+            ui->startDateLineEdit->setDisabled(true);
+            ui->endDateLineEdit->setDisabled(true);
+        }
+        else
+        {
+            setWindowTitle("修改账户");
+            ui->cancelPushButton->setText("取消");
+            ui->registerPushButton->setText("修改");
+            ui->userLineEdit->setText(logon::userNameInfo);
+            ui->userLineEdit->setDisabled(true);
+
+            ui->mailLineEdit->setText(ManagementTool::stUserInfo.userMail);
+            ui->phoneLineEdit->setText(ManagementTool::stUserInfo.userPhone);
+            ui->startDateLineEdit->setText(ManagementTool::stUserInfo.userStartDate);
+            ui->endDateLineEdit->setText(ManagementTool::stUserInfo.userEndDate);
+
+            ui->disenableRadioButton->hide();
+            ui->enableRadioButton->hide();
+            ui->operationLabel->hide();
+            ui->startLabel->hide();
+            ui->stopLabel->hide();
+            ui->startDateLineEdit->hide();
+            ui->endDateLineEdit->hide();
+        }
     }
 
     /*绑定enter键*/
@@ -91,28 +150,34 @@ void registerDlg::on_registerPushButton_clicked()
     QString admin = "2";  //普通用户
     stData.userType= admin;
 
-    if(pwd.isEmpty() || user.isEmpty() || mail.isEmpty() ||
+    if (pwd.isEmpty() || user.isEmpty() || mail.isEmpty() ||
             phone.isEmpty() || startDate.isEmpty() || endDate.isEmpty())  //检测输入框是不是为空
     {
         QMessageBox::warning(NULL, "提示", "注册输入内容为空！");
         return;
     }
-    else  if(!rx.exactMatch(pwd) || !rx.exactMatch(user) || !rx.exactMatch(phone))
+
+    if (!rx.exactMatch(pwd) || !rx.exactMatch(user))
     {
-        QMessageBox::warning(NULL, "提示", "输入信息能为特殊符号或汉字，请重新输入");
+        QMessageBox::warning(NULL, "提示", "用户名和密码不能为特殊符号或汉字，请重新输入");
         return;
     }
 
-    if ((stData.user.isEmpty()) || (stData.password.size() < 6) || (stData.userPhone.size() != 11) ||
-            (stData.userStartDate.size() != 10) || (stData.userStartDate.at(4) != "-") || (stData.userStartDate.at(7) != "-") ||
-            (stData.userEndDate.at(4) != "-") || (stData.userEndDate.at(7) != "-"))
+    if (!rxMail.exactMatch(mail))
     {
-        qDebug() << "user：" << stData.user;
-        qDebug() << "password：" << stData.password;
-        qDebug() << "userPhone：" << stData.userPhone;
-        qDebug() << "startDate：" << stData.userStartDate;
-        qDebug() << "endDAte：" << stData.userEndDate;
-        QMessageBox::warning(NULL, "提示", "输入格式不合法，请重新输入！");
+        QMessageBox::warning(NULL, "提示", "邮箱格式错误，请重新输入");
+        return;
+    }
+
+    if (!rxPhone.exactMatch(phone))
+    {
+        QMessageBox::warning(NULL, "提示", "电话格式错误，请重新输入！");
+        return;
+    }
+
+    if (!rxDate.exactMatch(startDate) || !rxDate.exactMatch(endDate))
+    {
+        QMessageBox::warning(NULL, "提示", "日期格式错误，请重新输入！");
         return;
     }
 

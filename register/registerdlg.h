@@ -44,6 +44,9 @@ private slots:
 private:
     Ui::registerDlg *ui;
     QRegExp rx;
+    QRegExp rxMail;
+    QRegExp rxDate;
+    QRegExp rxPhone;
 };
 
 #endif // REGISTERDLG_H
