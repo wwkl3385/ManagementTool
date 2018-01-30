@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>647</width>
+    <width>654</width>
     <height>459</height>
    </rect>
   </property>
@@ -28,9 +28,12 @@ font-family:Microsoft Yahei;</string>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>10</width>
          <height>20</height>
         </size>
        </property>
@@ -40,14 +43,14 @@ font-family:Microsoft Yahei;</string>
       <widget class="QLineEdit" name="searchLineEdit">
        <property name="minimumSize">
         <size>
-         <width>160</width>
+         <width>50</width>
          <height>30</height>
         </size>
        </property>
        <property name="font">
         <font>
          <family>Microsoft Yahei</family>
-         <pointsize>12</pointsize>
+         <pointsize>11</pointsize>
          <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
@@ -60,19 +63,20 @@ font-family:Microsoft Yahei;</string>
         <string notr="true">QLineEdit{
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
-border-radius:10px;
-font:12pt;
+border-radius:5px;
+font:11pt;
 font-family:Microsoft Yahei;
-border:1px solid gray;
+border:1px solid #d3dadd;
 }
 QLineEdit:hover{
 border-width:2px;
-border-color:rgb(170, 170, 255);
+border-color:skyblue;
 }
 QLineEdit:focus {
 border-width:2px;
-border-color:rgb(170, 170, 255);
-}</string>
+border-color:lightblue;
+}
+</string>
        </property>
        <property name="placeholderText">
         <string>输入用户名或邮箱查询</string>
@@ -83,13 +87,13 @@ border-color:rgb(170, 170, 255);
       <widget class="QPushButton" name="searchPushButton">
        <property name="minimumSize">
         <size>
-         <width>130</width>
+         <width>90</width>
          <height>30</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>130</width>
+         <width>90</width>
          <height>30</height>
         </size>
        </property>
@@ -98,8 +102,8 @@ border-color:rgb(170, 170, 255);
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:skyblue;
-    border-radius:10px;
+    background-color:#40aff1;
+    border-radius:5px;
 	font: 12pt;
 }
 
@@ -124,12 +128,19 @@ QPushButton:unpressed
        <property name="text">
         <string>查询</string>
        </property>
+       <property name="icon">
+        <iconset resource="../icon/pictures.qrc">
+         <normaloff>:/new/background/search.ico</normaloff>:/new/background/search.ico</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -139,53 +150,6 @@ QPushButton:unpressed
        </property>
       </spacer>
      </item>
-     <item>
-      <widget class="QPushButton" name="allUserPushButton">
-       <property name="minimumSize">
-        <size>
-         <width>130</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>130</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:skyblue;
-    border-radius:10px;
-	font: 12pt;
-}
-
-QPushButton:hover
-{
-    background-color:deepskyblue;
-}
-
-QPushButton:pressed
-{
-    background-color:deepskyblue;
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-       </property>
-       <property name="text">
-        <string>所有账户信息</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item row="1" column="0">
@@ -193,36 +157,26 @@ QPushButton:unpressed
      <property name="styleSheet">
       <string notr="true">QTableWidget
 {
-    selection-background-color:skyblue;
-font:12pt;
-
+font:11pt;
+color:black;
 }
 QTableWidget::item:hover
 {
-background-color:rgb(203,203,203);
+background-color:#cce5f4;
+font:12pt;
 } 
-
+QTableWidget::item:selected
+{
+background-color:lightblue;
+color:blue;
+font:13pt;
+} 
 QHeaderView
 {
 color:snow;
 font:bold;
 }</string>
      </property>
-     <column>
-      <property name="text">
-       <string>新建列</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>新建列</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>新建列</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item row="2" column="0">
@@ -259,8 +213,8 @@ font:bold;
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:skyblue;
-    border-radius:10px;
+    background-color:#0f9ef7;
+    border-radius:5px;
 	font: 12pt;
 }
 
@@ -319,8 +273,8 @@ QPushButton:unpressed
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:skyblue;
-    border-radius:10px;
+    background-color:#40aff1;
+    border-radius:5px;
 	font: 12pt;
 }
 
@@ -379,8 +333,8 @@ QPushButton:unpressed
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:skyblue;
-    border-radius:10px;
+    background-color:#40aff1;
+    border-radius:5px;
 	font: 12pt;
 }
 
@@ -424,6 +378,8 @@ QPushButton:unpressed
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../icon/pictures.qrc"/>
+ </resources>
  <connections/>
 </ui>

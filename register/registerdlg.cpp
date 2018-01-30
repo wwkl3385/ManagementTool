@@ -48,6 +48,7 @@ registerDlg::registerDlg(QWidget *parent) :
     QString currentDateStr = currentDate.toString("yyyy-MM-dd");
     qDebug() << "当前时间" << currentDateStr;
     ui->startDateLineEdit->setText(currentDateStr);
+    ui->passwordLineEdit->setText("123456");
 
     rx.setPatternSyntax(QRegExp::RegExp);
     rx.setCaseSensitivity(Qt::CaseSensitive); //对大小写字母敏感，即区分大小写
@@ -71,7 +72,6 @@ registerDlg::registerDlg(QWidget *parent) :
         if (logon::userType == 1 && accountDlg::deleteRow != -1)        //初始值
         {
             setWindowTitle("修改账户");
-            ui->cancelPushButton->setText("取消");
             ui->registerPushButton->setText("修改");
             ui->userLineEdit->setText(accountDlg::modifyInfoData.user);
             ui->mailLineEdit->setText(accountDlg::modifyInfoData.userMail);
@@ -97,7 +97,6 @@ registerDlg::registerDlg(QWidget *parent) :
         else
         {
             setWindowTitle("修改账户");
-            ui->cancelPushButton->setText("取消");
             ui->registerPushButton->setText("修改");
             ui->userLineEdit->setText(logon::userNameInfo);
             ui->userLineEdit->setDisabled(true);

@@ -33,22 +33,24 @@ public:
     QJsonObject jsonPackUpdate(QString version);
     QJsonObject jsonPackLogin( QString user, QString password);
 
-    QJsonObject jsonPackAddUser(QString user, QString password, QString mail, QString phone, QString enable, QString startDate, QString endDate, QString admin);
-    void jsonPackAddUserAppend(QJsonObject &obj, QString user, QString password, QString mail, QString phone, QString enable, QString startDate, QString endDate, QString admin);
+    QJsonObject jsonPackAddUser(QString user, QString password, QString mail,
+                                QString phone, QString enable, QString startDate, QString endDate, QString admin);
+    void jsonPackAddUserAppend(QJsonObject &obj, QString user, QString password,
+                               QString mail, QString phone, QString enable, QString startDate, QString endDate, QString admin);
 
     QJsonObject jsonPackDelete( QString user, QString password);
     void jsonPackDeleteAppend(QJsonObject &obj, QString user, QString password);
 
-    QJsonObject jsonPackModifyUser(const QString user, QString password, QString mail, QString phone, QString enable, QString startDate, QString endDate);
-    void jsonPackModifyUserAppend(QJsonObject &obj, QString user, QString password, QString mail, QString phone, QString enable, QString startDate, QString endDate);
+    QJsonObject jsonPackModifyUser(const QString user, QString password, QString mail,
+                                   QString phone, QString enable, QString startDate, QString endDate);
+    void jsonPackModifyUserAppend(QJsonObject &obj, QString user, QString password,
+                                  QString mail, QString phone, QString enable, QString startDate, QString endDate);
 
     QJsonObject jsonPackQueryUser();
     QJsonObject jsonPackQueryOneUser(QString user);
 
     QJsonObject jsonPackQueryConnectInfo(QString userId);
-
     QJsonObject jsonPackQueryConnectNumber();
-
     QJsonObject jsonPackQueryConnectAllInfo();
 
     QString jsonParseCmd(QByteArray reply);

@@ -23,6 +23,9 @@
 
 /*json内容:用户数据--解析数据结构*/
 
+bool findApp(const QString& exe);  //根据进程名字找到该进程
+void terminateApp(QString app);
+
 typedef struct ST_JSONUSERDATA
 {
     QString user;        //查询当前所有的用户信息
@@ -50,7 +53,6 @@ public:
     void        closeEvent(QCloseEvent *event);
     QStringList getIP(QString localHost);
     QStringList getAdapterInfoWithWindows();
-    void        terminateApp(QString app);
 
     jsonManage  *dataJson;
     httpManage  *dataHttp;
@@ -73,9 +75,7 @@ private slots:
     void on_recordPushButton_clicked();
     void on_devicePushButton_clicked();
     void on_accountPushButton_clicked();
-    void on_puttyPushButtonClose_clicked();
     void on_connectVPNPushButton_clicked();
-    void on_winscpPushButtonClose_clicked();
     void on_aboutPushButton_clicked();
     void on_aboutAction_triggered();
     void on_helpAction_triggered();

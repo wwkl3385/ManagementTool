@@ -27,6 +27,9 @@ public:
 
     int sec; //计时
 
+private slots:
+    void on_cancelPushButton_clicked();
+
 private:
     Ui::loadingDlg *ui;
     QMovie *movie;

@@ -25,7 +25,6 @@
 #define UNIT_MB 1024*1024       //MB
 #define UNIT_GB 1024*1024*1024  //GB
 #define TIME_INTERVAL 300       //0.3s
-
 #define  LOGIN_URL          "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/login"                   //登录url
 #define  UPDATE_URL         "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_update"            //更新url
 #define  UPDATE_URL_INDEX   "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/download?filename="      //下载url
@@ -54,9 +53,11 @@ logon::logon(QWidget *parent) :
     m_currentDownload = 0;
     m_intervalDownload = 0;
 
-    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint );
-    pLoadDlg->hide();
+    /*kill*/
+    if (findApp("openvpn.exe") == true)
+        terminateApp("taskkill /im openvpn.exe /f");
 
+    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint );
     progressDlg = new QProgressDialog(this);
 
     /*进度条设置样式*/
@@ -84,16 +85,13 @@ logon::logon(QWidget *parent) :
     progressDlg->reset();
 
     /*圆角窗口*/
-    QPixmap pixmap(":/new/background/tgood.png");
+    QPixmap pixmap(":/new/background/teldNew.png");
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(pixmap));
     setPalette(palette);
     resize(pixmap.size());
     setMask(pixmap.mask());
     qDebug() << "x坐标位置：" << this->pos();
-
-    /*绑定enter键*/
-    connect(ui->passwordLineEdit, SIGNAL(returnPressed()), ui->logonPushButton, SIGNAL(clicked(bool)), Qt::UniqueConnection);
 
     /*连接服务器,检测是否更新*/
     dataJson->updateObj= dataJson->jsonPackUpdate(version);
@@ -146,7 +144,6 @@ void logon::mouseReleaseEvent(QMouseEvent *)
 
 void logon::on_logonPushButton_clicked()
 {
-
     if (ui->userLineEdit->text().isEmpty() || ui->passwordLineEdit->text().isEmpty())
     {
        QMessageBox::critical(this, "错误", "请输入正确的用户名和密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -159,7 +156,6 @@ void logon::on_logonPushButton_clicked()
     dataJson->loginObj= dataJson->jsonPackLogin(ui->userLineEdit->text(), ui->passwordLineEdit->text()); //登录
     dataHttp->httpPost(LOGIN_URL, dataJson->loginObj); //http登录请求
     qDebug() << "登录信息帧：" << dataJson->loginObj;
-
     pLoadDlg->exec(); //动态登录
 }
 
@@ -174,7 +170,6 @@ void logon::replyFinished(QNetworkReply *reply)
 
         if(pLoadDlg->isActiveWindow())
             delete pLoadDlg;
-
         return;
     }
     QByteArray tempBuf = reply->readAll();
@@ -232,7 +227,6 @@ void logon::loginDataParse(QByteArray tmpData)
         break;
     }
     }
-
 }
 
 void logon::updateDataParse(QByteArray tmpData)
@@ -443,4 +437,13 @@ QString logon::transformTime(qint64 seconds)
             strValue += strSpacing + QString("%1s").arg(nSecond);
     }
     return strValue;
+}
+
+/*绑定enter键*/
+void logon::keyPressEvent(QKeyEvent  *event)
+{
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+    {
+        on_logonPushButton_clicked();
+    }
 }

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1233</width>
-    <height>662</height>
+    <width>1120</width>
+    <height>677</height>
    </rect>
   </property>
   <property name="font">
@@ -26,101 +26,78 @@
    <string>ManagementTool</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">
-
-
-</string>
+   <string notr="true"/>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>36</width>
+    <height>36</height>
+   </size>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
-    <string notr="true">color: rgb(101,147,74);
-border-radius:3px;
-font:13pt;
-font:bold;
-font-family:Microsoft Yahei;</string>
+    <string notr="true">border-radius:3px;
+</string>
    </property>
-   <layout class="QGridLayout" name="gridLayout_6">
-    <item row="0" column="0" colspan="3">
-     <widget class="QFrame" name="headerFrame">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>55</height>
-       </size>
+   <layout class="QGridLayout" name="gridLayout_9">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
       </property>
-      <property name="styleSheet">
-       <string notr="true">color:white;
+      <item>
+       <widget class="QFrame" name="headerFrame">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>55</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>55</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
 font:23pt;
 font-family:Microsoft Yahei;
+background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #0073ff, stop:1 #00cdff);
 </string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::WinPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="2">
-        <widget class="QLabel" name="label">
-         <property name="font">
-          <font>
-           <family>Microsoft Yahei</family>
-           <pointsize>19</pointsize>
-           <weight>50</weight>
-           <italic>false</italic>
-           <bold>false</bold>
-          </font>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::WinPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <property name="leftMargin">
+          <number>0</number>
          </property>
-         <property name="styleSheet">
-          <string notr="true">color:rgb(14 , 150 , 254);
-font:19pt;
-font-family:Microsoft Yahei;
-</string>
+         <property name="topMargin">
+          <number>0</number>
          </property>
-         <property name="text">
-          <string>集中控制器智能远程管理系统</string>
+         <property name="rightMargin">
+          <number>0</number>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="bottomMargin">
+          <number>0</number>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <spacer name="horizontalSpacer_34">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+         <property name="spacing">
+          <number>0</number>
          </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Maximum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer_33">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="4">
-        <layout class="QHBoxLayout" name="horizontalLayout_22">
-         <item>
-          <spacer name="horizontalSpacer_35">
+         <item row="0" column="2">
+          <spacer name="horizontalSpacer_34">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Maximum</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -130,907 +107,1035 @@ font-family:Microsoft Yahei;
            </property>
           </spacer>
          </item>
-         <item>
-          <widget class="QLabel" name="nameLabel">
-           <property name="styleSheet">
-            <string notr="true">color:black;
-font:11pt;
-font-family:Microsoft Yahei;
-</string>
-           </property>
-           <property name="text">
-            <string>管理员</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="nameLineEdit">
-           <property name="maximumSize">
-            <size>
-             <width>105</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">color:blue;
-font:10pt;
-</string>
-           </property>
-           <property name="text">
-            <string>name</string>
-           </property>
-           <property name="maxLength">
-            <number>20</number>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="aboutPushButton">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="../icon/pictures.qrc">
-           <normaloff>:/new/background/teld.png</normaloff>:/new/background/teld.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>80</width>
-           <height>40</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QGroupBox" name="functionGroupBox">
-      <property name="minimumSize">
-       <size>
-        <width>180</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>180</width>
-        <height>1100000</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">
-color: rgb(101,147,74);
-border-radius:10px;
-font:13pt;
-font:bold;
-font-family:Microsoft Yahei;</string>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="2" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>239</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0">
-        <widget class="QToolBox" name="manageToolBox">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>150</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>150</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QToolBox::tab {
-background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-					stop: 0   rgb(203,203,203), stop: 0.4 rgb(210,210,210),
-					stop: 0.5 rgb(210,210,210), stop: 1.0 rgb(203,203,203));
-border-radius: 5px;
-font:宋体;
-font:12pt;
-font:unbold;
-color:dimgray;
-}
-
-QToolBox::tab:selected { /* italicize selected tabs */
-background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-					stop: 0   deepskyblue, stop: 0.4 skyblue,
-					stop: 0.5 skyblue, stop: 1.0 deepskyblue);
-font:bold;
-color: rgb(17,63,61);
-border-radius: 5px;
-}
-QToolBox::tab:hover
-{
-background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-					stop: 0   deepskyblue, stop: 0.4 skyblue,
-					stop: 0.5 skyblue, stop: 1.0 deepskyblue);
-color: rgb(17,63,61);
-font:bold;
-}
-QToolBox::tab:pressed
-{
-    padding-left:2px;
-    padding-top:2px;
-	background-color:deepskyblue;
-}
-</string>
-         </property>
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <property name="tabSpacing">
-          <number>1</number>
-         </property>
-         <widget class="QWidget" name="deviceBoxPage">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>162</width>
-            <height>84</height>
-           </rect>
-          </property>
-          <attribute name="label">
-           <string>设备管理</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="1">
-            <widget class="QPushButton" name="devicePushButton">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:rgb(38,188,213);
-    border-radius:10px;
-	font: 12pt;
-}
-
-QPushButton:hover
-{
-    background-color:deepskyblue;
-}
-
-QPushButton:pressed
-{
-    background-color:deepskyblue;
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-             </property>
-             <property name="text">
-              <string>设备信息</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <spacer name="horizontalSpacer_29">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Maximum</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>28</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="1">
-            <spacer name="verticalSpacer_7">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="AdminPage">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>162</width>
-            <height>84</height>
-           </rect>
-          </property>
-          <attribute name="label">
-           <string>权限管理</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_7">
-           <item row="0" column="1">
-            <widget class="QPushButton" name="accountPushButton">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:rgb(38,188,213);
-    border-radius:10px;
-	font: 12pt;
-}
-
-QPushButton:hover
-{
-    background-color:deepskyblue;
-}
-
-QPushButton:pressed
-{
-    background-color:deepskyblue;
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-             </property>
-             <property name="text">
-              <string>账户管理</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Maximum</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>28</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="1">
-            <widget class="QPushButton" name="recordPushButton">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:rgb(38,188,213);
-    border-radius:10px;
-	font: 12pt;
-}
-
-QPushButton:hover
-{
-    background-color:deepskyblue;
-}
-
-QPushButton:pressed
-{
-    background-color:deepskyblue;
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-             </property>
-             <property name="text">
-              <string>登录记录</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>33</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QGroupBox" name="statusGroupBox">
-      <property name="minimumSize">
-       <size>
-        <width>180</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>180</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">
-color: rgb(101,147,74);
-border-radius:10px;
-font:13pt;
-font:bold;
-font-family:Microsoft Yahei;</string>
-      </property>
-      <property name="title">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="6" column="0">
-        <widget class="QProgressBar" name="connectVpnProgressBar">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>20</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QProgressBar {
-   border: 2px solid grey;
-   border-radius: 5px;
-   background-color: #FFFFFF;
-}
- 
-QProgressBar::chunk {
-   background-color: #05B8CC;
-   width: 20px;
-}
- 
-QProgressBar {
-   border: 2px solid grey;
-   border-radius: 5px;
-   text-align: center;
-}</string>
-         </property>
-         <property name="value">
-          <number>24</number>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <layout class="QGridLayout" name="gridLayout_5">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetDefaultConstraint</enum>
-         </property>
-         <property name="horizontalSpacing">
-          <number>2</number>
-         </property>
-         <property name="verticalSpacing">
-          <number>6</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="styleSheet">
-            <string notr="true">color:dimgray;
-border-radius:10px;
-font:11pt;
-font:bold;
-font-family:微软雅黑;</string>
-           </property>
-           <property name="text">
-            <string>运行状态：</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="1">
-          <widget class="QLabel" name="connectStatusLabel">
-           <property name="minimumSize">
-            <size>
-             <width>105</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>105</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">color: rgb(0, 0, 0);
-border-radius:3px;
-font:11pt;
-font:bold;
-font-family:Microsoft Yahei;</string>
-           </property>
-           <property name="text">
-            <string> 连接成功</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="styleSheet">
-            <string notr="true">color:dimgray;
-border-radius:10px;
-font:11pt;
-font:bold;
-font-family:微软雅黑;</string>
-           </property>
-           <property name="lineWidth">
-            <number>1</number>
-           </property>
-           <property name="text">
-            <string>在线时长：</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="indent">
-            <number>-1</number>
-           </property>
-           <property name="textInteractionFlags">
-            <set>Qt::LinksAccessibleByMouse</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="ipAddrLabel">
-           <property name="styleSheet">
-            <string notr="true">color:blue;
-border-radius:3px;
-font:bold;
-font:10pt;
-font-family:Microsoft Yahei;</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="label">
            <property name="font">
             <font>
              <family>微软雅黑</family>
-             <pointsize>11</pointsize>
-             <weight>75</weight>
+             <pointsize>-1</pointsize>
+             <weight>50</weight>
              <italic>false</italic>
-             <bold>true</bold>
+             <bold>false</bold>
             </font>
            </property>
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
            <property name="styleSheet">
-            <string notr="true">color:dimgray;
-border-radius:10px;
-font:11pt;
-font:bold;
-font-family:微软雅黑;</string>
+            <string notr="true">background:transparent;
+color:rgb(255,255,255);
+font:30px;
+font-family:微软雅黑;
+</string>
            </property>
            <property name="text">
-            <string>  虚拟    IP：</string>
+            <string>集中控制器智能远程管理系统</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
-          <widget class="QLabel" name="timeLable">
-           <property name="styleSheet">
-            <string notr="true">color:rgb(23,44,60);
-border-radius:6px;
-font:10pt;
-font:bold;
-font-family:Microsoft Yahei;</string>
-           </property>
-           <property name="text">
-            <string>00分：10秒</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="10" column="0">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>150</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="9" column="0">
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <property name="spacing">
-          <number>6</number>
-         </property>
-         <property name="leftMargin">
-          <number>20</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="puttyPushButton">
+         <item row="0" column="0">
+          <widget class="QPushButton" name="aboutPushButton">
            <property name="minimumSize">
             <size>
-             <width>0</width>
-             <height>30</height>
+             <width>40</width>
+             <height>40</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>120</width>
-             <height>16777215</height>
+             <width>40</width>
+             <height>40</height>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:rgb(38,188,213);
-    border-radius:10px;
-	font: 12pt;
-}
-
-QPushButton:hover
-{
-    background-color:deepskyblue;
-}
-
-QPushButton:pressed
-{
-    background-color:deepskyblue;
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-           </property>
-           <property name="text">
-            <string>打开putty</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Minimum</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>15</width>
-             <height>15</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="winscpPushButton">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>120</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:rgb(38,188,213);
-    border-radius:10px;
-	font: 12pt;
-}
-
-QPushButton:hover
-{
-    background-color:deepskyblue;
-}
-
-QPushButton:pressed
-{
-    background-color:deepskyblue;
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-           </property>
-           <property name="text">
-            <string>打开winscp</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="8" column="0">
-        <spacer name="verticalSpacerProgress">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>159</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <widget class="QPushButton" name="connectVPNPushButton">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:rgb(38,188,213);
-    border-radius:10px;
-	font: 12pt;
-}
-
-QPushButton:hover
-{
-    background-color:deepskyblue;
-}
-
-QPushButton:pressed
-{
-    background-color:deepskyblue;
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-           </property>
-           <property name="text">
-            <string>连接</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="font">
-            <font>
-             <family>华文新魏</family>
-             <pointsize>15</pointsize>
-             <weight>75</weight>
-             <italic>false</italic>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">color: rgb(0, 0, 0);
-border-radius:6px;
-font:15pt;
-font:bold;
-font-family:华文新魏;</string>
-           </property>
-           <property name="text">
-            <string> VPN</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="flashLabel">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>15</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>15</width>
-             <height>15</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: red;
-color: rgb(101,147,74);
-border-radius:6px;
-font:15pt;</string>
+            <string notr="true">background:transparent;</string>
            </property>
            <property name="text">
             <string/>
            </property>
+           <property name="icon">
+            <iconset resource="../icon/pictures.qrc">
+             <normaloff>:/new/background/特来电.ico</normaloff>:/new/background/特来电.ico</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>80</width>
+             <height>40</height>
+            </size>
+           </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Maximum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="0">
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>35</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="connectVpnLabel">
-         <property name="styleSheet">
-          <string notr="true">color:rgb(14 , 150 , 254);
-border-radius:6px;
+         <item row="0" column="3">
+          <layout class="QHBoxLayout" name="horizontalLayout_22">
+           <item>
+            <spacer name="horizontalSpacer_35">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="nameLabel">
+             <property name="minimumSize">
+              <size>
+               <width>23</width>
+               <height>28</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>23</width>
+               <height>28</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color:black;
 font:11pt;
-font:bold;
-font-family:华文新魏;
+font-family:Microsoft Yahei;
+background:transparent;
 </string>
-         </property>
-         <property name="text">
-          <string>正在连接VPN,请稍后...</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QFrame" name="spaceFrame">
-      <property name="styleSheet">
-       <string notr="true">
-QFrame#spaceFrame{
-image: url(:/new/background/teld.png); 
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="../icon/pictures.qrc">:/new/background/管理员.ico</pixmap>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="margin">
+              <number>3</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="nameLineEdit">
+             <property name="maximumSize">
+              <size>
+               <width>130</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color:blue;
+font:10pt;
+background:transparent;</string>
+             </property>
+             <property name="text">
+              <string>name</string>
+             </property>
+             <property name="maxLength">
+              <number>20</number>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="frame">
+          <property name="minimumSize">
+           <size>
+            <width>195</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>195</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QTabWidget" name="manageTabWidget">
+             <property name="minimumSize">
+              <size>
+               <width>180</width>
+               <height>125</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>125</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Microsoft Yahei</family>
+               <pointsize>13</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QTabWidget::pane{
+	border:none;
+	background-color:#cce5f4;
+}
+
+QTabWidget::tab-bar{
+        alignment:left;
+}
+QTabBar::tab{
+	background:#92d0f2;
+	color:white;
+	width:30ex;
+	height:10ex;
+border-top-left-radius: 6px; 
+border-top-right-radius: 6px; 
+}
+QTabBar::tab:hover{
+	background:deepskyblue;
+}
+QTabBar::tab:selected{
+	border-color: white;
+	background:#cce5f4;
+	color:#2b8eca;
+	font:bold;
 }
 </string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-     </widget>
+             </property>
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="manageTabWidgetPage">
+              <attribute name="title">
+               <string>设备管理</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_4">
+               <item row="0" column="0">
+                <widget class="QPushButton" name="devicePushButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>39</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>1111111</width>
+                   <height>39</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:#6dcbe4;
+    border-radius:3px;
+	font: 12pt;
+}
+
+QPushButton:hover
+{
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>设备信息</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../icon/pictures.qrc">
+                   <normaloff>:/new/background/设备.ico</normaloff>:/new/background/设备.ico</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>25</width>
+                   <height>25</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="manageTabWidgetPage1">
+              <attribute name="title">
+               <string>权限管理</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_2">
+               <item row="1" column="0">
+                <widget class="QPushButton" name="recordPushButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>39</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>39</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:#6dcbe4;
+    border-radius:3px;
+	font: 12pt;
+}
+
+QPushButton:hover
+{
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>登录记录</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="accountPushButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>39</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>39</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:#6dcbe4;
+    border-radius:3px;
+	font: 12pt;
+}
+
+QPushButton:hover
+{
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>账户管理</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../icon/pictures.qrc">
+                   <normaloff>:/new/background/管理员.ico</normaloff>:/new/background/管理员.ico</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>25</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QGroupBox" name="functionGroupBox">
+             <property name="minimumSize">
+              <size>
+               <width>180</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>1100000</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(101,147,74);
+border-radius:3px;
+font:13pt;
+font:bold;
+font-family:Microsoft Yahei;
+background-color:#cce5f4;</string>
+             </property>
+             <property name="title">
+              <string/>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_8">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <item row="0" column="0">
+               <spacer name="verticalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Minimum</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>25</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="1" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="connectVPNPushButton">
+                  <property name="minimumSize">
+                   <size>
+                    <width>148</width>
+                    <height>43</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>148</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:#0f9ef7;
+    border-radius:4px;
+	font: 16pt;
+}
+
+QPushButton:hover
+{
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>连接VPN</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item row="3" column="0">
+               <spacer name="verticalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>16</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="2" column="0">
+               <widget class="QStackedWidget" name="statusStackedWidget">
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
+                </property>
+                <property name="lineWidth">
+                 <number>0</number>
+                </property>
+                <property name="currentIndex">
+                 <number>1</number>
+                </property>
+                <widget class="QWidget" name="statusPage">
+                 <layout class="QGridLayout" name="gridLayout_6">
+                  <item row="0" column="0">
+                   <layout class="QGridLayout" name="gridLayout">
+                    <property name="horizontalSpacing">
+                     <number>3</number>
+                    </property>
+                    <property name="verticalSpacing">
+                     <number>8</number>
+                    </property>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_3">
+                      <property name="styleSheet">
+                       <string notr="true">color:#0f9ef7;
+border-radius:10px;
+font:10pt;
+font:bold;
+font-family:微软雅黑;</string>
+                      </property>
+                      <property name="text">
+                       <string>运行状态：</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <layout class="QHBoxLayout" name="horizontalLayout">
+                      <item>
+                       <widget class="QLabel" name="connectStatusLabel">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>80</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">color:#0f9ef7;
+border-radius:10px;
+font:10pt;
+font:bold;
+font-family:微软雅黑;</string>
+                        </property>
+                        <property name="text">
+                         <string>已连接</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="flashLabel">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>15</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>15</width>
+                          <height>15</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: red;
+color: rgb(101,147,74);
+border-radius:6px;
+font:15pt;</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_4">
+                      <property name="font">
+                       <font>
+                        <family>微软雅黑</family>
+                        <pointsize>10</pointsize>
+                        <weight>75</weight>
+                        <italic>false</italic>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="layoutDirection">
+                       <enum>Qt::LeftToRight</enum>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">color:#0f9ef7;
+border-radius:10px;
+font:10pt;
+font:bold;
+font-family:微软雅黑;</string>
+                      </property>
+                      <property name="text">
+                       <string>  虚拟   IP：</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLabel" name="ipAddrLabel">
+                      <property name="styleSheet">
+                       <string notr="true">color:#0f9ef7;
+border-radius:10px;
+font:9pt;
+font-family:微软雅黑;</string>
+                      </property>
+                      <property name="text">
+                       <string>188.188.188</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_5">
+                      <property name="styleSheet">
+                       <string notr="true">color:#0f9ef7;
+border-radius:10px;
+font:10pt;
+font:bold;
+font-family:微软雅黑;</string>
+                      </property>
+                      <property name="lineWidth">
+                       <number>1</number>
+                      </property>
+                      <property name="text">
+                       <string>在线时长：</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                      <property name="indent">
+                       <number>-1</number>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::LinksAccessibleByMouse</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLabel" name="timeLable">
+                      <property name="styleSheet">
+                       <string notr="true">color:#0f9ef7;
+border-radius:10px;
+font:10pt;
+font:bold;
+font-family:微软雅黑;</string>
+                      </property>
+                      <property name="text">
+                       <string>00分10秒</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="1" column="0">
+                   <spacer name="verticalSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>56</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="loadingPage">
+                 <layout class="QGridLayout" name="gridLayout_7">
+                  <item row="0" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_2">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="loadingLabel_2">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>75</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>75</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="scaledContents">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>13</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="loadingLabel">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>75</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>75</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="scaledContents">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Expanding</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>13</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="loadingLabel_3">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>75</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>75</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="scaledContents">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="connectVpnLabel">
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">color:rgb(14 , 150 , 254);
+border-radius:6px;
+font:10pt;
+font-family:微软雅黑;
+</string>
+                    </property>
+                    <property name="text">
+                     <string>正在连接VPN,请稍后...</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <spacer name="verticalSpacer_4">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <layout class="QVBoxLayout" name="verticalLayout">
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <property name="leftMargin">
+                 <number>25</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="puttyPushButton">
+                  <property name="minimumSize">
+                   <size>
+                    <width>130</width>
+                    <height>37</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>130</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton
+{
+	background: #47b4f6;
+    font-family:Microsoft Yahei;
+    color:white;
+    border-radius:3px;
+	font: 12pt;
+}
+
+QPushButton:hover
+{
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>打开putty</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="winscpPushButton">
+                  <property name="minimumSize">
+                   <size>
+                    <width>130</width>
+                    <height>37</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>130</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton
+{
+	background: #47b4f6;
+    font-family:Microsoft Yahei;
+    color:white;
+    border-radius:3px;
+	font: 12pt;
+}
+
+QPushButton:hover
+{
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>打开winscp</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Minimum</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>100</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="spaceFrame">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QFrame#spaceFrame{
+image: url(:/new/background/teld.png); 
+}
+font:12pt;
+color:black;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -1039,7 +1144,7 @@ image: url(:/new/background/teld.png);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1233</width>
+     <width>1120</width>
      <height>23</height>
     </rect>
    </property>
@@ -1081,7 +1186,6 @@ image: url(:/new/background/teld.png);
   <tabstop>connectVPNPushButton</tabstop>
   <tabstop>puttyPushButton</tabstop>
   <tabstop>winscpPushButton</tabstop>
-  <tabstop>devicePushButton</tabstop>
  </tabstops>
  <resources>
   <include location="../icon/pictures.qrc"/>

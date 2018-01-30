@@ -10,13 +10,12 @@
 #ifndef DEVICEDLG_H
 #define DEVICEDLG_H
 
+#include <QTimer>
 #include <QDialog>
 #include <QProgressDialog>
 #include "jsonManage/jsonmanage.h"
 #include "httpManage/httpmanage.h"
-#include <QTimer>
-//#include <QMenu>
-//#include <QAction>
+#include "loading/loadingdlg.h"
 
 namespace Ui {
 class deviceDlg;
@@ -31,29 +30,12 @@ public:
     ~deviceDlg();
 
     void keyPressEvent(QKeyEvent *event);
-//    void createActions();
-//    void contextMenuEvent(QContextMenuEvent *event);
 
     int            signalFlag;    //信号标志位
     static QString deviceIp;      //被选择的设备ip地址
     QList<QString> remoteIpList;  //存储解析的远程ip
     QList<QString> startTimeList; //存储解析最新上线时间
     QList<QString> userIdList;    //存储解析用户id地址
-
-#if 0
-    QMenu *pop_menu;
-    QMenu *sort_style;
-    QAction *action_name;
-    QAction *action_size;
-    QAction *action_type;
-    QAction *action_date;
-    QAction *action_open;
-    QAction *action_download;
-    QAction *action_flush;
-    QAction *action_delete;
-    QAction *action_rename ;
-    QAction *action_create_folder;
-#endif
 
 signals:
     transmitNumSignal(QByteArray);
@@ -70,16 +52,16 @@ private slots:
     void on_nextPushButton_clicked();
     void on_searchPushButton_clicked();
     void on_previousPushButton_clicked();
-    void on_searchAllPushButton_clicked();
-    void on_currentPageLineEdit_returnPressed();
     void on_listTableWidget_cellClicked(int row, int column);
+
+    void on_enterPushButton_clicked();
 
 private:
     Ui::deviceDlg   *ui;
     jsonManage      *dataJson;
     httpManage      *dataHttp;
-    QProgressDialog *progressDlg;
     QTimer          *pTimer;
+    loadingDlg      *pLoadDlg;                   //获取数据动态效果
 };
 
 #endif // DEVICEDLG_H

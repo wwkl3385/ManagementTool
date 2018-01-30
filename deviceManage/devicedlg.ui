@@ -14,13 +14,10 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">color: rgb(20,68,106);
-border-radius:10px;
-font:15pt;
-font-family:Microsoft Yahei;</string>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="7">
+   <item row="0" column="5">
     <widget class="QLabel" name="numberLabel">
      <property name="minimumSize">
       <size>
@@ -37,7 +34,7 @@ font-family:Microsoft Yahei;</string>
      <property name="font">
       <font>
        <family>Microsoft Yahei</family>
-       <pointsize>13</pointsize>
+       <pointsize>18</pointsize>
        <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
@@ -47,9 +44,9 @@ font-family:Microsoft Yahei;</string>
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(254,67,101);
+      <string notr="true">color: #3bb4f4;
 border-radius:6px;
-font:13pt;
+font:18pt;
 font-family:Microsoft Yahei;</string>
      </property>
      <property name="text">
@@ -60,10 +57,10 @@ font-family:Microsoft Yahei;</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="6">
+   <item row="0" column="4">
     <widget class="QLabel" name="deviceLabel">
      <property name="styleSheet">
-      <string notr="true">color: rgb(0, 0, 0);
+      <string notr="true">color: #737373;
 border-radius:10px;
 font:12pt;
 font:bold;
@@ -74,43 +71,36 @@ font-family:Microsoft Yahei;</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <spacer name="horizontalSpacer_6">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>6</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="2">
+   <item row="0" column="1">
     <widget class="QLineEdit" name="searchLineEdit">
      <property name="minimumSize">
       <size>
-       <width>270</width>
-       <height>0</height>
+       <width>0</width>
+       <height>33</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>33</height>
       </size>
      </property>
      <property name="styleSheet">
       <string notr="true">QLineEdit{
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
-border-radius:10px;
+border-radius:5px;
 font:11pt;
 font-family:Microsoft Yahei;
-border:1px solid gray;
+border:1px solid #d3dadd;
 }
 QLineEdit:hover{
 border-width:2px;
-border-color:rgb(170, 170, 255);
+border-color:skyblue;
 }
 QLineEdit:focus {
 border-width:2px;
-border-color:rgb(170, 170, 255);
+border-color:lightblue;
 }</string>
      </property>
      <property name="inputMask">
@@ -139,10 +129,13 @@ border-color:rgb(170, 170, 255);
      </property>
     </widget>
    </item>
-   <item row="0" column="5">
+   <item row="0" column="3">
     <spacer name="dotHorizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -152,31 +145,49 @@ border-color:rgb(170, 170, 255);
      </property>
     </spacer>
    </item>
-   <item row="0" column="8">
-    <widget class="QLabel" name="unitLabel">
-     <property name="styleSheet">
-      <string notr="true">color: rgb(0, 0, 0);
-border-radius:10px;
-font:12pt;
-font:bold;
-font-family:Microsoft Yahei;</string>
+   <item row="0" column="0">
+    <spacer name="horizontalSpacer_6">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="text">
-      <string> 台</string>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>6</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
-   <item row="0" column="3">
+   <item row="0" column="7">
+    <spacer name="horizontalSpacer_7">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>4</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="2">
     <widget class="QPushButton" name="searchPushButton">
      <property name="minimumSize">
       <size>
-       <width>80</width>
-       <height>0</height>
+       <width>85</width>
+       <height>32</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>100</width>
+       <width>85</width>
        <height>16777215</height>
       </size>
      </property>
@@ -185,7 +196,7 @@ font-family:Microsoft Yahei;</string>
 {
     font-family:Microsoft Yahei;
     color:white;
-    background-color:skyblue;
+    background-color:#40aff1;
     border-radius:10px;
 	font: 12pt;
 }
@@ -211,107 +222,27 @@ QPushButton:unpressed
      <property name="text">
       <string>查询</string>
      </property>
+     <property name="icon">
+      <iconset resource="../icon/pictures.qrc">
+       <normaloff>:/new/background/search.ico</normaloff>:/new/background/search.ico</iconset>
+     </property>
     </widget>
    </item>
-   <item row="0" column="9">
-    <spacer name="horizontalSpacer_7">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>4</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0" colspan="10">
-    <widget class="QTableWidget" name="listTableWidget">
+   <item row="0" column="6">
+    <widget class="QLabel" name="unitLabel">
      <property name="styleSheet">
-      <string notr="true">QTableWidget
-{
-    selection-background-color:skyblue;
+      <string notr="true">color: rgb(0, 0, 0);
+border-radius:10px;
 font:12pt;
-
-}
-QTableWidget::item:hover
-{
-background-color:rgb(203,203,203);
-} 
-
-QHeaderView
-{
-
 font:bold;
-}</string>
-     </property>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>180</number>
-     </attribute>
-    </widget>
-   </item>
-   <item row="0" column="4">
-    <widget class="QPushButton" name="searchAllPushButton">
-     <property name="minimumSize">
-      <size>
-       <width>100</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>100</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:skyblue;
-    border-radius:10px;
-	font: 12pt;
-}
-
-QPushButton:hover
-{
-    background-color:deepskyblue;
-}
-
-QPushButton:pressed
-{
-    background-color:deepskyblue;
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
+font-family:Microsoft Yahei;</string>
      </property>
      <property name="text">
-      <string>查询全部</string>
+      <string> 台</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer_10">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="0" colspan="10">
+   <item row="2" column="0" colspan="8">
     <widget class="QFrame" name="pageFrame">
      <property name="minimumSize">
       <size>
@@ -332,6 +263,22 @@ QPushButton:unpressed
       <property name="verticalSpacing">
        <number>0</number>
       </property>
+      <item row="0" column="2">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Maximum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item row="0" column="0">
        <spacer name="horizontalSpacer_5">
         <property name="orientation">
@@ -361,6 +308,47 @@ QPushButton:unpressed
          </spacer>
         </item>
         <item>
+         <widget class="QPushButton" name="enterPushButton">
+          <property name="minimumSize">
+           <size>
+            <width>45</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:#44afee;
+    border-radius:3px;
+	font: 12pt;
+}
+
+QPushButton:hover
+{
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+          </property>
+          <property name="text">
+           <string>转到</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="label_12">
           <property name="maximumSize">
            <size>
@@ -369,14 +357,14 @@ QPushButton:unpressed
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">color: rgb(0, 0, 0);
+           <string notr="true">color: #7f7f7f;
 border-radius:10px;
 font:10pt;
 font:bold;
 font-family:微软雅黑;</string>
           </property>
           <property name="text">
-           <string>当前第</string>
+           <string>第</string>
           </property>
          </widget>
         </item>
@@ -391,19 +379,19 @@ font-family:微软雅黑;</string>
           <property name="styleSheet">
            <string notr="true">QLineEdit{
 background-color: rgb(255,255,255);
-color: blue;
+color: #4a4a4a;
 border-radius:6px;
 font:11pt;
 font-family:Microsoft Yahei;
-border:1px solid gray;
+border:1px solid #d3dadd;
 }
 QLineEdit:hover{
 border-width:2px;
-border-color:rgb(170, 170, 255);
+border-color:#58baf2;
 }
 QLineEdit:focus {
 border-width:2px;
-border-color:rgb(170, 170, 255);
+border-color:#92d0f2;
 }</string>
           </property>
           <property name="text">
@@ -426,7 +414,7 @@ border-color:rgb(170, 170, 255);
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">color: rgb(0, 0, 0);
+           <string notr="true">color: #7f7f7f;
 border-radius:10px;
 font:10pt;
 font:bold;
@@ -437,23 +425,123 @@ font-family:微软雅黑;</string>
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="previousPushButton">
+          <property name="minimumSize">
+           <size>
+            <width>28</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>28</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:#44afee;
+    border-radius:3px;
+}
+
+QPushButton:hover
+{
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../icon/pictures.qrc">
+            <normaloff>:/new/background/up.ico</normaloff>:/new/background/up.ico</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>3</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="nextPushButton">
+          <property name="minimumSize">
+           <size>
+            <width>28</width>
+            <height>21</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>28</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton
+{
+    font-family:Microsoft Yahei;
+    color:white;
+    background-color:#44afee;
+    border-radius:3px;
+}
+
+QPushButton:hover
+{
+    background-color:deepskyblue;
+}
+
+QPushButton:pressed
+{
+    background-color:deepskyblue;
+    padding-left:4px;
+    padding-top:4px;
+}
+QPushButton:unpressed
+{
+    background-color:rgb(0 , 100 , 0);
+    padding-left:4px;
+    padding-top:4px;
+}</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../icon/pictures.qrc">
+            <normaloff>:/new/background/down.ico</normaloff>:/new/background/down.ico</iconset>
+          </property>
+         </widget>
+        </item>
        </layout>
-      </item>
-      <item row="0" column="2">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Maximum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
       <item row="0" column="3">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -472,7 +560,7 @@ font-family:微软雅黑;</string>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">color: rgb(0, 0, 0);
+           <string notr="true">color: #7f7f7f;
 border-radius:10px;
 font:10pt;
 font:bold;
@@ -486,7 +574,7 @@ font-family:微软雅黑;</string>
         <item>
          <widget class="QLabel" name="allPageLabel">
           <property name="styleSheet">
-           <string notr="true">color: blue;
+           <string notr="true">color: #000000;
 border-radius:10px;
 font:12pt;
 font:bold;
@@ -506,7 +594,7 @@ font-family:微软雅黑;</string>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">color: rgb(0, 0, 0);
+           <string notr="true">color: #7f7f7f;
 border-radius:10px;
 font:10pt;
 font:bold;
@@ -517,153 +605,27 @@ font-family:微软雅黑;</string>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPushButton" name="previousPushButton">
-          <property name="minimumSize">
-           <size>
-            <width>45</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>45</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:skyblue;
-    border-radius:10px;
-	font: 12pt;
-}
-
-QPushButton:hover
-{
-    background-color:deepskyblue;
-}
-
-QPushButton:pressed
-{
-    background-color:deepskyblue;
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-          </property>
-          <property name="text">
-           <string>上页</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_11">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Maximum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>5</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="nextPushButton">
-          <property name="minimumSize">
-           <size>
-            <width>45</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>45</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton
-{
-    font-family:Microsoft Yahei;
-    color:white;
-    background-color:skyblue;
-    border-radius:10px;
-	font: 12pt;
-}
-
-QPushButton:hover
-{
-    background-color:deepskyblue;
-}
-
-QPushButton:pressed
-{
-    background-color:deepskyblue;
-    padding-left:4px;
-    padding-top:4px;
-}
-QPushButton:unpressed
-{
-    background-color:rgb(0 , 100 , 0);
-    padding-left:4px;
-    padding-top:4px;
-}</string>
-          </property>
-          <property name="text">
-           <string>下页</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_8">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
        </layout>
       </item>
-      <item row="0" column="4">
-       <spacer name="horizontalSpacer_2">
+      <item row="0" column="5">
+       <spacer name="horizontalSpacer_9">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Maximum</enum>
-        </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>86</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
       </item>
-      <item row="0" column="5">
+      <item row="0" column="4">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QLabel" name="label_17">
           <property name="styleSheet">
-           <string notr="true">color: rgb(0, 0, 0);
+           <string notr="true">color: #7f7f7f;
 border-radius:10px;
 font:10pt;
 font:bold;
@@ -677,7 +639,7 @@ font-family:微软雅黑;</string>
         <item>
          <widget class="QLabel" name="numLabel">
           <property name="styleSheet">
-           <string notr="true">color: blue;
+           <string notr="true">color: #000000;
 border-radius:10px;
 font:12pt;
 font:bold;
@@ -691,7 +653,7 @@ font-family:微软雅黑;</string>
         <item>
          <widget class="QLabel" name="label_18">
           <property name="styleSheet">
-           <string notr="true">color: rgb(0, 0, 0);
+           <string notr="true">color: #7f7f7f;
 border-radius:10px;
 font:10pt;
 font:bold;
@@ -717,24 +679,43 @@ font-family:微软雅黑;</string>
         </item>
        </layout>
       </item>
-      <item row="0" column="6">
-       <spacer name="horizontalSpacer_9">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>86</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
      </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="8">
+    <widget class="QTableWidget" name="listTableWidget">
+     <property name="styleSheet">
+      <string notr="true">QTableWidget
+{
+font:11pt;
+color:black;
+}
+QTableWidget::item:hover
+{
+background-color:#cce5f4;
+font:12pt;
+} 
+QTableWidget::item:selected
+{
+background-color:lightblue;
+color:blue;
+font:13pt;
+} 
+QHeaderView
+{
+color:snow;
+font:bold;
+}</string>
+     </property>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>180</number>
+     </attribute>
     </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../icon/pictures.qrc"/>
+ </resources>
  <connections/>
 </ui>

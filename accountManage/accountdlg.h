@@ -44,6 +44,8 @@ public:
     explicit accountDlg(QWidget *parent = 0);
     ~accountDlg();
 
+    void keyPressEvent(QKeyEvent  *event);
+
     static stJsonData modifyInfoData;
     static dataList   userList;     //用户数据列表
     static int        deleteRow;    //删除&修改 选中的行

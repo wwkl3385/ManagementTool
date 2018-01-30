@@ -14,6 +14,7 @@
 #include "deviceManage/devicedlg.h"
 #include "recordExport/recorddlg.h"
 #include <QScrollBar>
+#include <QMovie>
 #include <QDebug>
 #include <QDir>
 #include <QMessageBox>
@@ -24,11 +25,15 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QNetworkReply>
+#include <QDesktopServices>
 #include <QDebug>
 #include <WinSock2.h>
 #include <iphlpapi.h>
+#include <Windows.h>
+#include <tlhelp32.h>
+#include <string.h>
 
- #define  QUERY_ONE_USER_URL "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_one_user"   //查询单个用户信息url
+#define  QUERY_ONE_USER_URL "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_one_user"   //查询单个用户信息url
 
 static int n = 0;       //记录创建的次数
 static int secTmp = 0;  //连接vpn 超时时间
@@ -45,11 +50,16 @@ ManagementTool::ManagementTool(QWidget *parent) :
 {
     ui->setupUi(this);
     qDebug() <<"managementDlg创建的次数："<< ++n;
+    SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);  //防止系统休眠
 
-    setWindowTitle("智能集中控制器远程管理系统");
+    setWindowTitle("集中控制器智能远程管理系统");
     setWindowIcon(QIcon("teld.ico")); //设置软件图标
     this->resize(1500, 800);          //设置初始尺寸
-    ui->flashLabel->setStyleSheet("QLabel{background-color:white ;border-radius:6px;}");
+    ui->flashLabel->setStyleSheet("QLabel{background-color:lightblue;border-radius:6px;}");
+
+    QMovie *movie = new QMovie(":/new/background/loading2.gif");
+    ui->loadingLabel->setMovie(movie);
+    movie->start();
 
     dataJson = new jsonManage;
     dataHttp = new httpManage;
@@ -58,11 +68,9 @@ ManagementTool::ManagementTool(QWidget *parent) :
     vpnClickedConnect = false;
     vpnClicked = false;
 
-    ui->connectVpnProgressBar->hide();
-    ui->connectVpnProgressBar->setMaximum(0);
-    ui->connectVpnProgressBar->setMinimum(0);
+    ui->statusStackedWidget->setCurrentIndex(1);
+    ui->loadingLabel->hide();
     ui->connectVpnLabel->hide();
-    ui->connectVpnLabel->setStyleSheet("QLabel{color:black;font:11pt;font:bold}");
 
     pTimer = new QTimer(this);
     connect(pTimer, SIGNAL(timeout()), this, SLOT(onTimeDelay()));
@@ -82,37 +90,19 @@ ManagementTool::ManagementTool(QWidget *parent) :
     ui->nameLineEdit->setText(logon::userNameInfo);
 
     ui->puttyPushButton->hide();
-//    ui->puttyPushButtonClose->hide();
     ui->winscpPushButton->hide();
-//    ui->winscpPushButtonClose->hide();
-    ui->connectVPNPushButton->setText("连接");
+    ui->connectVPNPushButton->setText("连接VPN");
+
+    ui->connectVPNPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; "
+                                            "background-color:#0f9ef7; border-radius:10px; font: 12pt; } "
+                                            "QPushButton:hover { background-color:deepskyblue; }  "
+                                            "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
+                                            "padding-top:4px; } "
+                                            "QPushButton:unpressed { background-color:#0f9ef7; "
+                                            "padding-left:4px; padding-top:4px;}");
 
     ui->recordPushButton->hide();
-
-    /*默认显示设备管理界面*/
-    if (funcWidget)
-    {
-        layout->removeWidget(funcWidget);
-        delete funcWidget;
-        funcWidget = NULL;
-    }
-
-    funcWidget = new deviceDlg(ui->spaceFrame);
-    layout->addWidget(funcWidget);
-    funcWidget->show();
-
-    /*管理员和普通用户*/
-    if(logon::userType == 1)
-    {
-        ui->nameLabel->setText("管理员");
-        ui->manageToolBox->setCurrentIndex(0);
-    }
-    else
-    {
-        ui->nameLabel->setText("普通用户");
-//        ui->AdminPage->setVisible(false);
-//        ui->manageToolBox->removeItem(1);
-    }
+    ui->manageTabWidget->setCurrentIndex(0);
 
     /*连接服务器,请求单个用户*/
     dataJson->queryOneUserObj= dataJson->jsonPackQueryOneUser(logon::userNameInfo);
@@ -122,11 +112,19 @@ ManagementTool::ManagementTool(QWidget *parent) :
     /*http请求*/
     connect(this->dataHttp->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onReplyFinished(QNetworkReply*)));
     connect(this, SIGNAL(transmitSignal(QByteArray)), this, SLOT(onOneUserDataParse(QByteArray)));
-
 }
 
 ManagementTool::~ManagementTool()
 {
+    /*强制 结束任务*/
+
+    if (findApp("openvpn.exe") == true)
+        terminateApp("taskkill /im openvpn.exe /f");
+    if (findApp("putty.exe") ==  true)
+        terminateApp("taskkill /im putty.exe /f");
+    if (findApp("WinSCP.exe") == true)
+        terminateApp("taskkill /im WinSCP.exe /f");
+
     if (funcWidget)
     {
         layout->removeWidget(funcWidget);
@@ -150,10 +148,6 @@ ManagementTool::~ManagementTool()
     delete puttyProcess;
     delete winscpProcess;
 
-    /*强制 结束任务*/
-    terminateApp("taskkill /im openvpn.exe /f");
-    terminateApp("taskkill /im putty.exe /f");
-    terminateApp("taskkill /im winscp.exe /f");
     delete ui;
 }
 
@@ -255,7 +249,7 @@ void ManagementTool::onTimeDelay()
     QStringList newIp= getIP(QHostInfo::localHostName());
     QString strTime;
 
-    if (!ui->connectVpnProgressBar->isHidden())
+    if (!ui->loadingLabel->isHidden())
         ui->connectVPNPushButton->setDisabled(true);
     else
         ui->connectVPNPushButton->setEnabled(true);
@@ -263,14 +257,13 @@ void ManagementTool::onTimeDelay()
     if (vpnClickedConnect == true && connectVpnSuccessFlag != true)
     {
         ++secTmp;
-        if (secTmp > 30)
+        if (secTmp > 20) //10s
         {
             secTmp = 0;
             vpnClickedConnect = false;  //断开
+            ui->statusStackedWidget->setCurrentIndex(1);
+            ui->loadingLabel->hide();
             ui->connectVpnLabel->setText("连接失败，请重新连接...");
-            ui->connectVpnLabel->setStyleSheet("QLabel{color:red;font:12pt;font:bold}");
-            ui->connectVpnProgressBar->hide();
-            ui->connectVpnProgressBar->setEnabled(true);
         }
     }
 
@@ -278,12 +271,10 @@ void ManagementTool::onTimeDelay()
     if(vpnClicked != true)
     {
         oldIp  = getIP(QHostInfo::localHostName());
-        qDebug()<<"odip.size" <<oldIp.size();
     }
 
     if (vpnClickedConnect == true &&  newIp.size() > oldIp.size())
     {
-        qDebug()<<"newip.size" <<newIp.size();
         static int halfSec = 0;
         halfSec ++;
         if (halfSec > 6000)
@@ -308,47 +299,95 @@ void ManagementTool::onTimeDelay()
             file.resize(0);
         }
 
-        ui->connectVpnProgressBar->hide();
         ui->connectVpnLabel->setText("正在连接vpn,请稍后...");
         ui->connectVpnLabel->hide();
-        ui->connectVpnLabel->setStyleSheet("QLabel{color:black;font:12pt;font:bold}");
 
         connectVpnSuccessFlag = true;
-        ui->connectVPNPushButton->setText("断开");
+        ui->connectVPNPushButton->setText("断开VPN");
+        ui->connectVPNPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                                "border-radius:10px; font:12pt; } QPushButton:hover { background-color:#aac8db;} "
+                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px;}"
+                                                "QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; "
+                                                "padding-top:4px; }");
         ui->connectVPNPushButton->setEnabled(true);
-        ui->connectStatusLabel->setText("连接成功");
-        ui->connectStatusLabel->setStyleSheet("QLabel{color:red;font:15px;font:bold;}");
+        ui->statusStackedWidget->setCurrentIndex(0);
+        ui->connectStatusLabel->setText("已连接");
+        ui->connectStatusLabel->setStyleSheet("QLabel{color:seagreen;font:10pt;font:bold;}");
 
         if (halfSec % 2 == 1)
-            ui->flashLabel->setStyleSheet("QLabel{background-color:red;border-radius:6px;}");
+            ui->flashLabel->setStyleSheet("QLabel{background-color:#A2CD5A;border-radius:6px;}");
         else
-            ui->flashLabel->setStyleSheet("QLabel{background-color:white; border-radius:6px;}");
+            ui->flashLabel->setStyleSheet("QLabel{background-color:#EE8262; border-radius:6px;}");
 
-        strTime.sprintf("%d分：%d秒", min, sec);
+        strTime.sprintf("%d分%d秒", min, sec);
         ui->timeLable->setText(strTime);
         ui->ipAddrLabel->setText(newIp.last());
     }
     else
     {
-        ui->connectVPNPushButton->setText("连接");
-        ui->connectStatusLabel->setText("未连接");
+        ui->connectVPNPushButton->setText("连接VPN");
+        ui->connectVPNPushButton->setStyleSheet("QPushButton {font-family:Microsoft Yahei; color:white; background-color:#0f9ef7;"
+                                   "border-radius:10px; font: 12pt; } QPushButton:hover { background-color:deepskyblue;}"
+                                   "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; padding-top:4px;} "
+                                   "QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px;}");
+        ui->flashLabel->setStyleSheet("QLabel{background-color:lightblue;border-radius:6px;}");
+        ui->statusStackedWidget->setCurrentIndex(1);
+        ui->loadingLabel->setText("");
         ui->timeLable->setText("");
         connectVpnSuccessFlag = false;
     }
 
-    if (!deviceDlg::deviceIp.isEmpty())
+    if (!deviceDlg::deviceIp.isEmpty() && connectVpnSuccessFlag== true)
     {
         ui->puttyPushButton->show();
-//        ui->puttyPushButtonClose->show();
         ui->winscpPushButton->show();
-//        ui->winscpPushButtonClose->show();
     }
     else
     {
         ui->puttyPushButton->hide();
-//        ui->puttyPushButtonClose->hide();
         ui->winscpPushButton->hide();
-//        ui->winscpPushButtonClose->hide();
+    }
+
+    if (findApp("putty.exe") ==  true)
+    {
+        openPutty = false;
+        ui->puttyPushButton->setText("关闭putty");
+        ui->puttyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#88acc3; "
+                                           "border-radius:10px; font: 12pt; } QPushButton:hover { background-color:#aac8db; }"
+                                           "QPushButton:pressed { background-color:skyblue; padding-left:4px; padding-top:4px;}"
+                                           "QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; "
+                                           "padding-top:4px; }");
+    }
+    else
+    {
+        openPutty = true;
+        ui->puttyPushButton->setText("打开putty");
+        ui->puttyPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:#47b4f6; "
+                                           "border-radius:10px; font: 12pt; } QPushButton:hover { background-color:deepskyblue;}"
+                                           "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
+                                           "padding-top:4px;} QPushButton:unpressed { background-color:rgb(0 , 100 , 0); "
+                                           "padding-left:4px; padding-top:4px;}");
+    }
+
+    if (findApp("WinSCP.exe") == true)
+    {
+        openWinscp= false;
+        ui->winscpPushButton->setText("关闭winscp");
+        ui->winscpPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#88acc3;"
+                                            "border-radius:10px; font: 12pt; } QPushButton:hover { background-color:#aac8db; } "
+                                            "QPushButton:pressed { background-color:skyblue; padding-left:4px; padding-top:4px; }"
+                                            "QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; "
+                                            "padding-top:4px; }");
+    }
+    else
+    {
+        openWinscp = true;
+        ui->winscpPushButton->setText("打开winscp");
+        ui->winscpPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:#47b4f6;"
+                                            "border-radius:10px; font: 12pt; } QPushButton:hover { background-color:deepskyblue;}"
+                                            "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
+                                            "padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); "
+                                            "padding-left:4px; padding-top:4px;}");
     }
 
     /*管理员密码被修改后,退出主界面*/
@@ -369,8 +408,8 @@ void ManagementTool::on_connectVPNPushButton_clicked()
     min = 0;     //vpn 连接时间 min
 
     /*结束 openvpn 任务*/
-    QString app = "taskkill /im openvpn.exe /f";
-    terminateApp(app);
+    if (findApp("openvpn.exe") == true)
+        terminateApp("taskkill /im openvpn.exe /f");
 
     QString program = QCoreApplication::applicationDirPath() + "/thirdApp/bin/openvpn.exe";
     QString workFileDir = QCoreApplication::applicationDirPath() + "/thirdApp/config";
@@ -384,21 +423,21 @@ void ManagementTool::on_connectVPNPushButton_clicked()
     args.append("script-security");
     args.append("3");
 
+    qDebug() <<"vpn连接状态："<< connectVpnSuccessFlag ;
+
     if (connectVpnSuccessFlag == false && vpnClickedConnect != true)
     {
         vpnClicked = true;
         vpnClickedConnect = true; //连接
         connectVpnSuccessFlag = false;
-        qDebug() <<"vpn连接状态："<< connectVpnSuccessFlag ;
 
-        ui->connectVpnProgressBar->show();
+        ui->statusStackedWidget->show();
+        ui->statusStackedWidget->setCurrentIndex(1);
+        ui->loadingLabel->show();
         ui->connectVpnLabel->show();
-        ui->connectVpnLabel->setText("正在连接vpn,请稍后...");
-        ui->connectVpnLabel->setStyleSheet("QLabel{color:black;font:12pt;font:bold}");
+        ui->connectVpnLabel->setText("正在连接VPN,请稍后...");
 
-        ui->connectStatusLabel->setText("连接中...");
         QString dirPath = QCoreApplication::applicationDirPath();
-
         QDir *userPass= new QDir;
         bool exist = userPass->exists(dirPath +"/thirdApp/config");
         if(!exist)
@@ -440,22 +479,29 @@ void ManagementTool::on_connectVPNPushButton_clicked()
     else
     {
         vpnProcess->close();
+        qDebug() <<"断开vpn："<< connectVpnSuccessFlag ;
         connectVpnSuccessFlag  = false;
+        vpnClickedConnect = false;  //断开
         vpnClicked = false;
 
-        qDebug() <<"断开 clicked  vpn连接状态："<< connectVpnSuccessFlag ;
-        vpnClickedConnect = false;  //断开
         ui->ipAddrLabel->setText("");
+        ui->loadingLabel->hide();
     }
 }
 
 void ManagementTool::on_puttyPushButton_clicked()
 {
+//     QProcess puttyProcess(this);
+
     if (openPutty == true)
     {
         openPutty = false;
         ui->puttyPushButton->setText("关闭putty");
-        ui->puttyPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:rgb(87,96,105); border-radius:10px; font: 12pt; } QPushButton:hover { background-color:rgb(84,115,135); } QPushButton:pressed { background-color:rgb(14 , 100 , 228); padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
+        ui->puttyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#88acc3; "
+                                           "border-radius:10px; font: 12pt; } QPushButton:hover { background-color:#aac8db; } "
+                                           "QPushButton:pressed { background-color:skyblue; padding-left:4px; padding-top:4px; }"
+                                           "QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; "
+                                           "padding-top:4px; }");
 
         QString program = QCoreApplication::applicationDirPath() + "./thirdApp/bin/putty.exe";
 
@@ -475,7 +521,11 @@ void ManagementTool::on_puttyPushButton_clicked()
         terminateApp("taskkill /im putty.exe /f");
         openPutty = true;
         ui->puttyPushButton->setText("打开putty");
-        ui->puttyPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:rgb(38,188,213); border-radius:10px; font: 12pt; } QPushButton:hover { background-color:deepskyblue; }  QPushButton:pressed { background-color:deepskyblue; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px;}");
+        ui->puttyPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:#47b4f6; "
+                                           "border-radius:10px; font: 12pt; } QPushButton:hover { background-color:deepskyblue;}"
+                                           "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
+                                           "padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); "
+                                           "padding-left:4px; padding-top:4px;}");
     }
 }
 
@@ -485,7 +535,11 @@ void ManagementTool::on_winscpPushButton_clicked()
     {
         openWinscp= false;
         ui->winscpPushButton->setText("关闭winscp");
-        ui->winscpPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:rgb(87,96,105); border-radius:10px; font: 12pt; } QPushButton:hover { background-color:rgb(84,115,135); } QPushButton:pressed { background-color:rgb(14 , 100 , 228); padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
+        ui->winscpPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#88acc3;"
+                                            "border-radius:10px; font: 12pt; } QPushButton:hover {background-color:#aac8db;}"
+                                            "QPushButton:pressed {background-color:skyblue; padding-left:4px; padding-top:4px;}"
+                                            "QPushButton:unpressed {background-color:rgb(0 , 100 , 0); padding-left:4px; "
+                                            "padding-top:4px; }");
 
         QString program = QCoreApplication::applicationDirPath() + "./thirdApp/bin/WinScp.exe";
         QStringList arguments;
@@ -499,10 +553,14 @@ void ManagementTool::on_winscpPushButton_clicked()
     }
     else
     {
-        terminateApp("taskkill /im winscp.exe /f");
+        terminateApp("taskkill /im WinSCP.exe /f");
         openWinscp = true;
         ui->winscpPushButton->setText("打开winscp");
-        ui->winscpPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:rgb(38,188,213); border-radius:10px; font: 12pt; } QPushButton:hover { background-color:deepskyblue; }  QPushButton:pressed { background-color:deepskyblue; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px;}");
+        ui->winscpPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; background-color:#47b4f6; "
+                                            "border-radius:10px; font: 12pt; } QPushButton:hover { background-color:deepskyblue; }  "
+                                            "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
+                                            "padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); "
+                                            "padding-left:4px; padding-top:4px;}");
     }
 }
 
@@ -553,21 +611,9 @@ QStringList ManagementTool::getIP(QString localHost)
     return ipAddr;
 }
 
-void ManagementTool::on_puttyPushButtonClose_clicked()
-{
-    /*结束 putty 任务*/
-    QString app = "taskkill /im putty.exe /f";
-    terminateApp(app);
-}
-
-void ManagementTool::on_winscpPushButtonClose_clicked()
-{
-    QString app = "taskkill /im winscp.exe /f";
-    terminateApp(app);
-}
 
 /*结束 外部APP 任务*/
-void ManagementTool::terminateApp(QString app)
+void terminateApp(QString app)
 {
     qDebug()<< app;
     QProcess process;
@@ -585,7 +631,7 @@ void ManagementTool::terminateApp(QString app)
 void ManagementTool::on_aboutPushButton_clicked()
 {
     QMessageBox::about(NULL, "版权所有", "Copyright (c) 2018, 青岛特来电新能源有限公司, All rights reserved." \
-                                     "\n\n集中控制器远程管理系统 V1.0.0\n\n智能充电研发中心-集控开发部");
+                                     "\n\n集中控制器智能远程管理系统 V1.0.0\n\n智能充电研发中心-集控开发部");
 }
 
 
@@ -598,7 +644,9 @@ void ManagementTool::on_aboutAction_triggered()
 /*使用说明书*/
 void ManagementTool::on_helpAction_triggered()
 {
-
+    QString dirPath = QCoreApplication::applicationDirPath();
+    QString fileName = dirPath + "/thirdApp/config/使用说明书.html";
+    QDesktopServices::openUrl ( QUrl::fromLocalFile(fileName) );
 }
 
 void ManagementTool::on_exitAction_triggered()
@@ -628,18 +676,54 @@ void ManagementTool::onOneUserDataParse(QByteArray tmpData)
         accountDlg::modifyFlag = true;
         if (regDlg)
         {
-           QMessageBox::warning(this->regDlg, "提示", "当前密码为初始密码，请修改密码！");
-//            delete regDlg;
-//            regDlg = NULL;
+            QMessageBox::warning(this->regDlg, "提示", "当前密码为初始密码，请修改密码！");
+            /*默认显示设备管理界面*/
+            if (funcWidget)
+            {
+                layout->removeWidget(funcWidget);
+                delete funcWidget;
+                funcWidget = NULL;
+            }
+
+            funcWidget = new deviceDlg(ui->spaceFrame);
+            layout->addWidget(funcWidget);
+            funcWidget->show();
         }
         else
         {
-            regDlg = new registerDlg;
             QMessageBox::warning(this, "提示", "当前密码为初始密码，请修改密码！");
+
+            regDlg = new registerDlg;
             regDlg->exec();
+
+            /*默认显示设备管理界面*/
+            if (funcWidget)
+            {
+                layout->removeWidget(funcWidget);
+                delete funcWidget;
+                funcWidget = NULL;
+            }
+
+            funcWidget = new deviceDlg(ui->spaceFrame);
+            layout->addWidget(funcWidget);
+            funcWidget->show();
 
             return;
         }
+    }
+    else
+    {
+        /*默认显示设备管理界面*/
+        if (funcWidget)
+        {
+            layout->removeWidget(funcWidget);
+            delete funcWidget;
+            funcWidget = NULL;
+        }
+
+        funcWidget = new deviceDlg(ui->spaceFrame);
+        layout->addWidget(funcWidget);
+        funcWidget->show();
     }
 }
 
@@ -655,3 +739,49 @@ void ManagementTool::onReplyFinished(QNetworkReply *reply)
     emit transmitSignal(tempBuf);
 }
 
+/*根据进程名称找到PID */
+bool findApp(const QString& exe)
+{
+    //根据进程名称找到PID
+    HANDLE hProcessSnap;
+    PROCESSENTRY32 pe32;
+
+    hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hProcessSnap == INVALID_HANDLE_VALUE)
+    {
+        return false;
+    }
+
+    pe32.dwSize = sizeof(PROCESSENTRY32);
+
+    if (!Process32First(hProcessSnap, &pe32))
+    {
+        CloseHandle(hProcessSnap);
+        return false;
+    }
+
+//    DWORD  dwPid = -1;
+    while (Process32Next(hProcessSnap, &pe32))
+    {
+        //将WCHAR转成const char*
+        int iLn = WideCharToMultiByte (CP_UTF8, 0, const_cast<LPWSTR> (pe32.szExeFile),
+                                       static_cast<int>(sizeof(pe32.szExeFile)), NULL, 0, NULL, NULL);
+        std::string result (iLn, 0);
+        WideCharToMultiByte (CP_UTF8, 0, pe32.szExeFile, static_cast<int>(sizeof(pe32.szExeFile)),
+                             const_cast<LPSTR> (result.c_str()), iLn, NULL, NULL);
+        if (0 == strcmp(exe.toStdString().c_str(), result.c_str ()))
+        {
+//            dwPid = pe32.th32ProcessID;
+            return true;
+        }
+    }
+
+    CloseHandle(hProcessSnap);
+//    qDebug()<<"进程id:"<< dwPid;
+    return false;
+}
+
+bool ManagementTool::nativeEvent(const QByteArray &eventType, void *message, long *result)
+{
+
+}

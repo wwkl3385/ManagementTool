@@ -16,10 +16,14 @@
 #include "httpManage/httpmanage.h"
 #include "loading/loadingdlg.h"
 #include <QProgressDialog>
+#include <QKeyEvent>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QDialog>
 #include <QTimer>
+
+extern bool findApp(const QString &exe);
+extern void terminateApp(QString app);
 
 namespace Ui {
 class logon;
@@ -49,6 +53,7 @@ public:
     QString transformUnit(qint64 bytes , bool isSpeed);
     QString transformTime(qint64 seconds);
 
+    void keyPressEvent(QKeyEvent *event);
     /*窗口移动*/
     QPoint m_DragPosition;
     bool   m_Drag;

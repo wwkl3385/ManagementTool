@@ -1,8 +1,15 @@
 <RCC>
     <qresource prefix="/new/background">
-        <file>tgood.png</file>
-        <file>tgood1.png</file>
         <file>teld.png</file>
-        <file>loading.gif</file>
+        <file>teldNew.png</file>
+        <file>loading1.gif</file>
+        <file>loading2.gif</file>
+        <file>设备.ico</file>
+        <file>管理员.ico</file>
+        <file>search.ico</file>
+        <file>x.ico</file>
+        <file>up.ico</file>
+        <file>down.ico</file>
+        <file>特来电.ico</file>
     </qresource>
 </RCC>

@@ -34,7 +34,6 @@ accountDlg::accountDlg(QWidget *parent) :
     qDebug() << "创建accountDlg";
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
-    ui->allUserPushButton->hide();
 
     signalFlag = false;  //请求 删除 信号
 
@@ -44,20 +43,20 @@ accountDlg::accountDlg(QWidget *parent) :
 
     /*删除按钮*/
     ui->deletePushButton->setDisabled(true);
-    ui->deletePushButton->setStyleSheet("QPushButton{background-color: gray; color: white; border-radius:10px; border: 2px groove gray; border-style: outset;}"\
-                                               "QPushButton:hover{background-color:white; color: black;}"\
-                                              "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
+    ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                        " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                        "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
     /*修改按钮*/
     ui->modifyPushButton->setDisabled(true);
 
-    ui->modifyPushButton->setStyleSheet("QPushButton{background-color: gray; color: white; border-radius:10px; font:12pt;font:bold;border: 2px groove gray; border-style: outset;}"\
-                                               "QPushButton:hover{background-color:white; color: black;}"\
-                                              "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
+    ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                        " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                        "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
-    ui->searchLineEdit->setStyleSheet("QLineEdit{background-color: oldlace; color: steelblue; border-radius:10px; font:12pt;font:bold;  border: 2px groove gray; border-style: outset;}"\
-                                               "QLineEdit:hover{background-color:skyblue; color: black;}"\
-                                              "QLineEdit:focus{background-color: lightblue; border-style: inset; }");
+    ui->searchLineEdit->setStyleSheet("QLineEdit{background-color:white; color: steelblue; border-radius:5px; font:12pt;  border: 2px groove #d3dadd;}"\
+                                      "QLineEdit:hover{background-color:#cce5f4; color: black;}"\
+                                      "QLineEdit:focus{background-color:white; border-style: inset;}");
 
     /*设置表头内容*/
     QStringList headerAccount;
@@ -297,14 +296,15 @@ void accountDlg::onDeleteUserDataParse(QByteArray tmpData)
     if (focus != true)
     {
         ui->deletePushButton->setDisabled(true);
-        ui->deletePushButton->setStyleSheet("QPushButton{background-color: gray; color: white; border-radius:10px; border: 2px groove gray; border-style: outset;}"\
-                                            "QPushButton:hover{background-color:white; color: black;}"\
-                                            "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
+        ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
         ui->modifyPushButton->setDisabled(true);
-        ui->modifyPushButton->setStyleSheet("QPushButton{background-color: gray; color: white; border-radius:10px; border: 2px groove gray; border-style: outset;}"\
-                                            "QPushButton:hover{background-color:white; color: black;}"\
-                                            "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
+
+        ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
     }
 }
 
@@ -322,14 +322,14 @@ void accountDlg::on_searchPushButton_clicked()
         if (focus != true)
         {
             ui->deletePushButton->setDisabled(true);
-            ui->deletePushButton->setStyleSheet("QPushButton{background-color: gray; color: white; border-radius:10px; border: 2px groove gray; border-style: outset;}"\
-                                                "QPushButton:hover{background-color:white; color: black;}"\
-                                                "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
 
+            ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
             ui->modifyPushButton->setDisabled(true);
-            ui->modifyPushButton->setStyleSheet("QPushButton{background-color: gray; color: white; border-radius:10px; border: 2px groove gray; border-style: outset;}"\
-                                                "QPushButton:hover{background-color:white; color: black;}"\
-                                                "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
+            ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
         }
 
         for (int i = 0; i < accountDlg::userList.size(); i++)
@@ -388,14 +388,14 @@ void accountDlg::on_allUserPushButton_clicked()
     if (focus != true)
     {
         ui->deletePushButton->setDisabled(true);
-        ui->deletePushButton->setStyleSheet("QPushButton{background-color: gray; color: white; border-radius:10px;font:12pt;font:bold; border: 2px groove gray; border-style: outset;}"\
-                                            "QPushButton:hover{background-color:white; color: black;}"\
-                                            "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
+        ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
         ui->modifyPushButton->setDisabled(true);
-        ui->modifyPushButton->setStyleSheet("QPushButton{background-color: gray; color: white; border-radius:10px;font:12pt;font:bold; border: 2px groove gray; border-style: outset;}"\
-                                            "QPushButton:hover{background-color:white; color: black;}"\
-                                            "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
+        ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
     }
 }
 
@@ -446,14 +446,24 @@ void accountDlg::on_accountTableWidget_cellClicked(int row, int column)
     qDebug() << "当前选中的deleteRow："<< accountDlg::deleteRow;
 
     ui->deletePushButton->setEnabled(true);
-    ui->deletePushButton->setStyleSheet("QPushButton{background-color: goldenrod; color: white; border-radius:10px; font:12pt;font:bold; border: 2px groove gray; border-style: outset;}"\
-                                        "QPushButton:hover{background-color: deepskyblue; color: black;}"\
-                                        "QPushButton:pressed{background-color:seagreen; border-style: inset; }");
+
+    ui->deletePushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; "
+                                            "background-color:#0f9ef7; border-radius:5px; font: 12pt; } "
+                                            "QPushButton:hover { background-color:deepskyblue; }  "
+                                            "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
+                                            "padding-top:4px; } "
+                                            "QPushButton:unpressed { background-color:#0f9ef7; "
+                                            "padding-left:4px; padding-top:4px;}");
 
     ui->modifyPushButton->setEnabled(true);
-    ui->modifyPushButton->setStyleSheet("QPushButton{background-color: green; color: white; border-radius:10px; font:12pt;font:bold; border: 2px groove gray; border-style: outset;}"\
-                                        "QPushButton:hover{background-color:deepskyblue; color: black;}"\
-                                        "QPushButton:pressed{background-color:yellowgreen; border-style: inset; }");
+
+    ui->modifyPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; "
+                                            "background-color:#0f9ef7; border-radius:5px; font: 12pt; } "
+                                            "QPushButton:hover { background-color:deepskyblue; }  "
+                                            "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
+                                            "padding-top:4px; } "
+                                            "QPushButton:unpressed { background-color:#0f9ef7; "
+                                            "padding-left:4px; padding-top:4px;}");
 }
 
 /*修改账号信息*/
@@ -473,14 +483,14 @@ void accountDlg::on_modifyPushButton_clicked()
     if (focus != true)
     {
         ui->deletePushButton->setDisabled(true);
-        ui->deletePushButton->setStyleSheet("QPushButton{background-color: gray; color: white; border-radius:10px;font:12pt;font:bold; border: 2px groove gray; border-style: outset;}"\
-                                            "QPushButton:hover{background-color:white; color: black;}"\
-                                            "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
+        ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
         ui->modifyPushButton->setDisabled(true);
-        ui->modifyPushButton->setStyleSheet("QPushButton{background-color: gray; color: white; border-radius:10px; font:12pt;font:bold;border: 2px groove gray; border-style: outset;}"\
-                                            "QPushButton:hover{background-color:white; color: black;}"\
-                                            "QPushButton:pressed{background-color:rgb(14 , 150 , 254); border-style: inset; }");
+        ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
     }
 
     qDebug() << "accountDlg modify 修改的标志：" << registerDlg::addSuccessFlag;
@@ -520,5 +530,14 @@ void accountDlg::on_modifyPushButton_clicked()
             ui->accountTableWidget->setItem(row_count, 7, new QTableWidgetItem(accountDlg::userList.value(i).userEnable));
             ui->accountTableWidget->item(row_count, 7)->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);//居中
         }
+    }
+}
+
+/*绑定enter键*/
+void accountDlg::keyPressEvent(QKeyEvent  *event)
+{
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+    {
+        on_searchPushButton_clicked();
     }
 }

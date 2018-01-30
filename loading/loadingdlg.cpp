@@ -27,11 +27,10 @@ loadingDlg::loadingDlg(QWidget *parent) :
     QPainter p(&bmp);
     p.setPen(Qt::NoPen);
     p.setBrush(Qt::black);
-    p.drawRoundedRect(bmp.rect(), 20, 20);
+    p.drawRoundedRect(bmp.rect(), 5, 5);
     setMask(bmp);
 
     setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint );
-    ui->loadingLabel->hide(); //加载图片的label
     ui->progressBar->setAlignment(Qt::AlignRight | Qt::AlignVCenter); //对其方式
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum(0);
@@ -41,4 +40,9 @@ loadingDlg::~loadingDlg()
 {
     delete ui;
     qDebug() << "销毁 loadingDlg";
+}
+
+void loadingDlg::on_cancelPushButton_clicked()
+{
+    this->close();
 }

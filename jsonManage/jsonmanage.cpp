@@ -18,7 +18,7 @@ jsonManage::jsonManage()
 
 }
 
-  /*软件更新*/
+/*软件更新*/
 QJsonObject jsonManage::jsonPackUpdate(QString version)
 {
     QJsonObject updateObj;
@@ -37,7 +37,7 @@ QJsonObject jsonManage::jsonPackUpdate(QString version)
     return updateObj;
 }
 
-    /*登录认证*/
+/*登录认证*/
 QJsonObject jsonManage::jsonPackLogin( QString user, QString password)
 {
     QJsonObject loginObj;
@@ -57,7 +57,7 @@ QJsonObject jsonManage::jsonPackLogin( QString user, QString password)
     return loginObj;
 }
 
-    /*添加用户*/
+/*添加用户*/
 QJsonObject jsonManage::jsonPackAddUser(QString user, QString password, QString mail, QString phone,
                                         QString enable, QString startDate, QString endDate, QString admin)
 {
@@ -67,11 +67,11 @@ QJsonObject jsonManage::jsonPackAddUser(QString user, QString password, QString 
     QJsonArray  addParamArray;
 
     qDebug() << "默认添加用户：" << user;
-//    qDebug() << "转码utf8用户名：" << user.toUtf8().data();
+    //    qDebug() << "转码utf8用户名：" << user.toUtf8().data();
     qDebug() << "转码utf8用户名：" << user.toUtf8();
 
     addObjData.insert("user", user.toUtf8().data());//用户名
-//    addObjData.insert("user", user.toUtf8());//用户名
+    //    addObjData.insert("user", user.toUtf8());//用户名
     addObjData.insert("password", password);        //密码
     addObjData.insert("user_mail", mail);
     addObjData.insert("user_phone", phone);
@@ -89,8 +89,9 @@ QJsonObject jsonManage::jsonPackAddUser(QString user, QString password, QString 
     return addObj;
 }
 
-    /*追加多个用户*/
-void jsonManage::jsonPackAddUserAppend(QJsonObject &obj, QString user, QString password, QString mail, QString phone, QString enable, QString startDate, QString endDate, QString admin)
+/*追加多个用户*/
+void jsonManage::jsonPackAddUserAppend(QJsonObject &obj, QString user, QString password, QString mail,
+                                       QString phone, QString enable, QString startDate, QString endDate, QString admin)
 {
     QJsonObject addObjParam,   addObjData;
     QJsonArray  addDataArray = obj.take("data").toArray();
@@ -112,7 +113,7 @@ void jsonManage::jsonPackAddUserAppend(QJsonObject &obj, QString user, QString p
     obj.insert("data", addDataArray);
 }
 
-    /*删除用户*/
+/*删除用户*/
 QJsonObject jsonManage::jsonPackDelete(QString user, QString password)
 {
     QJsonObject deleteObj;
@@ -132,7 +133,7 @@ QJsonObject jsonManage::jsonPackDelete(QString user, QString password)
     return deleteObj;
 }
 
-    /*追加删除多个用户*/
+/*追加删除多个用户*/
 void jsonManage::jsonPackDeleteAppend(QJsonObject &obj, QString user, QString password)
 {
     QJsonObject deleteObjParam, deleteObjData;
@@ -151,7 +152,7 @@ void jsonManage::jsonPackDeleteAppend(QJsonObject &obj, QString user, QString pa
 }
 
 
-    //修改用户
+//修改用户
 QJsonObject jsonManage::jsonPackModifyUser(const QString user, QString password, QString mail,
                                            QString phone, QString enable, QString startDate, QString endDate)
 {
@@ -176,8 +177,9 @@ QJsonObject jsonManage::jsonPackModifyUser(const QString user, QString password,
     return modifyObj;
 }
 
-    /*追加修改用户*/
-void jsonManage::jsonPackModifyUserAppend(QJsonObject &obj, QString user, QString password, QString mail, QString phone, QString enable, QString startDate, QString endDate)
+/*追加修改用户*/
+void jsonManage::jsonPackModifyUserAppend(QJsonObject &obj, QString user, QString password, QString mail,
+                                          QString phone, QString enable, QString startDate, QString endDate)
 {
     QJsonObject modifyObjParam,   modifyObjData;
     QJsonArray  modifyParamArray = obj.take("param").toArray();
@@ -198,7 +200,7 @@ void jsonManage::jsonPackModifyUserAppend(QJsonObject &obj, QString user, QStrin
     obj.insert("data", modifyDataArray);
 }
 
-    /*查询当前所有用户信息*/
+/*查询当前所有用户信息*/
 QJsonObject jsonManage::jsonPackQueryUser()
 {
     QJsonObject queryUserObj;
@@ -215,7 +217,7 @@ QJsonObject jsonManage::jsonPackQueryUser()
     return queryUserObj;
 }
 
-  /*查询当前登录用户信息*/
+/*查询当前登录用户信息*/
 QJsonObject jsonManage::jsonPackQueryOneUser(QString user)
 {
     QJsonObject oneUserObj;
@@ -234,7 +236,7 @@ QJsonObject jsonManage::jsonPackQueryOneUser(QString user)
     return oneUserObj;
 }
 
-    /*查询集控登录连接的信息*/
+/*查询集控登录连接的信息*/
 QJsonObject jsonManage::jsonPackQueryConnectInfo(QString userId)
 {
     QJsonObject queryConnectObj;
@@ -252,7 +254,7 @@ QJsonObject jsonManage::jsonPackQueryConnectInfo(QString userId)
     return queryConnectObj;
 }
 
-    /*查询在线终端数量*/
+/*查询在线终端数量*/
 QJsonObject jsonManage::jsonPackQueryConnectNumber()
 {
     QJsonObject queryTotalObj;
@@ -269,7 +271,7 @@ QJsonObject jsonManage::jsonPackQueryConnectNumber()
     return queryTotalObj;
 }
 
-    /*查询所有的在线终端数据*/
+/*查询所有的在线终端数据*/
 QJsonObject jsonManage::jsonPackQueryConnectAllInfo()
 {
     QJsonObject queryAllConnectObj;
@@ -286,7 +288,7 @@ QJsonObject jsonManage::jsonPackQueryConnectAllInfo()
     return queryAllConnectObj;
 }
 
-    /*解析cmd*/
+/*解析cmd*/
 QString jsonManage::jsonParseCmd(QByteArray reply)
 {
     QJsonParseError jsonError;
@@ -310,7 +312,7 @@ QString jsonManage::jsonParseCmd(QByteArray reply)
             if (value.isString())
             {
                 cmdVal = value.toString();
-//                qDebug() << "解析后的数据cmd:"<< cmdVal;
+                //                qDebug() << "解析后的数据cmd:"<< cmdVal;
             }
         }
     }
@@ -319,7 +321,7 @@ QString jsonManage::jsonParseCmd(QByteArray reply)
     return cmdVal;
 }
 
-    /*解析Param*/
+/*解析Param*/
 QList<QString> jsonManage::jsonParseParam(QByteArray reply, QString name)
 {
     QJsonParseError jsonError;
@@ -354,17 +356,17 @@ QList<QString> jsonManage::jsonParseParam(QByteArray reply, QString name)
                         if (value.isString())
                         {
                             QString nameVal= value.toString().toUtf8().data();
-                            //                            QString nameVal= QString::fromLocal8Bit(value.toString().toLocal8Bit().data());
-                            //                            qDebug() << "解析后的数据param-contains:"<<nameVal;
-                            //                            strcpy(nameVal, str.toStdString().data());
+                            //QString nameVal= QString::fromLocal8Bit(value.toString().toLocal8Bit().data());
+                            //qDebug() << "解析后的数据param-contains:"<<nameVal;
+                            //strcpy(nameVal, str.toStdString().data());
                             list.append(nameVal);
-                            //                            qDebug() << "解析后的数据param-contains:"<<nameVal;
+                            //qDebug() << "解析后的数据param-contains:"<<nameVal;
                         }
                         if (value.isDouble())
                         {
                             QString nameVal =  QString::number(value.toInt(), 10);
                             list.append(nameVal);
-                            //                            qDebug() << "解析后的数据param-contains:"<<nameVal;
+                            //qDebug() << "解析后的数据param-contains:"<<nameVal;
                         }
                     }
                 }
@@ -374,13 +376,13 @@ QList<QString> jsonManage::jsonParseParam(QByteArray reply, QString name)
     return list;
 }
 
-    /*解析data*/
+/*解析data*/
 QList<QString> jsonManage::jsonParseData(QByteArray reply, QString name)
 {
     QJsonParseError jsonError;
     QString str = reply;
 
-//    qDebug()<< "解析之前的数据：" << reply;
+    //    qDebug()<< "解析之前的数据：" << reply;
 
     QJsonDocument document = QJsonDocument::fromJson(str.toUtf8(), &jsonError); //解决乱码
     QList<QString> list;
@@ -402,8 +404,8 @@ QList<QString> jsonManage::jsonParseData(QByteArray reply, QString name)
             if (value.isArray())
             {
                 QJsonArray dataArray= value.toArray();
-//                qDebug() << "解析后的数据data:"<< dataArray;
-//                qDebug() << "dataSize:"<< dataArray.size();
+                //                qDebug() << "解析后的数据data:"<< dataArray;
+                //                qDebug() << "dataSize:"<< dataArray.size();
                 for (int i=0; i<dataArray.size(); i++)
                 {
                     QJsonObject objdata= dataArray.at(i).toObject();
@@ -414,9 +416,9 @@ QList<QString> jsonManage::jsonParseData(QByteArray reply, QString name)
                         if (value.isString())
                         {
                             QString nameVal = value.toString().toUtf8().data();
-//                            QString nameVal = QString::fromLocal8Bit(value.toString().toLocal8Bit().data());
-//                            qDebug() << "解析后的数据data-contains:"<<nameVal;
-//                            strcpy(nameVal, str.);
+                            //                            QString nameVal = QString::fromLocal8Bit(value.toString().toLocal8Bit().data());
+                            //                            qDebug() << "解析后的数据data-contains:"<<nameVal;
+                            //                            strcpy(nameVal, str.);
                             list.append(nameVal);
                         }
 
@@ -424,7 +426,7 @@ QList<QString> jsonManage::jsonParseData(QByteArray reply, QString name)
                         {
                             QString nameVal =  QString::number(value.toInt(), 10);
                             list.append(nameVal);
-//                            qDebug() << "解析后的数据data-contains:"<<nameVal;
+                            //                            qDebug() << "解析后的数据data-contains:"<<nameVal;
                         }
                     }
                 }
@@ -435,14 +437,14 @@ QList<QString> jsonManage::jsonParseData(QByteArray reply, QString name)
 }
 
 
-    /*获取 data数组大小*/
+/*获取 data数组大小*/
 int jsonManage::jsonDataSize(QByteArray reply)
 {
     QJsonParseError jsonError;
     QString str = reply;
     QJsonDocument document = QJsonDocument::fromJson(str.toUtf8(), &jsonError);
-//    qDebug() << "传回数据：" << document;
-//    qDebug() << "传回数据reply：" << reply.data();
+    //    qDebug() << "传回数据：" << document;
+    //    qDebug() << "传回数据reply：" << reply.data();
     int dataSize(0);
 
     if (jsonError.error != QJsonParseError::NoError)
@@ -462,16 +464,16 @@ int jsonManage::jsonDataSize(QByteArray reply)
             {
                 QJsonArray dataArray= value.toArray();
                 dataSize = dataArray.size();
-//                qDebug() << "dataSize:"<< dataSize;
+                //                qDebug() << "dataSize:"<< dataSize;
             }
         }
     }
 
-//    qDebug() << "传回数据datasize大小：" << dataSize;
+    //    qDebug() << "传回数据datasize大小：" << dataSize;
     return dataSize;
 }
 
-    /*获取 param数组大小*/
+/*获取 param数组大小*/
 int jsonManage::jsonParamSize(QByteArray reply)
 {
     QJsonParseError jsonError;
@@ -496,7 +498,7 @@ int jsonManage::jsonParamSize(QByteArray reply)
             {
                 QJsonArray dataArray= value.toArray();
                 dataSize = dataArray.size();
-//                qDebug() << "dataSize:"<< dataSize;
+                //                qDebug() << "dataSize:"<< dataSize;
             }
         }
     }
