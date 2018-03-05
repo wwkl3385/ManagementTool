@@ -16,8 +16,9 @@
 #include "httpManage/httpmanage.h"
 #include "loading/loadingdlg.h"
 #include <QProgressDialog>
-#include <QKeyEvent>
 #include <QMouseEvent>
+#include <QKeyEvent>
+#include <QSettings>
 #include <QPainter>
 #include <QDialog>
 #include <QTimer>
@@ -61,6 +62,10 @@ public:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *);
 
+    /*记住登录名*/
+    void WriteInit(QString key, QString value);
+    void ReadInit(QString key, QString &value);
+
 signals:
     transmitSignal(QByteArray tmpData);          //数据传送
     transmitUpdateSignal(QByteArray tmpData);   //数据传送
@@ -74,6 +79,8 @@ private slots:
     void onDownloadProcess(qint64 bytesReceived, qint64 bytesTotal);
 
 private:
+    bool             signalFlag ;                 //登录(false)，升级(true)，请求标志
+    bool             updateFlag ;                 //更新成功(true)，更新失败(fasle)，请求标志
     loadingDlg       *pLoadDlg;                   //登录动态效果
     QTimer           *pTimer;
     Ui::logon        *ui;

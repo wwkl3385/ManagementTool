@@ -12,25 +12,27 @@
 #include "loading/loadingdlg.h"
 #include "management/managementtool.h"
 #include "downloadManage/downloadmanager.h"
-#include <QBitmap>
-#include <QDebug>
 #include <QFile>
+#include <QDebug>
+#include <QBitmap>
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QNetworkReply>
+#include <QStandardPaths>
 #include <QProgressDialog>
+#include <QDesktopServices>
 
-#define UNIT_KB 1024            //KB
-#define UNIT_MB 1024*1024       //MB
-#define UNIT_GB 1024*1024*1024  //GB
-#define TIME_INTERVAL 300       //0.3s
+#define  UNIT_KB            1024            //KB
+#define  UNIT_MB            1024*1024       //MB
+#define  UNIT_GB            1024*1024*1024  //GB
+#define  TIME_INTERVAL      300             //0.3s
+
 #define  LOGIN_URL          "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/login"                   //登录url
 #define  UPDATE_URL         "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_update"            //更新url
 #define  UPDATE_URL_INDEX   "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/download?filename="      //下载url
 
-QString version = "1.0.0";    //版本号
-bool signalFlag = true;       //登录(false)，升级(true)，请求标志
+QString version = "1.0.1";    //版本号
 unsigned logon::userType = 0; //登录类型--1：管理员，--2：普通用户
 QString logon::userNameInfo;  //登录名
 QString logon::userPassInfo;  //密码
@@ -45,13 +47,27 @@ logon::logon(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    qDebug() <<"logonDlg创建的次数："<< ++n;
+    /*记住登录名字*/
+    QString strName;
+    ReadInit("name", strName);
+    ui->userLineEdit->setText(strName);
 
-    m_downloadManager = NULL;
+    qDebug() <<"logonDlg创建的次数："<< ++n;
+//    qDebug() << "路径：" << QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+
+//    QString dirPath = QCoreApplication::applicationDirPath();
+//    QString fileName = dirPath + "/uninst.exe";
+//    QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
+//    qDebug() << "程序路径：" << dirPath;
+
     m_url = "";
+    m_downloadManager = NULL;
     m_timeInterval = 0;
     m_currentDownload = 0;
     m_intervalDownload = 0;
+
+    signalFlag = true;       //登录(false)，升级(true)，请求标志
+    updateFlag = false;      //更新成功(true)，更新失败(fasle)，请求标志
 
     /*kill*/
     if (findApp("openvpn.exe") == true)
@@ -63,16 +79,16 @@ logon::logon(QWidget *parent) :
     /*进度条设置样式*/
     progressDlg->setCancelButtonText(tr("取消"));
     progressDlg->setModal(true);
-    progressDlg->setStyleSheet("QProgressBar{border:1px solid #FFFFFF;"
-                           "height:30;"
-                           "font:15pt;font:bold;"
-                           "background:wheat;"
+    progressDlg->setStyleSheet("QProgressBar{border:1px solid skyblue;"
+                           "height:20;"
+                           "font:13pt;font:bold;"
+                           "background:#E5E5E5;"
                            "text-align:center;"
-                           "color:white;"
-                           "border-radius:10px;}"
-                           "QProgressBar::chunk{""border-radius:3px;"    // 斑马线圆角
-                           "border:0.5px " "solid gold;" // 黑边，默认无边
-                           "background-color:tomato;} QLabel{font:16px;font:bold}");
+                           "color:#1874CD;"
+                           "border-radius:2px;}"
+                           "QProgressBar::chunk{""border-radius:2px;"    // 斑马线圆角
+                           "border:0.5px " "solid lightblue;" // 黑边，默认无边
+                           "background-color:#47b4f6;} QLabel{font:13px;font:bold}");
 
     progressDlg->setWindowModality(Qt::WindowModal);
     progressDlg->setMinimumDuration(5);
@@ -111,6 +127,14 @@ logon::~logon()
     delete dataHttp;
     delete progressDlg;
 
+    /*强制 结束任务*/
+    if (findApp("openvpn.exe") == true)
+        terminateApp("taskkill /im openvpn.exe /f");
+    if (findApp("putty.exe") ==  true)
+        terminateApp("taskkill /im putty.exe /f");
+    if (findApp("WinSCP.exe") == true)
+        terminateApp("taskkill /im WinSCP.exe /f");
+
     qDebug()<< "销毁 logonDlg";
     qDebug() <<"logonDlg还存在的个数："<< --n;
 }
@@ -144,10 +168,15 @@ void logon::mouseReleaseEvent(QMouseEvent *)
 
 void logon::on_logonPushButton_clicked()
 {
+    connect(this, SIGNAL(transmitSignal(QByteArray)), this, SLOT(loginDataParse(QByteArray)));
     if (ui->userLineEdit->text().isEmpty() || ui->passwordLineEdit->text().isEmpty())
     {
-       QMessageBox::critical(this, "错误", "请输入正确的用户名和密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-       return;
+        QMessageBox box(QMessageBox::Critical,"错误","请输入正确的用户名和密码！");
+        box.setStandardButtons (QMessageBox::Ok);
+        box.setButtonText (QMessageBox::Ok,QString("确 定"));
+        box.exec ();
+
+        return;
     }
 
     signalFlag = false;  //登录(false)，升级(true)，请求标志
@@ -161,15 +190,17 @@ void logon::on_logonPushButton_clicked()
 
 void logon::replyFinished(QNetworkReply *reply)
 {
-    if(reply->error() != QNetworkReply::NoError)
+    if (reply->error() != QNetworkReply::NoError)
     {
         qDebug() << "Error:" << reply->errorString();
 
-        pLoadDlg->close(); //关闭动态登录显示窗口
-        QMessageBox::warning(this, "提示", "连接服务器超时，请重试！");
+        pLoadDlg->close();
 
-        if(pLoadDlg->isActiveWindow())
-            delete pLoadDlg;
+        QMessageBox box(QMessageBox::Warning,"提示","网络错误，请检查网络！！");
+        box.setStandardButtons (QMessageBox::Ok);
+        box.setButtonText (QMessageBox::Ok,QString("确 定"));
+        box.exec();
+
         return;
     }
     QByteArray tempBuf = reply->readAll();
@@ -182,7 +213,9 @@ void logon::replyFinished(QNetworkReply *reply)
 
 void logon::loginDataParse(QByteArray tmpData)
 {
+    disconnect(this, SIGNAL(transmitSignal(QByteArray)), this, SLOT(loginDataParse(QByteArray)));
     qDebug() <<"传递返回的值："<< tmpData;
+    updateFlag = true;        //更新成功(true)，更新失败(fasle)，请求标志
     int status = 0;
     if (!dataJson->jsonParseData(tmpData, "status").isEmpty())
         status = dataJson->jsonParseData(tmpData,"status").first().toInt();
@@ -190,6 +223,16 @@ void logon::loginDataParse(QByteArray tmpData)
     qDebug() <<"status返回解析值："<< status ;
     switch (status)
     {
+    case 0:
+    {
+        pLoadDlg->close(); //关闭动态登录显示窗口
+
+        QMessageBox box(QMessageBox::Critical,"错误","用户名或密码错误！");
+        box.setStandardButtons (QMessageBox::Ok);
+        box.setButtonText (QMessageBox::Ok,QString("确 定"));
+        box.exec ();
+        break;
+    }
     case 1:  //登录成功
     {
         pLoadDlg->close(); //关闭动态登录显示窗口
@@ -205,27 +248,48 @@ void logon::loginDataParse(QByteArray tmpData)
         qDebug() <<"userNameInfo返回解析值："<< logon::userNameInfo;
         qDebug() <<"userType返回解析值："<< userType << "管理员";
 
-        this->accept();
+        WriteInit("name", ui->userLineEdit->text());
+
+        //this->accept();
+
+        this->close();
+        ManagementTool *w = new ManagementTool;
+        w->show();
+
         break;
     }
     case 2:  //已经登录
     {
         pLoadDlg->close(); //关闭动态登录显示窗口
-        QMessageBox::critical(this, "错误", "该用户已经登录!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+        QMessageBox box(QMessageBox::Critical,"错误","该用户已经登录！");
+        box.setStandardButtons (QMessageBox::Ok);
+        box.setButtonText (QMessageBox::Ok,QString("确 定"));
+        box.exec ();
         break;
     }
     case 3:  //该用户为生效
     {
         pLoadDlg->close(); //关闭动态登录显示窗口
-        QMessageBox::critical(this, "错误", "该用户未生效，请联系管理员!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+        QMessageBox box(QMessageBox::Critical,"错误","该用户未生效，请联系管理员！");
+        box.setStandardButtons (QMessageBox::Ok);
+        box.setButtonText (QMessageBox::Ok,QString("确 定"));
+        box.exec ();
+        break;
+    }
+    case 4:  //该用户已失效
+    {
+        pLoadDlg->close(); //关闭动态登录显示窗口
+
+        QMessageBox box(QMessageBox::Critical,"错误","该用户已失效，请联系管理员！");
+        box.setStandardButtons (QMessageBox::Ok);
+        box.setButtonText (QMessageBox::Ok,QString("确 定"));
+        box.exec ();
         break;
     }
     default:
-    {
-        pLoadDlg->close(); //关闭动态登录显示窗口
-        QMessageBox::critical(this, "错误", "用户名或密码错误!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
         break;
-    }
     }
 }
 
@@ -239,7 +303,7 @@ void logon::updateDataParse(QByteArray tmpData)
 
     if (status == 1)
     {
-        QMessageBox Msg(QMessageBox::Question, QString("更新提示"), QString("有新的应用，请更新到最新应用!"));
+        QMessageBox Msg(QMessageBox::Question, QString("更新提示"), QString("有新的应用，请更新到最新应用！"));
         QAbstractButton *pYesBtn = (QAbstractButton*)Msg.addButton(QString("确定"), QMessageBox::YesRole);
         QAbstractButton *pNoBtn = (QAbstractButton*)Msg.addButton(QString("取消"), QMessageBox::NoRole);
         Msg.exec();
@@ -248,32 +312,46 @@ void logon::updateDataParse(QByteArray tmpData)
         {
             /* 开始下载  */
             QString strFileName = dataJson->jsonParseData(tmpData, "filename").first();
+//            QString verTmp;
+//            qDebug() <<"下载文件：" << strFileName;
+//            verTmp = strFileName.section("_", 1,1).left(3);
+//            qDebug() <<"下载文件版本：" << strFileName.section("_", 1,1).left(6);
+
+            QString verTmp;
+            verTmp = version +"++";
+
             QString downloadUrl = UPDATE_URL_INDEX + strFileName;
             qDebug() << "下载链接：" << downloadUrl;
 
+            QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+
             m_url = downloadUrl; // 获取下载链接;
             QString fileName= QFileDialog::getSaveFileName(this, tr("保存升级文件"),
-                                                           "智能集中器远程管理工具", tr("*.tar.gz;; *.zip;;")); //选择路径
+                                    QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "/集中器智能远程管理系统" + verTmp,
+                                    tr("*.exe;;")); //选择路径
             qDebug() << "下载文件名字：" <<fileName;
 
-            if (m_downloadManager == NULL)
+            if (!fileName.isNull())
             {
-                m_downloadManager = new downloadManager(this);
-                connect(m_downloadManager , SIGNAL(signalDownloadProcess(qint64, qint64)), this, SLOT(onDownloadProcess(qint64, qint64)));
-                connect(m_downloadManager, SIGNAL(signalReplyFinished(int)), this, SLOT(onReplyFinished(int)));
-            }
+                if (m_downloadManager == NULL)
+                {
+                    m_downloadManager = new downloadManager(this);
+                    connect(m_downloadManager , SIGNAL(signalDownloadProcess(qint64, qint64)), this, SLOT(onDownloadProcess(qint64, qint64)));
+                    connect(m_downloadManager, SIGNAL(signalReplyFinished(int)), this, SLOT(onReplyFinished(int)));
+                }
 
-            /*这里先获取到m_downloadManager中的url与当前的m_url 对比，如果url变了需要重置参数,防止文件下载不全*/
-            QString url = m_downloadManager->getDownloadUrl(m_url);
-            if (url != m_url)
-            {
-                m_downloadManager->reset();
-            }
+                /*这里先获取到m_downloadManager中的url与当前的m_url 对比，如果url变了需要重置参数,防止文件下载不全*/
+                QString url = m_downloadManager->getDownloadUrl(m_url);
+                if (url != m_url)
+                {
+                    m_downloadManager->reset();
+                }
 
-            m_downloadManager->downloadFile(m_url, fileName);
-            m_timeRecord.start();
-            m_timeInterval = 0;
-            qDebug() << "正在下载";
+                m_downloadManager->downloadFile(m_url, fileName);
+                m_timeRecord.start();
+                m_timeInterval = 0;
+                qDebug() << "正在下载";
+            }
 
             delete pYesBtn;
             delete pNoBtn;
@@ -338,12 +416,25 @@ void logon::onReplyFinished(int statusCode)
     if (statusCode > 200 && statusCode < 400)
     {
         qDebug() << "Download Failed";
-        QMessageBox::information(this, "提示", "下载失败!");
+
+        QMessageBox box(QMessageBox::Information,"提示","下载失败！");
+        box.setStandardButtons (QMessageBox::Ok);
+        box.setButtonText (QMessageBox::Ok,QString("确 定"));
+        box.exec ();
     }
     else if( statusCode == 200)
     {
         qDebug() << "Download Success";
-        QMessageBox::information(this, "提示", "下载完成!");
+        QMessageBox box(QMessageBox::Information,"提示","下载完成！ \n 请卸载旧版本！");
+        box.setStandardButtons (QMessageBox::Ok);
+        box.setButtonText (QMessageBox::Ok,QString("确 定"));
+        box.exec ();
+
+        this->close();
+
+        QString dirPath = QCoreApplication::applicationDirPath();
+        QString fileName = dirPath + "/uninst.exe";
+        QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
     }
 }
 
@@ -446,4 +537,50 @@ void logon::keyPressEvent(QKeyEvent  *event)
     {
         on_logonPushButton_clicked();
     }
+}
+
+void logon::WriteInit(QString key, QString value)
+{
+    QString dirPath = QCoreApplication::applicationDirPath();
+    QDir *userPass= new QDir;
+    bool exist = userPass->exists(dirPath +"/thirdApp/config");
+    if(!exist)
+    {
+        bool ok = userPass->mkdir(dirPath +"/thirdApp/config");
+        qDebug() <<ok;
+    }
+
+    QString path = dirPath + "/thirdApp/config/user.ini";
+
+    //创建配置文件操作对象
+    QSettings *config = new QSettings(path, QSettings::IniFormat);
+
+    //将信息写入配置文件
+    config->beginGroup("USER");
+    config->setValue(key, value);
+    config->endGroup();
+    delete config;
+}
+
+void logon::ReadInit(QString key, QString &value)
+{
+    value = QString("");
+
+    QString dirPath = QCoreApplication::applicationDirPath();
+    QDir *userPass= new QDir;
+    bool exist = userPass->exists(dirPath +"/thirdApp/config");
+    if(!exist)
+    {
+        bool ok = userPass->mkdir(dirPath +"/thirdApp/config");
+        qDebug() <<ok;
+    }
+
+    QString path = dirPath + "/thirdApp/config/user.ini";
+
+    //创建配置文件操作对象
+    QSettings *config = new QSettings(path, QSettings::IniFormat);
+
+    //读取配置信息
+    value = config->value(QString("USER/") + key).toString();
+    delete config;
 }

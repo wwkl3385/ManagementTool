@@ -157,7 +157,7 @@ background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #0073ff, s
     <property name="font">
      <font>
       <family>Microsoft Yahei</family>
-      <pointsize>13</pointsize>
+      <pointsize>12</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -165,7 +165,7 @@ background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #0073ff, s
     </property>
     <property name="styleSheet">
      <string notr="true">background:transparent;
-font:13pt;
+font:12pt;
 color:white;</string>
     </property>
     <property name="text">
@@ -239,9 +239,9 @@ QPushButton:unpressed
   <widget class="QLabel" name="timeLabel_3">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>48</x>
      <y>70</y>
-     <width>200</width>
+     <width>191</width>
      <height>21</height>
     </rect>
    </property>
@@ -254,16 +254,17 @@ QPushButton:unpressed
    <property name="font">
     <font>
      <family>微软雅黑</family>
-     <pointsize>13</pointsize>
-     <weight>50</weight>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
      <italic>false</italic>
-     <bold>false</bold>
+     <bold>true</bold>
     </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color: #0f9ef7;
 border-radius:5px;
-font:13pt;
+font:10pt;
+font:bold;
 font-family:微软雅黑;</string>
    </property>
    <property name="text">

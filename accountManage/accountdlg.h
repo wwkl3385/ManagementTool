@@ -15,6 +15,7 @@
 #include "management/managementtool.h"
 #include "jsonManage/jsonmanage.h"
 #include "httpManage/httpmanage.h"
+#include "loading/loadingdlg.h"
 
 /*json内容:用户数据--解析数据结构*/
 typedef struct ST_JSONDATA
@@ -70,11 +71,12 @@ private slots:
     void on_addAccountPushButton_clicked();
     void on_deletePushButton_clicked();
     void on_searchPushButton_clicked();
-    void on_allUserPushButton_clicked();
+//    void on_allUserPushButton_clicked();
     void on_modifyPushButton_clicked();
 
 private:
-    Ui::accountDlg *ui;
+    Ui::accountDlg  *ui;
+    loadingDlg      *pLoadDlg;                   //获取数据动态效果
 };
 
 #endif // ACCOUNTDLG_H

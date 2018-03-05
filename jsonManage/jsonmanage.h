@@ -35,6 +35,9 @@ public:
 
     QJsonObject jsonPackAddUser(QString user, QString password, QString mail,
                                 QString phone, QString enable, QString startDate, QString endDate, QString admin);
+
+    QJsonObject jsonPackAddUser(QString adminParam, QString user, QString password, QString mail, QString phone,
+                                QString enable, QString startDate, QString endDate, QString admin);
     void jsonPackAddUserAppend(QJsonObject &obj, QString user, QString password,
                                QString mail, QString phone, QString enable, QString startDate, QString endDate, QString admin);
 
@@ -47,6 +50,8 @@ public:
                                   QString mail, QString phone, QString enable, QString startDate, QString endDate);
 
     QJsonObject jsonPackQueryUser();
+    QJsonObject jsonPackQueryUser(QString admin);
+
     QJsonObject jsonPackQueryOneUser(QString user);
 
     QJsonObject jsonPackQueryConnectInfo(QString userId);
@@ -56,6 +61,7 @@ public:
     QString jsonParseCmd(QByteArray reply);
     QList<QString>jsonParseParam(QByteArray reply, QString name);
     QList<QString> jsonParseData(QByteArray reply, QString name);
+    QString regionCodeParse(QString provinceCode,QString cityCode, QString districtCode); //行政区域码 解析
 
     int jsonParamSize(QByteArray reply);
     int jsonDataSize(QByteArray reply);

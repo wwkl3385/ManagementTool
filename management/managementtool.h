@@ -16,6 +16,11 @@
 #include <QProgressDialog>
 #include <QMainWindow>
 #include <QHBoxLayout>
+
+#include <QProxyStyle>
+#include <QPainter>
+#include <QStyleOption>
+
 #include <QProcess>
 #include <QWidget>
 #include <QTimer>
@@ -49,10 +54,12 @@ class ManagementTool : public QMainWindow
 public:
     explicit ManagementTool(QWidget *parent = 0);
     ~ManagementTool();
+    void delaySec(unsigned int msec);
 
     void        closeEvent(QCloseEvent *event);
     QStringList getIP(QString localHost);
-    QStringList getAdapterInfoWithWindows();
+    QString     getAdapterInfoWithWindows();
+//    LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 
     jsonManage  *dataJson;
     httpManage  *dataHttp;
@@ -80,9 +87,10 @@ private slots:
     void on_aboutAction_triggered();
     void on_helpAction_triggered();
     void on_exitAction_triggered();
-
     void onOneUserDataParse(QByteArray tmpData);    //登录数据解析
     void onReplyFinished(QNetworkReply *reply);    //http接收数据
+    void on_logoutPushButton_clicked();
+    void on_upgradePushButton_clicked();
 
 private:
     QProcess           *vpnProcess;
@@ -92,5 +100,63 @@ private:
     QHBoxLayout        *layout;
     QTimer             *pTimer ;
 };
+
+#if 0
+/*tab横向显示*/
+class CustomTabStyle : public QProxyStyle
+{
+public:
+    QSize sizeFromContents(ContentsType type, const QStyleOption *option,
+                           const QSize &size, const QWidget *widget) const
+    {
+        QSize s = QProxyStyle::sizeFromContents(type, option, size, widget);
+        if (type == QStyle::CT_TabBarTab)
+        {
+            s.transpose();
+            s.rwidth() = 50; // 设置每个tabBar中item的大小
+            s.rheight() = 35;
+        }
+        return s;
+    }
+
+    void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const
+    {
+        if (element == CE_TabBarTabLabel)
+        {
+            if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(option))
+            {
+                QRect allRect = tab->rect;
+
+                if (tab->state & QStyle::State_Selected)
+                {
+                    painter->save();
+                    painter->setPen(0x89cfff);
+                    painter->setBrush(QBrush(0x89cfff));
+                    painter->drawRect(allRect.adjusted(6, 6, -6, -6));
+                    painter->restore();
+                }
+                QTextOption option;
+                option.setAlignment(Qt::AlignCenter);
+                if (tab->state & QStyle::State_Selected)
+                {
+                    painter->setPen(0xf8fcff);
+                }
+                else
+                {
+                    painter->setPen(0x5d5d5d);
+                }
+
+                painter->drawText(allRect, tab->text, option);
+                return;
+            }
+        }
+
+        if (element == CE_TabBarTab)
+        {
+            QProxyStyle::drawControl(element, option, painter, widget);
+        }
+    }
+};
+#endif
 
 #endif // MANAGEMENTTOOL_H

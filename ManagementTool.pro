@@ -24,7 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 QT += network
-#LIBS += -lIphlpapi
+LIBS += -lIphlpapi
 
 SOURCES += \
     main.cpp \
@@ -37,7 +37,8 @@ SOURCES += \
     jsonManage/jsonmanage.cpp \
     httpManage/httpmanage.cpp \
     logon/logon.cpp \
-    downloadManage/downloadmanager.cpp
+    downloadManage/downloadmanager.cpp \
+    deviceUpgrade/deviceupgrade.cpp
 
 HEADERS += \
     management/managementtool.h \
@@ -50,7 +51,8 @@ HEADERS += \
     httpManage/httpmanage.h \
     main.rc \
     logon/logon.h \
-    downloadManage/downloadmanager.h
+    downloadManage/downloadmanager.h \
+    deviceUpgrade/deviceupgrade.h
 
 FORMS += \
     management/managementtool.ui \
@@ -59,13 +61,16 @@ FORMS += \
     register/registerdlg.ui \
     recordExport/recorddlg.ui \
     loading/loadingdlg.ui \
-    logon/logon.ui
+    logon/logon.ui \
+    deviceUpgrade/deviceupgrade.ui
 
 RC_FILE  = ./icon/icon.rc
 
 RC_FILE += main.rc
+
 RESOURCES += \
-    ./icon/pictures.qrc
+    ./icon/pictures.qrc \
+    language/language.qrc
 
 DISTFILES += \
     uac.manifest

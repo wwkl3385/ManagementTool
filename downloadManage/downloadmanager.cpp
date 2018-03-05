@@ -43,7 +43,6 @@ QString downloadManager::getDownloadUrl(QUrl m_url)
 void downloadManager::downloadFile(QString url , QString fileName)
 {
         m_url = QUrl(url);
-
         m_fileName = fileName + DOWNLOAD_FILE_SUFFIX; // 将当前文件名设置为临时文件名，下载完成时修改回来;
 
         // 如果当前下载的字节数为0那么说明未下载过或者重新下载

@@ -2,8 +2,6 @@
     <qresource prefix="/new/background">
         <file>teld.png</file>
         <file>teldNew.png</file>
-        <file>loading1.gif</file>
-        <file>loading2.gif</file>
         <file>设备.ico</file>
         <file>管理员.ico</file>
         <file>search.ico</file>
@@ -11,5 +9,15 @@
         <file>up.ico</file>
         <file>down.ico</file>
         <file>特来电.ico</file>
+        <file>loading2.gif</file>
+        <file>upgrade.ico</file>
+        <file>ccu.ico</file>
+        <file>confirm.ico</file>
+        <file>cscu.ico</file>
+        <file>newFlile.ico</file>
+        <file>open.ico</file>
+        <file>update.ico</file>
+        <file>update_pre.ico</file>
+        <file>upload.ico</file>
     </qresource>
 </RCC>

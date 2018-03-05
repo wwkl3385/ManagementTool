@@ -8,10 +8,11 @@
 *
 ***********************************************************************/
 #include "jsonmanage.h"
+#include<QDebug>
 #include<QJsonArray>
 #include<QJsonDocument>
 #include<QJsonParseError>
-#include<QDebug>
+#include<QCoreApplication>
 
 jsonManage::jsonManage()
 {
@@ -58,7 +59,7 @@ QJsonObject jsonManage::jsonPackLogin( QString user, QString password)
 }
 
 /*添加用户*/
-QJsonObject jsonManage::jsonPackAddUser(QString user, QString password, QString mail, QString phone,
+QJsonObject jsonManage::jsonPackAddUser(QString adminParam, QString user, QString password, QString mail, QString phone,
                                         QString enable, QString startDate, QString endDate, QString admin)
 {
     QJsonObject addObj;
@@ -67,11 +68,10 @@ QJsonObject jsonManage::jsonPackAddUser(QString user, QString password, QString 
     QJsonArray  addParamArray;
 
     qDebug() << "默认添加用户：" << user;
-    //    qDebug() << "转码utf8用户名：" << user.toUtf8().data();
+    //qDebug() << "转码utf8用户名：" << user.toUtf8().data();
     qDebug() << "转码utf8用户名：" << user.toUtf8();
 
     addObjData.insert("user", user.toUtf8().data());//用户名
-    //    addObjData.insert("user", user.toUtf8());//用户名
     addObjData.insert("password", password);        //密码
     addObjData.insert("user_mail", mail);
     addObjData.insert("user_phone", phone);
@@ -79,6 +79,9 @@ QJsonObject jsonManage::jsonPackAddUser(QString user, QString password, QString 
     addObjData.insert("user_start_date", startDate);
     addObjData.insert("user_end_date", endDate);
     addObjData.insert("user_type", admin.toInt());
+
+    addObjParam.insert("user",  adminParam.toUtf8().data());//用户名
+
     addDataArray.append(addObjData);
     addParamArray.append(addObjParam);
 
@@ -105,6 +108,9 @@ void jsonManage::jsonPackAddUserAppend(QJsonObject &obj, QString user, QString p
     addObjData.insert("user_start_date", startDate);
     addObjData.insert("user_end_date", endDate);
     addObjData.insert("user_type", admin.toInt());
+
+    addObjParam.insert("user", user.toUtf8().data());//用户名
+
     addDataArray.append(addObjData);
     addParamArray.append(addObjParam);
 
@@ -216,6 +222,25 @@ QJsonObject jsonManage::jsonPackQueryUser()
 
     return queryUserObj;
 }
+
+/*查询当前所有用户信息 -- 带参数*/
+QJsonObject jsonManage::jsonPackQueryUser(QString admin)
+{
+    QJsonObject queryUserObj;
+    QJsonObject queryUserObjParam, queryUserObjData;
+    QJsonArray  queryUserParamArray, queryUserDataArray;
+
+    queryUserObjParam.insert("user", admin.toUtf8().data());//用户名
+    queryUserDataArray.append(queryUserObjData);
+    queryUserParamArray.append(queryUserObjParam);
+
+    queryUserObj.insert("cmd", QString("query_user"));
+    queryUserObj.insert("param", queryUserParamArray);
+    queryUserObj.insert("data", queryUserDataArray);
+
+    return queryUserObj;
+}
+
 
 /*查询当前登录用户信息*/
 QJsonObject jsonManage::jsonPackQueryOneUser(QString user)
@@ -503,4 +528,62 @@ int jsonManage::jsonParamSize(QByteArray reply)
         }
     }
     return dataSize;
+}
+
+/*区域代码解析为汉字*/
+//QString regionCodeParse(QString regionCodeStr)  //regionCodeStr : 370202   6位数
+QString jsonManage::regionCodeParse(QString provinceCode,QString cityCode, QString districtCode )  // 37 02 02   6位数
+{
+    QVariantMap allprovinceMap , provinceMap;      //所有省，省
+    QVariantMap allCityMap, cityMap;               //所有市, 市
+    QVariantMap allDistrictMap, districtMap;       //所有县区,县区
+    QString     provinceStr, cityStr, districtStr; //省，市 县区
+    QString     strTmp;  //返回详细信息
+
+    QString dirPath = QCoreApplication::applicationDirPath();
+    QString fileName = dirPath + "\\test.json";
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString val;
+    val = file.readAll();
+    file.close();
+
+    QJsonParseError error;
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(val.toUtf8(), &error);
+    if (error.error == QJsonParseError::NoError)
+    {
+        if (jsonDocument.isObject())
+        {
+            allprovinceMap = jsonDocument.toVariant().toMap();
+//            qDebug() << "allMap:" << allprovinceMap;
+
+            provinceMap = allprovinceMap[provinceCode].toMap();
+//            qDebug() << "provinceMap:\n" << provinceMap;
+            provinceStr = provinceMap["name"].toString();
+//            qDebug() << "provinceStr:\n" << provinceStr;
+
+            allCityMap = provinceMap["city"].toMap();
+//            qDebug() << "allCityMap:" << allCityMap;
+
+            cityMap = allCityMap[cityCode].toMap();
+//            qDebug() << "cityMap:" << cityMap;
+
+            cityStr =  cityMap["name"].toString();
+//            qDebug() << "cityStr:\n" << cityStr;
+
+            allDistrictMap = cityMap["district"].toMap();
+//            qDebug() << "allDistrictMap:" << allDistrictMap;
+
+            districtMap = allDistrictMap[districtCode].toMap();
+//            qDebug() << "district:" << districtMap;
+            districtStr = districtMap["name"].toString();
+//            qDebug() << "districtStr:\n" << districtStr;
+
+            strTmp = provinceStr;
+            strTmp.append(cityStr).append(districtStr);   //拼接
+            qDebug() << strTmp;
+        }
+    }
+
+    return strTmp;
 }

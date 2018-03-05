@@ -29,6 +29,7 @@ public:
     jsonManage  *dataJson;
     httpManage  *dataHttp;
     static bool addSuccessFlag;
+    static QString newPassword;  //修改后的密码
 
 signals:
     transmitRegisterSignal(QByteArray tmpData);    //数据传送

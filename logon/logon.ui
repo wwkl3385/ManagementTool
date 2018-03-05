@@ -64,7 +64,7 @@
          <property name="styleSheet">
           <string notr="true">color: #31576d;
 border-radius:6px;
-font:21px;
+font:20px;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -91,7 +91,7 @@ font-family:微软雅黑;</string>
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:6px;
-font:12pt;
+font:11pt;
 font-family:Microsoft Yahei;
 border:1px solid #bfd2e3;
 }
@@ -120,7 +120,7 @@ border-color:skyblue;
          <property name="styleSheet">
           <string notr="true">color: #31576d;
 border-radius:6px;
-font:21px;
+font:20px;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -150,7 +150,7 @@ font-family:微软雅黑;</string>
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:6px;
-font:12pt;
+font:11pt;
 font-family:Microsoft Yahei;
 border:1px solid #bfd2e3;
 }
@@ -205,7 +205,7 @@ border-color:skyblue;
     color:white;
     background-color:#4e8bcc;
     border-radius:5px;
-	font: 22px;
+	font: 21px;
 }
 
 QPushButton:hover
@@ -252,7 +252,7 @@ QPushButton:unpressed
     color:white;
     background-color:#10a7cb;
     border-radius:5px;
-	font: 22px;
+	font: 21px;
 }
 
 QPushButton:hover

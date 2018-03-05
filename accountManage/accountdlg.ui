@@ -14,10 +14,9 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">
-color: rgb(20,68,106);
-border-radius:10px;
-font:15pt;
+   <string notr="true">color: black;
+border-radius:3px;
+font:10pt;
 font-family:Microsoft Yahei;</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -43,14 +42,14 @@ font-family:Microsoft Yahei;</string>
       <widget class="QLineEdit" name="searchLineEdit">
        <property name="minimumSize">
         <size>
-         <width>50</width>
+         <width>45</width>
          <height>30</height>
         </size>
        </property>
        <property name="font">
         <font>
          <family>Microsoft Yahei</family>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
          <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
@@ -64,7 +63,7 @@ font-family:Microsoft Yahei;</string>
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:5px;
-font:11pt;
+font:10pt;
 font-family:Microsoft Yahei;
 border:1px solid #d3dadd;
 }
@@ -104,7 +103,7 @@ border-color:lightblue;
     color:white;
     background-color:#40aff1;
     border-radius:5px;
-	font: 12pt;
+	font: 11pt;
 }
 
 QPushButton:hover
@@ -157,19 +156,19 @@ QPushButton:unpressed
      <property name="styleSheet">
       <string notr="true">QTableWidget
 {
-font:11pt;
+font:9pt;
 color:black;
 }
 QTableWidget::item:hover
 {
 background-color:#cce5f4;
-font:12pt;
+font:11pt;
 } 
 QTableWidget::item:selected
 {
 background-color:lightblue;
 color:blue;
-font:13pt;
+font:11pt;
 } 
 QHeaderView
 {
@@ -215,7 +214,7 @@ font:bold;
     color:white;
     background-color:#0f9ef7;
     border-radius:5px;
-	font: 12pt;
+	font: 11pt;
 }
 
 QPushButton:hover
@@ -275,7 +274,7 @@ QPushButton:unpressed
     color:white;
     background-color:#40aff1;
     border-radius:5px;
-	font: 12pt;
+	font: 11pt;
 }
 
 QPushButton:hover
@@ -335,7 +334,7 @@ QPushButton:unpressed
     color:white;
     background-color:#40aff1;
     border-radius:5px;
-	font: 12pt;
+	font: 11pt;
 }
 
 QPushButton:hover

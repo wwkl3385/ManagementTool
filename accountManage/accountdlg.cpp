@@ -1,12 +1,3 @@
-/***********************************************************************
-* Copyright (c) 2017, 青岛特来电新能源有限公司  All rights reserved.
-*
-* 文件名称： accountdlg.cpp
-* 描    述： 账户管理  -- 查询所有账户，查询单个账户，删除账户
-* 修改记录：
-* 			V0.9，2017-12-28，new，刘卫明
-*
-***********************************************************************/
 #include "accountdlg.h"
 #include "logon/logon.h"
 #include "ui_accountdlg.h"
@@ -29,9 +20,11 @@ accountDlg::accountDlg(QWidget *parent) :
     QDialog(parent),
     dataJson(new jsonManage),
     dataHttp(new httpManage),
-    ui(new Ui::accountDlg)
+    ui(new Ui::accountDlg),
+    pLoadDlg(new loadingDlg(this))
 {
     qDebug() << "创建accountDlg";
+    registerDlg::newPassword = "";    //修改后的密码.初始化
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
 
@@ -43,18 +36,18 @@ accountDlg::accountDlg(QWidget *parent) :
 
     /*删除按钮*/
     ui->deletePushButton->setDisabled(true);
-    ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
-                                        " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+    ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#C7C7C7;"
+                                        " border-radius:5px; font:10pt; } QPushButton:hover { background-color:#9fbf15; } "
                                         "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
     /*修改按钮*/
     ui->modifyPushButton->setDisabled(true);
 
-    ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
-                                        " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+    ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#C7C7C7;"
+                                        " border-radius:5px; font:10pt; } QPushButton:hover { background-color:#9fbf15; } "
                                         "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
-    ui->searchLineEdit->setStyleSheet("QLineEdit{background-color:white; color: steelblue; border-radius:5px; font:12pt;  border: 2px groove #d3dadd;}"\
+    ui->searchLineEdit->setStyleSheet("QLineEdit{background-color:white; color: steelblue; border-radius:5px; font:10pt;  border: 2px groove #d3dadd;}"\
                                       "QLineEdit:hover{background-color:#cce5f4; color: black;}"\
                                       "QLineEdit:focus{background-color:white; border-style: inset;}");
 
@@ -66,13 +59,14 @@ accountDlg::accountDlg(QWidget *parent) :
     /*设置表的行排列显示*/
     ui->accountTableWidget->horizontalHeader()->setStretchLastSection(true);        //设置充满表宽度
     ui->accountTableWidget->horizontalHeader()->resizeSection(0, 50);               //设置表头第一列(编号)的宽度为50；
-    ui->accountTableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    ui->accountTableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     ui->accountTableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
-    ui->accountTableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
+    ui->accountTableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
     ui->accountTableWidget->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
     ui->accountTableWidget->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
     ui->accountTableWidget->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Stretch);
-    ui->accountTableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::ResizeToContents);
+    ui->accountTableWidget->horizontalHeader()->resizeSection(7, 70);               //设置表头最后一列(编号)的宽度；
+//    ui->accountTableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::ResizeToContents);
 
     /*设置表头字体加粗*/
     QFont font = this->font();
@@ -80,12 +74,14 @@ accountDlg::accountDlg(QWidget *parent) :
     ui->accountTableWidget->horizontalHeader()->setFont(font);
 
     /*设置表的属性*/
-    ui->accountTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background:deepskyblue;font:12pt;font:bold;}"); //设置表头背景色
+    ui->accountTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background-color:#58baf2; "
+                                                           "color:white;font:9pt;font:bold;}"); //设置表头背景色
     ui->accountTableWidget->horizontalHeader()->setHighlightSections(false);        //点击表时，不对表头行高亮
     ui->accountTableWidget->horizontalHeader()->setFixedHeight(30);                 //设置表头的高度
     ui->accountTableWidget->verticalHeader()->setDefaultSectionSize(35);            //设置行高
     ui->accountTableWidget->setFrameShape(QFrame::NoFrame);                         //设置无边框
     ui->accountTableWidget->setShowGrid(false);                                     //设置不显示格子线
+    ui->accountTableWidget->setFocusPolicy(Qt::NoFocus);                            //去除虚线
     ui->accountTableWidget->verticalHeader()->setVisible(false);                    //设置垂直头不可见
     ui->accountTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);    //整行选中的方式
     ui->accountTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);     //设置不可编辑
@@ -104,8 +100,9 @@ accountDlg::accountDlg(QWidget *parent) :
                                                                "QScrollBar::add-line{background:transparent;}");
 
     /*查询当前所有的用户信息*/
-    dataJson->queryUserObj= dataJson->jsonPackQueryUser();
+    dataJson->queryUserObj= dataJson->jsonPackQueryUser(logon::userNameInfo);
     dataHttp->httpPost(QUERY_USER_URL, dataJson->queryUserObj); //http请求
+    pLoadDlg->show(); // 加载数据
 
     /*http请求*/
     connect(this->dataHttp->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onReplyFinished(QNetworkReply*)));
@@ -117,6 +114,7 @@ accountDlg::~accountDlg()
     delete ui;
     delete dataJson;
     delete dataHttp;
+    delete pLoadDlg;
 
     qDebug() << "销毁 accountDlg----------";
 }
@@ -131,8 +129,6 @@ void accountDlg::on_addAccountPushButton_clicked()
 
     registerDlg dlg;
     dlg.exec();
-
-    qDebug() << "accountDlg  add 添加的用户：" << accountDlg::userList.first().user;
     qDebug() << "accountDlg  add 添加的标志：" << registerDlg::addSuccessFlag;
 
     if (registerDlg::addSuccessFlag == true) //添加成功后，更新列表
@@ -173,7 +169,11 @@ void accountDlg::onReplyFinished(QNetworkReply *reply)
     if(reply->error() != QNetworkReply::NoError)
     {
         qDebug() << "Error:" << reply->errorString();
-        QMessageBox::warning(this, "提示", "连接服务器超时，请重试！");
+        pLoadDlg->hide();
+        QMessageBox box(QMessageBox::Warning,"提示", reply->errorString());
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
         return;
     }
     QByteArray tempBuf = reply->readAll();
@@ -195,6 +195,17 @@ void accountDlg::onUserDataParse(QByteArray tmpData)
     accountDlg::userList.clear(); //删除列表中所有数据
 
     /*list插入*/
+    if (dataJson->jsonDataSize(tmpData) <= 0)
+    {
+        pLoadDlg->close(); //加载完成
+
+        QMessageBox box(QMessageBox::Warning,"提示","无用户信息！");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
+        return;
+    }
+
     for (int i = 0; i < dataJson->jsonDataSize(tmpData); i++)
     {
         if (dataJson->jsonParseData(tmpData, "user").isEmpty())
@@ -213,9 +224,13 @@ void accountDlg::onUserDataParse(QByteArray tmpData)
         else
             stData.userEnable= QString("无效");
 
-        if (stData.userType == "2" || stData.user == logon::userNameInfo) //普通用户 he 管理员自己
+        if (logon::userNameInfo == "admin")      //超级管理员
+            accountDlg::userList.append(stData); //
+        else if (stData.userType == "2" || stData.user == logon::userNameInfo) //普通用户 he 管理员自己
             accountDlg::userList.append(stData);
     }
+
+    pLoadDlg->close(); //加载完成
 
     /* 动态插入*/
     for (int i = 0; i < accountDlg::userList.size(); i++)
@@ -250,13 +265,20 @@ void accountDlg::onDeleteUserDataParse(QByteArray tmpData)
     qDebug() << "删除数据返回信息：" << tmpData;
     if (dataJson->jsonParseData(tmpData, "status").isEmpty())
     {
-        QMessageBox::warning(NULL, "提示", "服务器无响应，请重试");
+        QMessageBox box(QMessageBox::Warning,"提示","服务器无响应，请重试！");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
         return;
     }
     else if (dataJson->jsonParseData(tmpData,"status").first().toInt() == 1)
     {
-        QMessageBox::warning(NULL, "提示", "成功删除账户");
+        QMessageBox box(QMessageBox::Warning,"提示","成功删除账户！");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
         accountDlg::userList.removeAt(accountDlg::deleteRow); //删除list
+        accountDlg::deleteRow = -1;       //删除成功后设置为默认值
 
         /* 删除所有账户信息 */
         ui->accountTableWidget->clearContents();
@@ -288,7 +310,10 @@ void accountDlg::onDeleteUserDataParse(QByteArray tmpData)
     }
     else
     {
-        QMessageBox::warning(NULL, "提示", "删除账户失败，请重试");
+        QMessageBox box(QMessageBox::Warning,"提示","删除账户失败，请重试！");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
         return;
     }
 
@@ -296,15 +321,15 @@ void accountDlg::onDeleteUserDataParse(QByteArray tmpData)
     if (focus != true)
     {
         ui->deletePushButton->setDisabled(true);
-        ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
-                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
-                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
+        ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#C7C7C7;"
+                                            " border-radius:5px; font:10pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                            "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
         ui->modifyPushButton->setDisabled(true);
 
-        ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
-                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
-                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
+        ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#C7C7C7;"
+                                            " border-radius:5px; font:10pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                            "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
     }
 }
 
@@ -323,12 +348,12 @@ void accountDlg::on_searchPushButton_clicked()
         {
             ui->deletePushButton->setDisabled(true);
 
-            ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
-                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+            ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#C7C7C7;"
+                                                " border-radius:5px; font:10pt; } QPushButton:hover { background-color:#9fbf15; } "
                                                 "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
             ui->modifyPushButton->setDisabled(true);
-            ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
-                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
+            ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#C7C7C7;"
+                                                " border-radius:5px; font:10pt; } QPushButton:hover { background-color:#9fbf15; } "
                                                 "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
         }
 
@@ -359,45 +384,51 @@ void accountDlg::on_searchPushButton_clicked()
         }
         if (ui->accountTableWidget->rowCount() < 1)
         {
-            QMessageBox::warning(NULL, "提示", "该用户不存在，请重新查找");
+            QMessageBox box(QMessageBox::Warning,"提示","该用户不存在，请重新查找！");
+            box.setStandardButtons(QMessageBox::Ok);
+            box.setButtonText(QMessageBox::Ok,QString("确 定"));
+            box.exec();
         }
     }
     else
     {
-        QMessageBox::warning(NULL, "提示", "输入为空，请重新输入");
+        QMessageBox box(QMessageBox::Warning,"提示","输入为空，请重新输入！");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
     }
 }
 
-/*所有账户信息*/
-void accountDlg::on_allUserPushButton_clicked()
-{
-    signalFlag = false;
+///*所有账户信息*/
+//void accountDlg::on_allUserPushButton_clicked()
+//{
+//    signalFlag = false;
 
-    /* 删除所有账户信息*/
-    ui->accountTableWidget->clearContents();
-    ui->accountTableWidget->setRowCount(0); //删除行
+//    /* 删除所有账户信息*/
+//    ui->accountTableWidget->clearContents();
+//    ui->accountTableWidget->setRowCount(0); //删除行
 
-    /*查询当前所有的用户信息*/
-    dataJson->queryUserObj= dataJson->jsonPackQueryUser();
-    dataHttp->httpPost(QUERY_USER_URL, dataJson->queryUserObj); //http请求
+//    /*http请求*/
+//    connect(this, SIGNAL(transmitUserDataSignal(QByteArray)), this, SLOT(onUserDataParse(QByteArray)));
 
-    /*http请求*/
-    connect(this, SIGNAL(transmitUserDataSignal(QByteArray)), this, SLOT(onUserDataParse(QByteArray)));
+//    /*查询当前所有的用户信息*/
+//    dataJson->queryUserObj= dataJson->jsonPackQueryUser();
+//    dataHttp->httpPost(QUERY_USER_URL, dataJson->queryUserObj); //http请求
 
-    bool focus = ui->accountTableWidget->isItemSelected(ui->accountTableWidget->currentItem()); // 判断是否选中一行
-    if (focus != true)
-    {
-        ui->deletePushButton->setDisabled(true);
-        ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
-                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
-                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
+//    bool focus = ui->accountTableWidget->isItemSelected(ui->accountTableWidget->currentItem()); // 判断是否选中一行
+//    if (focus != true)
+//    {
+//        ui->deletePushButton->setDisabled(true);
+//        ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+//                                            " border-radius:5px; font:10pt; } QPushButton:hover { background-color:#9fbf15; } "
+//                                            "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
-        ui->modifyPushButton->setDisabled(true);
-        ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
-                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
-                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
-    }
-}
+//        ui->modifyPushButton->setDisabled(true);
+//        ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
+//                                            " border-radius:5px; font:10pt; } QPushButton:hover { background-color:#9fbf15; } "
+//                                            "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
+//    }
+//}
 
 /*删除账户*/
 void accountDlg::on_deletePushButton_clicked()
@@ -407,7 +438,10 @@ void accountDlg::on_deletePushButton_clicked()
     stJsonData userTmp =  accountDlg::userList[accountDlg::deleteRow];
     if (userTmp.user == logon::userNameInfo)
     {
-        QMessageBox::warning(NULL, "提示", "无法完成删除该账号！");
+        QMessageBox box(QMessageBox::Warning,"提示","无法删除该账号！");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
         return;
     }
 
@@ -448,22 +482,22 @@ void accountDlg::on_accountTableWidget_cellClicked(int row, int column)
     ui->deletePushButton->setEnabled(true);
 
     ui->deletePushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; "
-                                            "background-color:#0f9ef7; border-radius:5px; font: 12pt; } "
-                                            "QPushButton:hover { background-color:deepskyblue; }  "
-                                            "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
-                                            "padding-top:4px; } "
-                                            "QPushButton:unpressed { background-color:#0f9ef7; "
-                                            "padding-left:4px; padding-top:4px;}");
+                                        "background-color:#0f9ef7; border-radius:5px; font: 10pt; } "
+                                        "QPushButton:hover { background-color:deepskyblue; }  "
+                                        "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
+                                        "padding-top:4px; } "
+                                        "QPushButton:unpressed { background-color:#0f9ef7; "
+                                        "padding-left:4px; padding-top:4px;}");
 
     ui->modifyPushButton->setEnabled(true);
 
     ui->modifyPushButton->setStyleSheet("QPushButton { font-family:Microsoft Yahei; color:white; "
-                                            "background-color:#0f9ef7; border-radius:5px; font: 12pt; } "
-                                            "QPushButton:hover { background-color:deepskyblue; }  "
-                                            "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
-                                            "padding-top:4px; } "
-                                            "QPushButton:unpressed { background-color:#0f9ef7; "
-                                            "padding-left:4px; padding-top:4px;}");
+                                        "background-color:#0f9ef7; border-radius:5px; font: 10pt; } "
+                                        "QPushButton:hover { background-color:deepskyblue; }  "
+                                        "QPushButton:pressed { background-color:deepskyblue; padding-left:4px; "
+                                        "padding-top:4px; } "
+                                        "QPushButton:unpressed { background-color:#0f9ef7; "
+                                        "padding-left:4px; padding-top:4px;}");
 }
 
 /*修改账号信息*/
@@ -483,18 +517,22 @@ void accountDlg::on_modifyPushButton_clicked()
     if (focus != true)
     {
         ui->deletePushButton->setDisabled(true);
-        ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
-                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
-                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
+        ui->deletePushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#C7C7C7;"
+                                            " border-radius:5px; font:10pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                            "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
 
         ui->modifyPushButton->setDisabled(true);
-        ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#729ab4;"
-                                                " border-radius:5px; font:12pt; } QPushButton:hover { background-color:#9fbf15; } "
-                                                "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
+        ui->modifyPushButton->setStyleSheet("QPushButton{font-family:Microsoft Yahei; color:white; background-color:#C7C7C7;"
+                                            " border-radius:5px; font:10pt; } QPushButton:hover { background-color:#9fbf15; } "
+                                            "QPushButton:pressed { background-color:#9fbfd4; padding-left:4px; padding-top:4px; } QPushButton:unpressed { background-color:rgb(0 , 100 , 0); padding-left:4px; padding-top:4px; }");
     }
 
     qDebug() << "accountDlg modify 修改的标志：" << registerDlg::addSuccessFlag;
     qDebug() << "accountDlg modify 修改的用户：" << accountDlg::userList.last().user;
+
+//    qDebug() << accountDlg::userList.last().user;
+//    qDebug() << logon::userNameInfo;
+
     if (accountDlg::userList.last().user == logon::userNameInfo)
     {
         qDebug()<< "OK";

@@ -11,20 +11,20 @@
 #include "logon/logon.h"
 #include "ui_devicedlg.h"
 #include "loading/loadingdlg.h"
-#include <QScrollBar>
-#include <QMessageBox>
 #include <QNetworkReply>
+#include <QMessageBox>
+#include <QScrollBar>
 
 #define  QUERY_ALL_INFO_URL  "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_all_connect_info"     //所有在线终端 信息
 #define  QUERY_ALL_NUM_URL   "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_total_connect"        //所有在线终端 数量
 #define  QUERY_INFO_URL      "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_connect_info"         //集控登录连接信息
-#define  NUMPAGE             30    //每页显示条数
+#define  NUMPAGE             100         //每页显示条数
 
 const QString signalInitensity = "--dB"; //无信号强度，默认为--dB
-int pageNum = 0;     // 页数
-int remainsRow = 0;  // 剩余行数
-int indexPage = 1;   // 页的索引
-QString deviceDlg::deviceIp; //被选择的设备ip地址
+QString deviceDlg::deviceIp;             //被选择的设备ip地址
+int pageNum = 0;                         // 页数
+int indexPage = 1;                       // 页的索引
+int remainsRow = 0;                      // 剩余行数
 
 deviceDlg::deviceDlg(QWidget *parent) :
     QDialog(parent),
@@ -35,7 +35,6 @@ deviceDlg::deviceDlg(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
-
     signalFlag = 0;  //发送数量信号
 
     ui->pageFrame->hide();
@@ -50,13 +49,13 @@ deviceDlg::deviceDlg(QWidget *parent) :
 
     /*搜索按钮 样式设置*/
     ui->searchLineEdit->setStyleSheet("QLineEdit{background-color:white; color: steelblue; border-radius:5px; "
-                                      "font:12pt;  border: 2px groove #d3dadd;}"\
-                                      "QLineEdit:hover{background-color:#cce5f4; color: black;}"\
+                                      "font:9pt;  border: 2px groove #d3dadd;}"
+                                      "QLineEdit:hover{background-color:#cce5f4; color: black;}"
                                       "QLineEdit:focus{background-color:white; border-style: inset;}");
 
     /*设置表头内容*/
     QStringList header;
-    header << "编号"  << "   mac地址   "<< "  站地址1  "<< "  站地址2  "<< "  站地址3  " <<  " 设备vpn地址 " << "设备上线时间" << "信号强度";
+    header << "编号"  << "   mac地址   "<< "  站地址1  "<< "  站地址2  "<< "  站地址3  " <<  " 设备vpn地址 " << "设备上线时间" << " 信号强度 ";
     ui->listTableWidget->setHorizontalHeaderLabels(header);
 
     /*设置表的行排列显示*/
@@ -76,23 +75,22 @@ deviceDlg::deviceDlg(QWidget *parent) :
 
     /*设置表的属性*/
     ui->listTableWidget->horizontalHeader()->setStyleSheet("QHeaderView::section{background-color:#58baf2; "
-                                                           "color:white;font:12pt;font:bold;}"); //设置表头背景色
-    ui->listTableWidget->horizontalHeader()->setHighlightSections(false);     //点击表时，不对表头行高亮
-    ui->listTableWidget->horizontalHeader()->setStretchLastSection(true);     //设置充满表宽度
-    ui->listTableWidget->verticalHeader()->setDefaultSectionSize(30);         //设置行高
-    ui->listTableWidget->setFrameShape(QFrame::NoFrame);                      //设置无边框
-    ui->listTableWidget->setShowGrid(false);                                  //设置不显示格子线
-    ui->listTableWidget->verticalHeader()->setVisible(false);                 //设置垂直头不可见
-    ui->listTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows); //整行选中的方式
-    ui->listTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置不可编辑
-    ui->listTableWidget->setEditTriggers(QAbstractItemView::DoubleClicked);   //设置双击可编辑
-    ui->listTableWidget->horizontalHeader()->setFixedHeight(28);              //设置表头的高度
+                                                           "color:white;font:9pt;font:bold;}"); //设置表头背景色
+    ui->listTableWidget->horizontalHeader()->setHighlightSections(false);      //点击表时，不对表头行高亮
+    ui->listTableWidget->horizontalHeader()->setStretchLastSection(true);      //设置充满表宽度
+    ui->listTableWidget->verticalHeader()->setDefaultSectionSize(30);          //设置行高
+    ui->listTableWidget->setFrameShape(QFrame::NoFrame);                       //设置无边框
+    ui->listTableWidget->setShowGrid(false);                                   //设置不显示格子线
+    ui->listTableWidget->setFocusPolicy(Qt::NoFocus);                          //去除虚线
+    ui->listTableWidget->verticalHeader()->setVisible(false);                  //设置垂直头不可见
+    ui->listTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);  //整行选中的方式
+    ui->listTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);   //设置不可编辑
+    ui->listTableWidget->setEditTriggers(QAbstractItemView::DoubleClicked);    //设置双击可编辑
+    ui->listTableWidget->horizontalHeader()->setFixedHeight(28);               //设置表头的高度
     ui->listTableWidget->setSelectionMode(QAbstractItemView::SingleSelection); //设置只能选择一行，不能选择多行
-    ui->listTableWidget->setFocusPolicy(Qt::NoFocus);  //去除虚线
 
     /*设置table的滚动条*/
-    //    ui->listTableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    ui->listTableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+//    ui->listTableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     /*设置水平、垂直滚动条样式*/
     ui->listTableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{background:transparent; height:20px;}"
@@ -110,6 +108,7 @@ deviceDlg::deviceDlg(QWidget *parent) :
     /*管理员和普通用户*/
     if(logon::userType == 1)
     {
+        ui->listTableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         /* 管理员---查询所有的在线终端--数量*/
         dataJson->connectNumberObj= dataJson->jsonPackQueryConnectNumber();
         dataHttp->httpPost(QUERY_ALL_NUM_URL, dataJson->connectNumberObj); //http请求终端数量
@@ -174,8 +173,12 @@ void deviceDlg::onReplyFinished(QNetworkReply *reply)
 {
     if(reply->error() != QNetworkReply::NoError)
     {
+        pLoadDlg->hide();
         qDebug() << "Error:" << reply->errorString();
-        QMessageBox::warning(this, "提示", "连接服务器超时，请重试！");
+        QMessageBox box(QMessageBox::Warning,"提示",reply->errorString());
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
         return;
     }
 
@@ -261,7 +264,7 @@ void deviceDlg::onConnectAllInfoDataParse(QByteArray tmpData)
     ui->listTableWidget->setRowCount(0); //删除行
     for (int i = 0; i < NUMPAGE; i++)
     {
-        QApplication::processEvents(); //处理大数据，防gui假死
+//        QApplication::processEvents(); //处理大数据，防gui假死
 
         QString userId = userIdList.at(i);
         QList<QString> idList = userId.split('-');
@@ -307,7 +310,11 @@ void deviceDlg::on_searchPushButton_clicked()
 
     if (ui->searchLineEdit->text().isEmpty())
     {
-        QMessageBox::information(NULL, "提示", "输入内容为空！！" );
+        QMessageBox box(QMessageBox::Warning, "提示","输入内容为空！");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
+
         return;
     }
 
@@ -333,6 +340,7 @@ void deviceDlg::onConnectInfoDataParse(QByteArray tmpData)
 
     /* 删除所有设备信息*/
     ui->listTableWidget->clearContents();
+    ui->listTableWidget->setRowCount(0); //删除行
     ui->listTableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     startTimeList = dataJson->jsonParseData(tmpData,"log_start_time");//解析
@@ -344,7 +352,10 @@ void deviceDlg::onConnectInfoDataParse(QByteArray tmpData)
     if (num < 1)
     {
         pLoadDlg->hide();
-        QMessageBox::information(NULL, "提示", "没有找到相匹配的数据！！" );
+        QMessageBox box(QMessageBox::Warning,"提示","没有找到相匹配的数据！");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
         return;
     }
     if (num > 5) //限定显示条数
@@ -355,7 +366,7 @@ void deviceDlg::onConnectInfoDataParse(QByteArray tmpData)
     ui->listTableWidget->setRowCount(0); //删除行
     for (int i = 0; i < num; i++)
     {
-        QApplication::processEvents(); //处理大数据，防gui假死
+//        QApplication::processEvents(); //处理大数据，防gui假死
 
         QString userId = userIdList.at(i);
         QList<QString> idList = userId.split('-');
@@ -392,8 +403,13 @@ void deviceDlg::onConnectInfoDataParse(QByteArray tmpData)
 
     pLoadDlg->hide();
 
-    if (num == 5) //限定显示条数
-        QMessageBox::information(NULL, "提示", "匹配到的数据太多，只显示前 5 条，请重新搜索！！" );
+    if (num > 1) //限定显示条数
+    {
+        QMessageBox box(QMessageBox::Information,"提示","搜索到多条信息！请确认MAC地址或重新搜索，谨慎操作！！");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
+        box.exec();
+    }
 }
 
 /*列表*/
@@ -438,7 +454,10 @@ void deviceDlg::on_nextPushButton_clicked()
             indexPage ++ ;   // 页的索引
         else
         {
-            QMessageBox::information(NULL, "提示", "已经到最后一页！！" );
+            QMessageBox box(QMessageBox::Information,"提示","已经到最后一页！");
+            box.setStandardButtons(QMessageBox::Ok);
+            box.setButtonText(QMessageBox::Ok,QString("确 定"));
+            box.exec();
             return;
         }
     }
@@ -451,7 +470,10 @@ void deviceDlg::on_nextPushButton_clicked()
             indexPage ++ ;   // 页的索引
         else
         {
-            QMessageBox::information(NULL, "提示", "已经到最后一页！！" );
+            QMessageBox box(QMessageBox::Information,"提示","已经到最后一页！");
+            box.setStandardButtons(QMessageBox::Ok);
+            box.setButtonText(QMessageBox::Ok,QString("确 定"));
+            box.exec();
             return;
         }
     }
@@ -470,7 +492,7 @@ void deviceDlg::on_nextPushButton_clicked()
         ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * indexPage; i++)
         {
-            QApplication::processEvents(); //处理大数据，防gui假死
+//            QApplication::processEvents(); //处理大数据，防gui假死
 
             QString userId = userIdList.at(i);
             QList<QString> idList = userId.split('-');
@@ -511,7 +533,7 @@ void deviceDlg::on_nextPushButton_clicked()
         ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * (indexPage-1) + remainsRow; i++)
         {
-            QApplication::processEvents(); //处理大数据，防gui假死
+//            QApplication::processEvents(); //处理大数据，防gui假死
 
             QString userId = userIdList.at(i);
             QList<QString> idList = userId.split('-');
@@ -562,7 +584,10 @@ void deviceDlg::on_previousPushButton_clicked()
             indexPage -- ;   // 页的索引
         else
         {
-            QMessageBox::information(NULL, "提示", "已经到第一页！！" );
+            QMessageBox box(QMessageBox::Information,"提示","已经到第一页！");
+            box.setStandardButtons(QMessageBox::Ok);
+            box.setButtonText(QMessageBox::Ok,QString("确 定"));
+            box.exec();
             return;
         }
     }
@@ -575,7 +600,10 @@ void deviceDlg::on_previousPushButton_clicked()
             indexPage -- ;   // 页的索引
         else
         {
-            QMessageBox::information(NULL, "提示", "已经到第一页！！" );
+            QMessageBox box(QMessageBox::Information,"提示","已经到第一页！");
+            box.setStandardButtons(QMessageBox::Ok);
+            box.setButtonText(QMessageBox::Ok,QString("确 定"));
+            box.exec();
             return;
         }
     }
@@ -594,7 +622,7 @@ void deviceDlg::on_previousPushButton_clicked()
         ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * indexPage; i++)
         {
-            QApplication::processEvents(); //处理大数据，防gui假死
+//            QApplication::processEvents(); //处理大数据，防gui假死
 
             QString userId = userIdList.at(i);
             QList<QString> idList = userId.split('-');
@@ -636,7 +664,7 @@ void deviceDlg::on_previousPushButton_clicked()
         ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * (indexPage-1) + remainsRow; i++)
         {
-            QApplication::processEvents(); //处理大数据，防gui假死
+//            QApplication::processEvents(); //处理大数据，防gui假死
             QString userId = userIdList.at(i);
             QList<QString> idList = userId.split('-');
 
@@ -679,7 +707,10 @@ void deviceDlg::on_enterPushButton_clicked()
     {
         if ((indexPage > pageNum + 1) || (indexPage < 1))
         {
-            QMessageBox::information(NULL, "提示", "输入页码超过范围！！" );
+            QMessageBox box(QMessageBox::Information,"提示","输入页码超过范围！");
+            box.setStandardButtons(QMessageBox::Ok);
+            box.setButtonText(QMessageBox::Ok,QString("确 定"));
+            box.exec();
             return;
         }
     }
@@ -687,7 +718,10 @@ void deviceDlg::on_enterPushButton_clicked()
     {
         if ((indexPage > pageNum) || (indexPage < 1))
         {
-            QMessageBox::information(NULL, "提示", "输入页码超过范围！！" );
+            QMessageBox box(QMessageBox::Information,"提示","输入页码超过范围！");
+            box.setStandardButtons(QMessageBox::Ok);
+            box.setButtonText(QMessageBox::Ok,QString("确 定"));
+            box.exec();
             return;
         }
     }
@@ -705,7 +739,7 @@ void deviceDlg::on_enterPushButton_clicked()
         ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * indexPage; i++)
         {
-            QApplication::processEvents(); //处理大数据，防gui假死
+//            QApplication::processEvents(); //处理大数据，防gui假死
 
             QString userId = userIdList.at(i);
             QList<QString> idList = userId.split('-');
@@ -746,7 +780,7 @@ void deviceDlg::on_enterPushButton_clicked()
         ui->listTableWidget->setRowCount(0); //删除行
         for (int i = NUMPAGE * (indexPage - 1) ; i < NUMPAGE * (indexPage-1) + remainsRow; i++)
         {
-            QApplication::processEvents(); //处理大数据，防gui假死
+//            QApplication::processEvents(); //处理大数据，防gui假死
 
             QString userId = userIdList.at(i);
             QList<QString> idList = userId.split('-');

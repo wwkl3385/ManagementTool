@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>385</width>
-    <height>350</height>
+    <width>325</width>
+    <height>333</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>385</width>
-    <height>350</height>
+    <width>325</width>
+    <height>333</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>385</width>
-    <height>350</height>
+    <width>325</width>
+    <height>333</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -66,7 +66,7 @@
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:6px;
-font:15pt;
+font:11pt;
 font-family:Microsoft Yahei;
 border:1px solid #bfd2e3;
 }
@@ -89,7 +89,7 @@ border-color:skyblue;
          <property name="styleSheet">
           <string notr="true">color: #31576d;
 border-radius:6px;
-font:21px;
+font:12pt;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -105,7 +105,7 @@ font-family:微软雅黑;</string>
          <property name="styleSheet">
           <string notr="true">color: #31576d;
 border-radius:6px;
-font:21px;
+font:12pt;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -121,7 +121,7 @@ font-family:微软雅黑;</string>
          <property name="styleSheet">
           <string notr="true">color: rgb(0, 0, 0);
 font:bold;
-font:13pt;
+font:11pt;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -145,7 +145,7 @@ font-family:微软雅黑;</string>
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:6px;
-font:15pt;
+font:11pt;
 font-family:Microsoft Yahei;
 border:1px solid #bfd2e3;
 }
@@ -168,7 +168,7 @@ border-color:skyblue;
          <property name="styleSheet">
           <string notr="true">color: rgb(0, 0, 0);
 font:bold;
-font:13pt;
+font:11pt;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -181,7 +181,7 @@ font-family:微软雅黑;</string>
          <property name="styleSheet">
           <string notr="true">color: #31576d;
 border-radius:6px;
-font:21px;
+font:12pt;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -199,7 +199,7 @@ font-family:微软雅黑;</string>
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:6px;
-font:15pt;
+font:11pt;
 font-family:Microsoft Yahei;
 border:1px solid #bfd2e3;
 }
@@ -216,7 +216,7 @@ border-color:skyblue;
           <enum>QLineEdit::PasswordEchoOnEdit</enum>
          </property>
          <property name="placeholderText">
-          <string>输入密码</string>
+          <string>设置密码</string>
          </property>
         </widget>
        </item>
@@ -225,7 +225,7 @@ border-color:skyblue;
          <property name="styleSheet">
           <string notr="true">color: #31576d;
 border-radius:6px;
-font:21px;
+font:12pt;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -243,7 +243,7 @@ font-family:微软雅黑;</string>
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:6px;
-font:15pt;
+font:11pt;
 font-family:Microsoft Yahei;
 border:1px solid #bfd2e3;
 }
@@ -268,7 +268,7 @@ border-color:skyblue;
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:6px;
-font:15pt;
+font:11pt;
 font-family:Microsoft Yahei;
 border:1px solid #bfd2e3;
 }
@@ -291,7 +291,7 @@ border-color:skyblue;
          <property name="styleSheet">
           <string notr="true">color: #31576d;
 border-radius:6px;
-font:21px;
+font:12pt;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -307,7 +307,7 @@ font-family:微软雅黑;</string>
          <property name="styleSheet">
           <string notr="true">color: #31576d;
 border-radius:6px;
-font:21px;
+font:12pt;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -325,7 +325,7 @@ font-family:微软雅黑;</string>
 background-color: rgb(255,255,255);
 color: rgb(0, 0, 0);
 border-radius:6px;
-font:15pt;
+font:11pt;
 font-family:Microsoft Yahei;
 border:1px solid #bfd2e3;
 }
@@ -348,7 +348,7 @@ border-color:skyblue;
          <property name="styleSheet">
           <string notr="true">color: #31576d;
 border-radius:6px;
-font:21px;
+font:12pt;
 font-family:微软雅黑;</string>
          </property>
          <property name="text">
@@ -385,7 +385,7 @@ font-family:微软雅黑;</string>
        <property name="font">
         <font>
          <family>Microsoft Yahei</family>
-         <pointsize>18</pointsize>
+         <pointsize>15</pointsize>
          <weight>50</weight>
          <italic>false</italic>
          <bold>false</bold>
@@ -393,7 +393,7 @@ font-family:微软雅黑;</string>
        </property>
        <property name="styleSheet">
         <string notr="true">color: rgb(0, 0, 0);
-font:18pt;
+font:15pt;
 font-family:Microsoft Yahei;</string>
        </property>
        <property name="text">
@@ -416,7 +416,7 @@ font-family:Microsoft Yahei;</string>
          </property>
          <property name="maximumSize">
           <size>
-           <width>295</width>
+           <width>260</width>
            <height>38</height>
           </size>
          </property>
@@ -428,7 +428,7 @@ font-family:Microsoft Yahei;</string>
     background-color:rgb(38,188,213);
     border-radius:5px;
 	font:bold;
-	font: 18pt;
+	font: 13pt;
 }
 
 QPushButton:hover
