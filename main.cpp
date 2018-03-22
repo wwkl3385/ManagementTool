@@ -42,7 +42,11 @@ int main(int argc, char *argv[])
         translator.load(QString(":/qm/qt_zh_CN"));
         a.installTranslator(&translator);
 
+<<<<<<< HEAD
 //        logon dlg;
+=======
+        logon dlg;
+>>>>>>> ee2bb8874067b0c54e479eb14aa328b73c7109c6
 #if 0
         if (dlg.exec() == QDialog::Accepted)
         {
@@ -53,8 +57,12 @@ int main(int argc, char *argv[])
         else
             return 0;
 #endif
+<<<<<<< HEAD
 //        dlg.show();
         controlWork ctl;
+=======
+        dlg.show();
+>>>>>>> ee2bb8874067b0c54e479eb14aa328b73c7109c6
         return a.exec();
 
         if(m_hMutex != NULL)

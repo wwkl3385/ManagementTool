@@ -32,7 +32,11 @@
 #define  UPDATE_URL         "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_update"            //更新url
 #define  UPDATE_URL_INDEX   "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/download?filename="      //下载url
 
+<<<<<<< HEAD
 QString version = "1.0.5";    //版本号
+=======
+QString version = "1.0.2";    //版本号
+>>>>>>> ee2bb8874067b0c54e479eb14aa328b73c7109c6
 unsigned logon::userType = 0; //登录类型--1：管理员，--2：普通用户
 QString logon::userNameInfo;  //登录名
 QString logon::userPassInfo;  //密码
@@ -204,6 +208,7 @@ void logon::replyFinished(QNetworkReply *reply)
 
         pLoadDlg->close();
 
+<<<<<<< HEAD
         if (messFlag == false)
         {
             QMessageBox replyBox(QMessageBox::Warning, "提示", reply->errorString());
@@ -213,6 +218,14 @@ void logon::replyFinished(QNetworkReply *reply)
             replyBox.exec();
             return;
         }
+=======
+        QMessageBox box(QMessageBox::Warning,"提示", reply->errorString());
+        box.setStandardButtons (QMessageBox::Ok);
+        box.setButtonText (QMessageBox::Ok,QString("确 定"));
+        box.exec();
+
+        return;
+>>>>>>> ee2bb8874067b0c54e479eb14aa328b73c7109c6
     }
 
     QByteArray tempBuf = reply->readAll();
