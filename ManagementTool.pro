@@ -38,7 +38,8 @@ SOURCES += \
     httpManage/httpmanage.cpp \
     logon/logon.cpp \
     downloadManage/downloadmanager.cpp \
-    deviceUpgrade/deviceupgrade.cpp
+    deviceUpgrade/deviceupgrade.cpp \
+    controlWork/controlwork.cpp
 
 HEADERS += \
     management/managementtool.h \
@@ -52,7 +53,8 @@ HEADERS += \
     main.rc \
     logon/logon.h \
     downloadManage/downloadmanager.h \
-    deviceUpgrade/deviceupgrade.h
+    deviceUpgrade/deviceupgrade.h \
+    controlWork/controlwork.h
 
 FORMS += \
     management/managementtool.ui \

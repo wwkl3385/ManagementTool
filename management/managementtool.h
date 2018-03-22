@@ -63,6 +63,7 @@ public:
 
     jsonManage  *dataJson;
     httpManage  *dataHttp;
+    QString     aboutStr ;//关于版权
 
     static stJsonUserData  stUserInfo;
 
@@ -74,6 +75,7 @@ public:
 
 signals:
     transmitSignal(QByteArray tmpData);          //数据传送
+    closeManagementToolSignal(int);             //关闭主窗口信号
 
 private slots:
     void onTimeDelay();

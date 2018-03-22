@@ -17,6 +17,7 @@
 #include "loading/loadingdlg.h"
 #include <QProgressDialog>
 #include <QMouseEvent>
+#include <QMessageBox>
 #include <QKeyEvent>
 #include <QSettings>
 #include <QPainter>
@@ -25,6 +26,7 @@
 
 extern bool findApp(const QString &exe);
 extern void terminateApp(QString app);
+void setLog(QVariant log);
 
 namespace Ui {
 class logon;
@@ -69,6 +71,7 @@ public:
 signals:
     transmitSignal(QByteArray tmpData);          //数据传送
     transmitUpdateSignal(QByteArray tmpData);   //数据传送
+    closeLogonSignal(int);                      //关闭登录窗口信号 1,登录，2，主窗口
 
 private slots:
     void on_logonPushButton_clicked();
@@ -86,5 +89,7 @@ private:
     Ui::logon        *ui;
     downloadManager  *m_downloadManager;
 };
+
+extern QString version;     //版本号
 
 #endif // LOGON_H

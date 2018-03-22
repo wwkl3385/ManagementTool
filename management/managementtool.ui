@@ -286,7 +286,7 @@ QPushButton:unpressed
 }</string>
              </property>
              <property name="text">
-              <string>注销</string>
+              <string>退出</string>
              </property>
             </widget>
            </item>

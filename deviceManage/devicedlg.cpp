@@ -358,8 +358,8 @@ void deviceDlg::onConnectInfoDataParse(QByteArray tmpData)
         box.exec();
         return;
     }
-    if (num > 5) //限定显示条数
-        num = 5;
+//    if (num > 5) //限定显示条数
+//        num = 5;
 
     /* 删除所有账户信息*/
     ui->listTableWidget->clearContents();

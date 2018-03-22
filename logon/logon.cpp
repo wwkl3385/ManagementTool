@@ -16,9 +16,9 @@
 #include <QDebug>
 #include <QBitmap>
 #include <QFileInfo>
-#include <QMessageBox>
 #include <QFileDialog>
 #include <QNetworkReply>
+#include <QDesktopWidget>
 #include <QStandardPaths>
 #include <QProgressDialog>
 #include <QDesktopServices>
@@ -32,11 +32,12 @@
 #define  UPDATE_URL         "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/query_update"            //更新url
 #define  UPDATE_URL_INDEX   "http://D-BJ-3rdCOM.chinacloudapp.cn:1195/roam/download?filename="      //下载url
 
-QString version = "1.0.1";    //版本号
+QString version = "1.0.5";    //版本号
 unsigned logon::userType = 0; //登录类型--1：管理员，--2：普通用户
 QString logon::userNameInfo;  //登录名
 QString logon::userPassInfo;  //密码
 static int n = 0;             //记录创建的次数
+static bool messFlag = false; //提示框 不存在（false）,存在（true） 防止重复弹出 登录数据解析窗口
 
 logon::logon(QWidget *parent) :
     QDialog(parent),
@@ -46,6 +47,7 @@ logon::logon(QWidget *parent) :
     ui(new Ui::logon)
 {
     ui->setupUi(this);
+    setWindowTitle("login");
 
     /*记住登录名字*/
     QString strName;
@@ -53,12 +55,6 @@ logon::logon(QWidget *parent) :
     ui->userLineEdit->setText(strName);
 
     qDebug() <<"logonDlg创建的次数："<< ++n;
-//    qDebug() << "路径：" << QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-
-//    QString dirPath = QCoreApplication::applicationDirPath();
-//    QString fileName = dirPath + "/uninst.exe";
-//    QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
-//    qDebug() << "程序路径：" << dirPath;
 
     m_url = "";
     m_downloadManager = NULL;
@@ -74,7 +70,12 @@ logon::logon(QWidget *parent) :
         terminateApp("taskkill /im openvpn.exe /f");
 
     setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint );
+
     progressDlg = new QProgressDialog(this);
+    progressDlg->setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
+
+    /*设置窗口位置*/
+    progressDlg->move(this->width() +  this->size().width() / 2,  this->height());
 
     /*进度条设置样式*/
     progressDlg->setCancelButtonText(tr("取消"));
@@ -168,12 +169,14 @@ void logon::mouseReleaseEvent(QMouseEvent *)
 
 void logon::on_logonPushButton_clicked()
 {
+    connect(this->dataHttp->manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
     connect(this, SIGNAL(transmitSignal(QByteArray)), this, SLOT(loginDataParse(QByteArray)));
+
     if (ui->userLineEdit->text().isEmpty() || ui->passwordLineEdit->text().isEmpty())
     {
         QMessageBox box(QMessageBox::Critical,"错误","请输入正确的用户名和密码！");
-        box.setStandardButtons (QMessageBox::Ok);
-        box.setButtonText (QMessageBox::Ok,QString("确 定"));
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok,QString("确 定"));
         box.exec ();
 
         return;
@@ -184,25 +187,34 @@ void logon::on_logonPushButton_clicked()
     /*连接服务器,校验用户名和密码*/
     dataJson->loginObj= dataJson->jsonPackLogin(ui->userLineEdit->text(), ui->passwordLineEdit->text()); //登录
     dataHttp->httpPost(LOGIN_URL, dataJson->loginObj); //http登录请求
+    messFlag = false;
     qDebug() << "登录信息帧：" << dataJson->loginObj;
     pLoadDlg->exec(); //动态登录
 }
 
 void logon::replyFinished(QNetworkReply *reply)
 {
+    qDebug() << "Error:" << reply->errorString();
+    qDebug() << "Errorcode:" << reply->error();
+//    setLog(reply->error());   //写日志
     if (reply->error() != QNetworkReply::NoError)
     {
         qDebug() << "Error:" << reply->errorString();
+//        setLog(reply->error()); //记录错误日志
 
         pLoadDlg->close();
 
-        QMessageBox box(QMessageBox::Warning,"提示","网络错误，请检查网络！！");
-        box.setStandardButtons (QMessageBox::Ok);
-        box.setButtonText (QMessageBox::Ok,QString("确 定"));
-        box.exec();
-
-        return;
+        if (messFlag == false)
+        {
+            QMessageBox replyBox(QMessageBox::Warning, "提示", reply->errorString());
+            messFlag = true;   //已存在提示框
+            replyBox.setStandardButtons (QMessageBox::Ok);
+            replyBox.setButtonText (QMessageBox::Ok,QString("确 定"));
+            replyBox.exec();
+            return;
+        }
     }
+
     QByteArray tempBuf = reply->readAll();
 
     if (signalFlag == true)
@@ -216,7 +228,7 @@ void logon::loginDataParse(QByteArray tmpData)
     disconnect(this, SIGNAL(transmitSignal(QByteArray)), this, SLOT(loginDataParse(QByteArray)));
     qDebug() <<"传递返回的值："<< tmpData;
     updateFlag = true;        //更新成功(true)，更新失败(fasle)，请求标志
-    int status = 0;
+    int status = 10;
     if (!dataJson->jsonParseData(tmpData, "status").isEmpty())
         status = dataJson->jsonParseData(tmpData,"status").first().toInt();
 
@@ -252,9 +264,10 @@ void logon::loginDataParse(QByteArray tmpData)
 
         //this->accept();
 
-        this->close();
-        ManagementTool *w = new ManagementTool;
-        w->show();
+        emit closeLogonSignal(1);
+//        this->close();
+//        ManagementTool *w = new ManagementTool;
+//        w->show();
 
         break;
     }
@@ -425,12 +438,20 @@ void logon::onReplyFinished(int statusCode)
     else if( statusCode == 200)
     {
         qDebug() << "Download Success";
-        QMessageBox box(QMessageBox::Information,"提示","下载完成！ \n 请卸载旧版本！");
+        QMessageBox box(QMessageBox::Information,"提示","下载完成！ \n 请卸载旧版本！并手动安装");
         box.setStandardButtons (QMessageBox::Ok);
         box.setButtonText (QMessageBox::Ok,QString("确 定"));
         box.exec ();
 
         this->close();
+
+        /*强制 结束任务 防止卸载不完全*/
+        if (findApp("openvpn.exe") == true)
+            terminateApp("taskkill /im openvpn.exe /f");
+        if (findApp("putty.exe") ==  true)
+            terminateApp("taskkill /im putty.exe /f");
+        if (findApp("WinSCP.exe") == true)
+            terminateApp("taskkill /im WinSCP.exe /f");
 
         QString dirPath = QCoreApplication::applicationDirPath();
         QString fileName = dirPath + "/uninst.exe";
@@ -583,4 +604,32 @@ void logon::ReadInit(QString key, QString &value)
     //读取配置信息
     value = config->value(QString("USER/") + key).toString();
     delete config;
+}
+
+void setLog(QVariant log)
+{
+    QString dirPath = QCoreApplication::applicationDirPath();
+    QDir    *userPass= new QDir;
+    bool exist = userPass->exists(dirPath +"/log");
+    if(!exist)
+    {
+        bool ok = userPass->mkdir(dirPath +"/log");
+        qDebug() <<ok;
+    }
+
+    QString fileName = dirPath + "/log/网络错误.log";
+
+    QFile file(fileName);
+
+    if(!file.open(QIODevice::WriteOnly  | QIODevice::Text|QIODevice::Append))
+    {
+        qDebug() << "文件打开错误！";
+        return;
+    }
+
+    QTextStream in(&file);
+    QString timeStr  = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    in << log.toString();
+    in << "----" + timeStr + "\r\n";
+    file.close();
 }

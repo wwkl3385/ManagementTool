@@ -45,6 +45,7 @@ bool connectVpnSuccessFlag = false;  //vpn连接成功标志  false:未连接
 bool openPutty  = true;
 bool openWinscp = true;
 stJsonUserData  ManagementTool::stUserInfo;
+extern QString version; //版本号
 
 ManagementTool::ManagementTool(QWidget *parent) :
     QMainWindow(parent),
@@ -56,6 +57,8 @@ ManagementTool::ManagementTool(QWidget *parent) :
 //    ui->tabWidget->setTabPosition(QTabWidget::West);
 //    ui->tabWidget->tabBar()->setStyle(new CustomTabStyle);
 
+    aboutStr =  QString("Copyright (c) 2018, 青岛特来电新能源有限公司, All rights reserved."
+                        "\n\n集中控制器智能远程管理系统 V%1\n\n智能充电研发中心-集控开发部").arg(version);
 //    /*隐藏设备升级按钮*/
     ui->upgradePushButton->hide();     //设备升级
 
@@ -219,6 +222,7 @@ void ManagementTool::closeEvent(QCloseEvent *event)
         delete pYesBtn;
         delete pNoBtn;
         event->accept();
+        emit closeManagementToolSignal(3);  //关闭主界面，退出
     }
     else
     {
@@ -429,9 +433,10 @@ void ManagementTool::onTimeDelay()
         box.setButtonText (QMessageBox::Ok,QString("确 定"));
         box.exec ();
 
-        delete this;
-        logon lgDlg;
-        lgDlg.exec();
+        emit closeManagementToolSignal(2);  //关闭主界面，显示登录界面
+//        delete this;
+//        logon lgDlg;
+//        lgDlg.exec();
     }
 }
 
@@ -715,8 +720,7 @@ void terminateApp(QString app)
 ***********************************************************************/
 void ManagementTool::on_aboutPushButton_clicked()
 {
-    QMessageBox box(QMessageBox::Information, "版权所有", "Copyright (c) 2018, 青岛特来电新能源有限公司, All rights reserved." \
-                                                      "\n\n集中控制器智能远程管理系统 V1.0.1\n\n智能充电研发中心-集控开发部");
+    QMessageBox box(QMessageBox::Information, "版权所有", aboutStr);
     box.setStandardButtons (QMessageBox::Ok);
     box.setButtonText (QMessageBox::Ok,QString("确 定"));
     box.exec ();
@@ -726,8 +730,7 @@ void ManagementTool::on_aboutPushButton_clicked()
 
 void ManagementTool::on_aboutAction_triggered()
 {
-    QMessageBox box(QMessageBox::Information, "版权所有", "Copyright (c) 2018, 青岛特来电新能源有限公司, All rights reserved." \
-                                                      "\n\n集中控制器智能远程管理系统 V1.0.1\n\n智能充电研发中心-集控开发部");
+    QMessageBox box(QMessageBox::Information, "版权所有", aboutStr);
     box.setStandardButtons (QMessageBox::Ok);
     box.setButtonText (QMessageBox::Ok,QString("确定"));
     box.exec();
@@ -891,28 +894,31 @@ bool findApp(const QString& exe)
 
 void ManagementTool::on_logoutPushButton_clicked()
 {
-    QMessageBox Msg(QMessageBox::Question, QString("注销"), QString("是否要注销该用户？"));
-    QAbstractButton *pYesBtn = (QAbstractButton*)Msg.addButton(QString("确定"), QMessageBox::YesRole);
-    QAbstractButton *pNoBtn = (QAbstractButton*)Msg.addButton(QString("取消"), QMessageBox::NoRole);
-    Msg.exec();
+    this->close();
 
-    if (Msg.clickedButton() != pNoBtn)
-    {
-        delete this;
-        logon lgDlg;
-        lgDlg.exec();
+//    QMessageBox Msg(QMessageBox::Question, QString("注销"), QString("是否要注销该用户？"));
+//    QAbstractButton *pYesBtn = (QAbstractButton*)Msg.addButton(QString("确定"), QMessageBox::YesRole);
+//    QAbstractButton *pNoBtn = (QAbstractButton*)Msg.addButton(QString("取消"), QMessageBox::NoRole);
+//    Msg.exec();
 
-        accountDlg::deleteRow = -1;       //修改成功后设置为默认值
+//    if (Msg.clickedButton() != pNoBtn)
+//    {
+//        emit closeManagementToolSignal(2);
+////        delete this;
+////        logon lgDlg;
+////        lgDlg.exec();
 
-        delete pYesBtn;
-        delete pNoBtn;
-    }
-    else
-    {
-        delete pYesBtn;
-        delete pNoBtn;
-        return;
-    }
+//        accountDlg::deleteRow = -1;       //修改成功后设置为默认值
+
+//        delete pYesBtn;
+//        delete pNoBtn;
+//    }
+//    else
+//    {
+//        delete pYesBtn;
+//        delete pNoBtn;
+//        return;
+//    }
 }
 
 //LRESULT ManagementTool::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
